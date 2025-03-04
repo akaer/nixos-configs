@@ -150,9 +150,6 @@
       options = "eurosign:e,terminate:ctrl_alt_bksp";
     };
     videoDrivers = [ "fbdev" ];
-    desktopManager = {
-      xterm.enable = false;
-    };
     windowManager.i3 = {
       enable = true;
       extraPackages = with pkgs; [
@@ -163,6 +160,8 @@
       ];
     };
   };
+  services.displayManager.autoLogin.enable = true;
+  services.displayManager.autoLogin.user = "andrer";
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
