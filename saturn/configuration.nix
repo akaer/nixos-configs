@@ -85,7 +85,7 @@
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.andrer = {
     isNormalUser = true;
-    description = "Andre Raabe";
+    description = "André Raabe";
     extraGroups = [ "networkmanager" "wheel" ];
     #packages = with pkgs; [];
   };
