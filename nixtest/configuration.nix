@@ -28,7 +28,6 @@
   boot.loader.grub.copyKernels = true;  # Activate automatic copying of kernel files
   boot.loader.grub.efiSupport = true;  # Enable EFI support for GRUB
   boot.loader.grub.enableCryptodisk = true ; # Enable GRUB support for encrypted disks
-  boot.loader.grub.gfxmodeEfi = "1024x768";
   boot.loader.efi.efiSysMountPoint = "/boot";  # Mount point of the EFI system partition
   boot.loader.efi.canTouchEfiVariables = true;  # Allow GRUB to modify EFI variables for boot entry management
   
@@ -44,8 +43,6 @@
 
   # Choose Linux kernel
   boot.kernelPackages = pkgs.linuxPackages_latest;
-
-  boot.kernelParams = [ "boot.shell_on_fail" ];
 
   hardware = {
     enableAllFirmware = true;
