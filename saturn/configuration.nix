@@ -11,29 +11,45 @@
       ./hardware-configuration.nix
     ];
 
-  # Bootloader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-
   boot.initrd.checkJournalingFS = false;
 
+  # Use the GRUB bootloader
+  boot.loader.grub.enable = true;  # Enable GRUB as the bootloader
+  boot.loader.grub.device = "nodev";  # Install GRUB on the EFI system partition
+  boot.loader.grub.copyKernels = true;  # Activate automatic copying of kernel files
+  boot.loader.grub.efiSupport = true;  # Enable EFI support for GRUB
+  boot.loader.grub.enableCryptodisk = true ; # Enable GRUB support for encrypted disks
+  boot.loader.efi.efiSysMountPoint = "/boot";  # Mount point of the EFI system partition
+  boot.loader.efi.canTouchEfiVariables = true;  # Allow GRUB to modify EFI variables for boot entry management
+
+  # Adds custom menu entries for reboot and poweroff
+  boot.loader.grub.extraEntries = ''
+      menuentry "Reboot" {
+          reboot
+      }
+      menuentry "Poweroff" {
+          halt
+      }
+  '';
+
   boot.kernelPackages = pkgs.linuxPackages_latest;
-  boot.kernelParams = [ "boot.shell_on_fail" ];
 
   hardware = {
-    enableRedistributableFirmware = true;
+    enableAllFirmware = true;
     cpu.intel.updateMicrocode = true;
-    cpu.amd.updateMicrocode = true;
+  };
+
+  fileSystems."/".options = [ "noatime" "nodiratime" "discard" ];
+
+  virtualisation.virtualbox.guest = {
+    enable = true;
+    dragAndDrop = true;
+    vboxsf = false;
+    clipboard = true;
   };
 
   networking.hostName = "saturn"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-
-  # Enable networking
+  networking.wireless.enable = false;
   networking.networkmanager.enable = true;
 
   # Set your time zone.
@@ -54,16 +70,98 @@
     LC_TIME = "de_DE.UTF-8";
   };
 
-  hardware.graphics.enable = true;
+  console = {
+    font = "Lat2-Terminus16";
+    keyMap = "de";
+  };
 
+  # Allow unfree packages
+  nixpkgs.config.allowUnfree = true;
+
+  environment.systemPackages = with pkgs; [
+    _7zz
+    acpi
+    bc
+    binutils
+    btop
+    chromium
+    curl
+    dconf
+    direnv
+    dunst
+    file
+    flameshot
+    fzf
+    ghostty
+    git
+    htop
+    killall
+    linux-firmware
+    mc
+    most
+    pulseaudioFull
+    tmux
+    tree
+    unrar
+    unzip
+    vim-full
+    watch
+    wget
+    which
+    xclip
+  ];
+
+  # Define a user account. Don't forget to set a password with ‘passwd’.
+  users.users.andrer = {
+    isNormalUser = true;
+    description = "André Raabe";
+    extraGroups = [ "networkmanager" "wheel" "video" ]; # Enable ‘sudo’ for the user.
+    packages = with pkgs; [];
+  };
+
+  programs = {
+    bash.completion.enable = true;
+    mtr.enable = true;
+    gnupg.agent = {
+      enable = true;
+      enableSSHSupport = true;
+    };
+    dconf.enable = true;
+  };
+
+  services.acpid.enable = true;
+
+  services.dbus.enable = true;
+  services.dbus.packages = [ pkgs.dconf ];
+
+  services.openssh.enable = true;
+
+  # Enable touchpad support (enabled default in most desktopManager).
   services.libinput.enable = true;
-  services.displayManager.defaultSession = "none+i3";
+
+  services.printing.enable = true;
+
+  services.pipewire = {
+    enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
+  };
+
   services.xserver = {
     enable = true;
-    desktopManager = { xterm.enable = false; };
+    xkb = {
+      layout = "de";
+      options = "eurosign:e,terminate:ctrl_alt_bksp";
+    };
+    videoDrivers = [
+      "modesetting"
+      "vmsvga"
+      "vboxvideo"
+      "fbdev"
+    ];
     windowManager.i3 = {
       enable = true;
-      package = pkgs.i3;
       extraPackages = with pkgs; [
         dmenu
         i3status
@@ -72,108 +170,14 @@
       ];
     };
   };
-
-  # Configure keymap in X11
-  services.xserver.xkb = {
-    layout = "de";
-    variant = "";
-  };
-
-  # Configure console keymap
-  console.keyMap = "de";
-
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.andrer = {
-    isNormalUser = true;
-    description = "André Raabe";
-    extraGroups = [ "networkmanager" "wheel" ];
-    #packages = with pkgs; [];
-  };
-
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
-
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
-  environment.systemPackages = with pkgs; [
-  #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-  #  wget
-	_7zz
-	acpi
-        bc
-        chromium
-	btop
-	direnv
-	dunst
-	feh
-	file
-	firefox-esr
-	flameshot
-	fzf
-	ghostty
-	git
-	gnome-keyring
-	htop
-	jq
-	killall
-	libnotify
-        linuxKernel.packages.linux_6_13.virtualboxGuestAdditions
-	lxappearance
-	mc
-	most
-	neofetch
-	nerdfonts
-	networkmanagerapplet
-	pasystray
-	powerline
-	powerline-fonts
-	powerline-symbols
-	pulseaudioFull
-	rofi
-	scrot
-	sshfs
-	tldr
-	tmux
-	tmuxPlugins.sensible
-	tmuxPlugins.tmux-fzf
-	tmuxPlugins.tmux-powerline
-	tree
-	unrar
-	unzip
-	vim-full
-	watch
-	wget
-	xclip
-	xfce.thunar
-	xorg.xauth
-	xorg.xf86inputvmmouse
-	xorg.xf86videovesa
-	xorg.xinit
-	xorg.xinput
-	xorg.xkbcomp
-	xorg.xrandr
-	xorg.xset
-	xterm
-  ];
+  services.displayManager.autoLogin.enable = true;
+  services.displayManager.autoLogin.user = "andrer";
 
   environment.variables = {
     EDITOR = "vim";
     TERMINAL = "ghostty";
     BROWSER = "chromium";
   };
-
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
-
-  # List services that you want to enable:
-
-  # Enable the OpenSSH daemon.
-  services.openssh.enable = true;
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];

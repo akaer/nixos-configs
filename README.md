@@ -27,6 +27,10 @@ sudo nixos-rebuild switch
 
 ```
 sudo nix-store --gc
+sudo nix-collect-garbage --delete-old
+
+sudo nix profile history --profile /nix/var/nix/profiles/system --extra-experimental-features nix-command
+sudo nix profile wipe-history --older-than 7d --profile /nix/var/nix/profiles/system --extra-experimental-features nix-command
 
 sudo nix-env -p /nix/var/nix/profiles/system --list-generations
 ```
