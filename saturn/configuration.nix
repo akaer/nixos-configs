@@ -117,7 +117,7 @@
 	jq
 	killall
 	libnotify
-	linuxKernel.packages.linux_6_6.virtualboxGuestAdditions
+        linuxKernel.packages.linux_6_13.virtualboxGuestAdditions
 	lxappearance
 	mc
 	most
