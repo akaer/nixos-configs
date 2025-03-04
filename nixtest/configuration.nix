@@ -48,9 +48,8 @@
   boot.kernelParams = [ "boot.shell_on_fail" ];
 
   hardware = {
-    enableRedistributableFirmware= true;
+    enableAllFirmware = true;
     cpu.intel.updateMicrocode = true;
-    cpu.amd.updateMicrocode = true;
   };
 
   fileSystems."/".options = [ "noatime" "nodiratime" "discard" ];
@@ -59,8 +58,6 @@
   virtualisation.hypervGuest.enable = true;
 
   networking.hostName = "nixtest"; # Define your hostname.
-  
-  # Pick only one of the below networking options.
   networking.wireless.enable = false;
   networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
 
@@ -87,8 +84,6 @@
     keyMap = "de";
   };
   
-  hardware.graphics.enable = true;
-
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
@@ -115,36 +110,8 @@
     which
     watch
     wget
+    ghostty
   ];
-
-  # Enable the X11 windowing system.
-  # services.xserver.enable = true;
-
-  # Configure keymap in X11
-  # services.xserver.xkb.layout = "us";
-  # services.xserver.xkb.options = "eurosign:e,caps:escape";
-
-  # Enable CUPS to print documents.
-  # services.printing.enable = true;
-
-  # Enable sound.
-  # hardware.pulseaudio.enable = true;
-  # OR
-  # services.pipewire = {
-  #   enable = true;
-  #   pulse.enable = true;
-  # };
-
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-  };
-
-
-  # Enable touchpad support (enabled default in most desktopManager).
-  services.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.andrer = {
@@ -154,18 +121,51 @@
     packages = with pkgs; [];
   };
 
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
-
-  # List services that you want to enable:
+  programs = {
+    bash.completion.enable = true;
+    mtr.enable = true;
+    gnupg.agent = {
+      enable = true;
+      enableSSHSupport = true;
+    };
+  };
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
+
+  # Enable touchpad support (enabled default in most desktopManager).
+  services.libinput.enable = true;
+
+  # Enable CUPS to print documents.
+  services.printing.enable = true;
+
+  services.pipewire = {
+    enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
+  };
+
+  services.xserver = {
+    enable = true;
+    xkb = {
+      layout = "de";
+      options = "eurosign:e,terminate:ctrl_alt_bksp";
+    };
+    videoDrivers = [ "fbdev" ];
+    desktopManager = {
+      xterm.enable = false;
+    };
+    windowManager.i3 = {
+      enable = true;
+      extraPackages = with pkgs; [
+        dmenu
+        i3status
+        i3lock
+        i3blocks
+      ];
+    };
+  };
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
