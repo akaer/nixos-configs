@@ -38,3 +38,5 @@ sudo nix-env -p /nix/var/nix/profiles/system --list-generations
 ## Resources
 
 https://github.com/enoren5/vbox-nixos-configs/tree/main
+
+https://gvolpe.com/blog/home-manager-dotfiles-management/

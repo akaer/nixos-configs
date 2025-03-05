@@ -9,6 +9,8 @@
     [
       # Include the results of the hardware scan.
       ./hardware-configuration.nix
+
+      <home-manager/nixos>
     ];
 
   boot.initrd.checkJournalingFS = false;
@@ -81,11 +83,12 @@
   environment.systemPackages = with pkgs; [
     _7zz
     acpi
+    alacritty
     bc
     binutils
     btop
-    chromium
     curl
+    colordiff
     dconf
     direnv
     dunst
@@ -117,6 +120,36 @@
     description = "André Raabe";
     extraGroups = [ "networkmanager" "wheel" "video" ]; # Enable ‘sudo’ for the user.
     packages = with pkgs; [];
+  };
+
+  home-manager.useUserPackages = true;
+  home-manager.useGlobalPkgs = true;
+  home-manager.users.andrer = { pkgs, ... }: {
+    nixpkgs.config.allowUnfree = true;
+
+    home.packages = [
+      pkgs.chromium
+      pkgs.vscode
+    ];
+    programs.bash = {
+      enable = true;
+      historyControl = [ "ignoreboth" "erasedups" ];
+      shellAliases = {
+        ll = "ls --color=auto -lha";
+        myextip = "curl ipinfo.io/ip";
+        grep = "grep --color=auto";
+        mv = "mv -i";
+        cp = "cp -i";
+        ln = "ln -i";
+      };
+    };
+    programs.git = {
+      enable = true;
+      userName = "André Raabe";
+      userEmail = "andre.raabe@gmail.com";
+    };
+
+    home.stateVersion = "24.11";
   };
 
   programs = {
@@ -175,7 +208,7 @@
 
   environment.variables = {
     EDITOR = "vim";
-    TERMINAL = "ghostty";
+    TERMINAL = "alacritty";
     BROWSER = "chromium";
   };
 
