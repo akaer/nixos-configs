@@ -8,6 +8,8 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+
+      <home-manager/nixos>
     ];
 
   # luks setup
@@ -87,35 +89,73 @@
   environment.systemPackages = with pkgs; [
     _7zz
     acpi
+    alacritty
     bc
-    btop
     binutils
+    btop
     curl
+    colordiff
+    dconf
     direnv
+    dunst
     file
+    flameshot
+    fzf
+    ghostty
     git
     htop
     killall
     linux-firmware
     mc
     most
+    pulseaudioFull
     tmux
     tree
     unrar
     unzip
     vim-full
-    which
     watch
     wget
-    ghostty
+    which
+    xclip
   ];
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.andrer = {
     isNormalUser = true;
     description = "André Raabe";
-    extraGroups = [ "networkmanager" "wheel" ]; # Enable ‘sudo’ for the user.
+    extraGroups = [ "networkmanager" "wheel" "video" ]; # Enable ‘sudo’ for the user.
     packages = with pkgs; [];
+  };
+
+  home-manager.useUserPackages = true;
+  home-manager.useGlobalPkgs = true;
+  home-manager.users.andrer = { pkgs, ... }: {
+    nixpkgs.config.allowUnfree = true;
+
+    home.packages = [
+      pkgs.chromium
+      pkgs.vscode
+    ];
+    programs.bash = {
+      enable = true;
+      historyControl = [ "ignoreboth" "erasedups" ];
+      shellAliases = {
+        ll = "ls --color=auto -lha";
+        myextip = "curl ipinfo.io/ip";
+        grep = "grep --color=auto";
+        mv = "mv -i";
+        cp = "cp -i";
+        ln = "ln -i";
+      };
+    };
+    programs.git = {
+      enable = true;
+      userName = "André Raabe";
+      userEmail = "andre.raabe@gmail.com";
+    };
+
+    home.stateVersion = "24.11";
   };
 
   programs = {
@@ -125,15 +165,19 @@
       enable = true;
       enableSSHSupport = true;
     };
+    dconf.enable = true;
   };
 
-  # Enable the OpenSSH daemon.
+  services.acpid.enable = true;
+
+  services.dbus.enable = true;
+  services.dbus.packages = [ pkgs.dconf ];
+
   services.openssh.enable = true;
 
   # Enable touchpad support (enabled default in most desktopManager).
   services.libinput.enable = true;
 
-  # Enable CUPS to print documents.
   services.printing.enable = true;
 
   services.pipewire = {
@@ -149,7 +193,10 @@
       layout = "de";
       options = "eurosign:e,terminate:ctrl_alt_bksp";
     };
-    videoDrivers = [ "fbdev" ];
+    videoDrivers = [
+      "modesetting"
+      "fbdev"
+    ];
     windowManager.i3 = {
       enable = true;
       extraPackages = with pkgs; [
@@ -163,34 +210,25 @@
   services.displayManager.autoLogin.enable = true;
   services.displayManager.autoLogin.user = "andrer";
 
+  environment.variables = {
+    EDITOR = "vim";
+    TERMINAL = "alacritty";
+    BROWSER = "chromium";
+  };
+
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
 
-  # Copy the NixOS configuration file and link it from the resulting system
-  # (/run/current-system/configuration.nix). This is useful in case you
-  # accidentally delete configuration.nix.
-  # system.copySystemConfiguration = true;
+  # This value determines the NixOS release from which the default
+  # settings for stateful data, like file locations and database versions
+  # on your system were taken. It‘s perfectly fine and recommended to leave
+  # this value at the release version of the first install of this system.
+  # Before changing this value read the documentation for this option
+  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
 
-  # This option defines the first version of NixOS you have installed on this particular machine,
-  # and is used to maintain compatibility with application data (e.g. databases) created on older NixOS versions.
-  #
-  # Most users should NEVER change this value after the initial install, for any reason,
-  # even if you've upgraded your system to a new NixOS release.
-  #
-  # This value does NOT affect the Nixpkgs version your packages and OS are pulled from,
-  # so changing it will NOT upgrade your system - see https://nixos.org/manual/nixos/stable/#sec-upgrading for how
-  # to actually do that.
-  #
-  # This value being lower than the current NixOS release does NOT mean your system is
-  # out of date, out of support, or vulnerable.
-  #
-  # Do NOT change this value unless you have manually inspected all the changes it would make to your configuration,
-  # and migrated your data accordingly.
-  #
-  # For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .
   system.stateVersion = "24.11"; # Did you read the comment?
 
 }

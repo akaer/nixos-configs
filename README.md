@@ -23,6 +23,30 @@ sudo ln -s ~/nixos-configs/<hostname>/hardware-configuration.nix /etc/nixos/hard
 sudo nixos-rebuild switch
 ```
 
+## Channels
+
+### List Channels
+
+```
+sudo nix-channel --list
+```
+
+### Add Channels
+
+To allow working with the home-manager we have to add the channel
+
+```
+sudo nix-channel --add https://github.com/nix-community/home-manager/archive/release-24.11.tar.gz home-manager
+sudo nix-channel --update
+```
+
+### System upgrade
+
+```
+sudo nix-channel --update
+sudo nixos-rebuild switch --upgrade
+```
+
 ## Cleanup
 
 ```
