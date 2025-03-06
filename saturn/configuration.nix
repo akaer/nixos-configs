@@ -1,37 +1,33 @@
 # Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
+# your system. Help is available in the configuration.nix(5) man page, on
+# https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
 
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 {
   imports =
     [
-      # Include the results of the hardware scan.
       ./hardware-configuration.nix
-
       <home-manager/nixos>
     ];
 
   boot.initrd.checkJournalingFS = false;
 
-  # Use the GRUB bootloader
-  boot.loader.grub.enable = true;  # Enable GRUB as the bootloader
-  boot.loader.grub.device = "nodev";  # Install GRUB on the EFI system partition
-  boot.loader.grub.copyKernels = true;  # Activate automatic copying of kernel files
-  boot.loader.grub.efiSupport = true;  # Enable EFI support for GRUB
-  boot.loader.grub.enableCryptodisk = true ; # Enable GRUB support for encrypted disks
-  boot.loader.efi.efiSysMountPoint = "/boot";  # Mount point of the EFI system partition
-  boot.loader.efi.canTouchEfiVariables = true;  # Allow GRUB to modify EFI variables for boot entry management
+  boot.loader.grub.enable = true; # Enable GRUB as the bootloader
+  boot.loader.grub.device = "nodev"; # Install GRUB on the EFI system partition
+  boot.loader.grub.copyKernels = true; # Activate automatic copying of kernel files
+  boot.loader.grub.efiSupport = true; # Enable EFI support for GRUB
+  boot.loader.grub.enableCryptodisk = true; # Enable GRUB support for encrypted disks
+  boot.loader.efi.efiSysMountPoint = "/boot"; # Mount point of the EFI system partition
+  boot.loader.efi.canTouchEfiVariables = true; # Allow GRUB to modify EFI variables for boot entry management
 
-  # Adds custom menu entries for reboot and poweroff
   boot.loader.grub.extraEntries = ''
-      menuentry "Reboot" {
-          reboot
-      }
-      menuentry "Poweroff" {
-          halt
-      }
+    menuentry "Reboot" {
+        reboot
+    }
+    menuentry "Poweroff" {
+        halt
+    }
   '';
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
@@ -59,7 +55,6 @@
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
-
   i18n.extraLocaleSettings = {
     LC_ADDRESS = "de_DE.UTF-8";
     LC_IDENTIFICATION = "de_DE.UTF-8";
@@ -118,8 +113,8 @@
   users.users.andrer = {
     isNormalUser = true;
     description = "André Raabe";
-    extraGroups = [ "networkmanager" "wheel" "video" ]; # Enable ‘sudo’ for the user.
-    packages = with pkgs; [];
+    extraGroups = [ "networkmanager" "wheel" "video" ];
+    packages = with pkgs; [ ];
   };
 
   home-manager.useUserPackages = true;

@@ -6,44 +6,39 @@
 
 {
   imports =
-    [ # Include the results of the hardware scan.
+    [
       ./hardware-configuration.nix
-
       <home-manager/nixos>
     ];
 
-  # luks setup
   boot.initrd = {
-      luks.devices = {
-        luksCrypted = {
-          device = "/dev/sda2"; # Replace with your UUID
-          preLVM = true; # Unlock before activating LVM
-          allowDiscards = true; # Allow TRIM commands for SSDs
-        };
+    luks.devices = {
+      luksCrypted = {
+        device = "/dev/sda2"; # Replace with your UUID
+        preLVM = true; # Unlock before activating LVM
+        allowDiscards = true; # Allow TRIM commands for SSDs
       };
-      checkJournalingFS = false;
+    };
+    checkJournalingFS = false;
   };
 
-  # Use the GRUB bootloader
-  boot.loader.grub.enable = true;  # Enable GRUB as the bootloader
-  boot.loader.grub.device = "nodev";  # Install GRUB on the EFI system partition
-  boot.loader.grub.copyKernels = true;  # Activate automatic copying of kernel files
-  boot.loader.grub.efiSupport = true;  # Enable EFI support for GRUB
-  boot.loader.grub.enableCryptodisk = true ; # Enable GRUB support for encrypted disks
-  boot.loader.efi.efiSysMountPoint = "/boot";  # Mount point of the EFI system partition
-  boot.loader.efi.canTouchEfiVariables = true;  # Allow GRUB to modify EFI variables for boot entry management
-  
-  # Adds custom menu entries for reboot and poweroff
+  boot.loader.grub.enable = true; # Enable GRUB as the bootloader
+  boot.loader.grub.device = "nodev"; # Install GRUB on the EFI system partition
+  boot.loader.grub.copyKernels = true; # Activate automatic copying of kernel files
+  boot.loader.grub.efiSupport = true; # Enable EFI support for GRUB
+  boot.loader.grub.enableCryptodisk = true; # Enable GRUB support for encrypted disks
+  boot.loader.efi.efiSysMountPoint = "/boot"; # Mount point of the EFI system partition
+  boot.loader.efi.canTouchEfiVariables = true; # Allow GRUB to modify EFI variables for boot entry management
+
   boot.loader.grub.extraEntries = ''
-      menuentry "Reboot" {
-          reboot
-      }
-      menuentry "Poweroff" {
-          halt
-      }
+    menuentry "Reboot" {
+        reboot
+    }
+    menuentry "Poweroff" {
+        halt
+    }
   '';
 
-  # Choose Linux kernel
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
   hardware = {
@@ -58,14 +53,13 @@
 
   networking.hostName = "nixtest"; # Define your hostname.
   networking.wireless.enable = false;
-  networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
+  networking.networkmanager.enable = true; # Easiest to use and most distros use this by default.
 
   # Set your time zone.
   time.timeZone = "Europe/Berlin";
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
-
   i18n.extraLocaleSettings = {
     LC_ADDRESS = "de_DE.UTF-8";
     LC_IDENTIFICATION = "de_DE.UTF-8";
@@ -82,7 +76,7 @@
     font = "Lat2-Terminus16";
     keyMap = "de";
   };
-  
+
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
@@ -124,8 +118,8 @@
   users.users.andrer = {
     isNormalUser = true;
     description = "André Raabe";
-    extraGroups = [ "networkmanager" "wheel" "video" ]; # Enable ‘sudo’ for the user.
-    packages = with pkgs; [];
+    extraGroups = [ "networkmanager" "wheel" "video" ];
+    packages = with pkgs; [ ];
   };
 
   home-manager.useUserPackages = true;
