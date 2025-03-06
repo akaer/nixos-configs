@@ -102,6 +102,7 @@
     linux-firmware
     mc
     most
+    nixpkgs-fmt
     pulseaudioFull
     tmux
     tree

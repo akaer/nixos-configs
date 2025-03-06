@@ -97,6 +97,7 @@
     linux-firmware
     mc
     most
+    nixpkgs-fmt
     pulseaudioFull
     tmux
     tree
@@ -122,9 +123,9 @@
   home-manager.users.andrer = { pkgs, ... }: {
     nixpkgs.config.allowUnfree = true;
 
-    home.packages = [
-      pkgs.chromium
-      pkgs.vscode
+    home.packages = with pkgs; [
+      chromium
+      vscode
     ];
     programs.bash = {
       enable = true;
@@ -142,6 +143,32 @@
       enable = true;
       userName = "André Raabe";
       userEmail = "andre.raabe@gmail.com";
+    };
+    programs.vim = {
+      enable = true;
+      settings = {
+        number = true;
+      };
+      plugins = with pkgs.vimPlugins; [
+        airline
+      ];
+    };
+    programs.tmux = {
+      enable = true;
+      baseIndex = 1;
+      clock24 = true;
+      mouse = true;
+      prefix = "C-a";
+      terminal = "screen-256color";
+      # Search plugins: nix-env -f '<nixpkgs>' -qaP -A tmuxPlugins
+      plugins = with pkgs; [
+        tmuxPlugins.better-mouse-mode
+        tmuxPlugins.sensible
+        tmuxPlugins.tmux-powerline
+        tmuxPlugins.yank
+        tmuxPlugins.tokyo-night-tmux
+        tmuxPlugins.cpu
+      ];
     };
 
     home.stateVersion = "24.11";
