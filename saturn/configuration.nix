@@ -79,6 +79,7 @@
     _7zz
     acpi
     alacritty
+    bat
     bc
     binutils
     btop
@@ -126,6 +127,7 @@
     home.packages = with pkgs; [
       chromium
       vscode
+      vim
     ];
     programs.bash = {
       enable = true;
