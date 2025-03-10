@@ -87,6 +87,7 @@
     curl
     colordiff
     dconf
+    lxappearance
     direnv
     dunst
     file
@@ -169,7 +170,9 @@
         };
       };
     };
-
+    programs.rofi = {
+      enable = true;
+    };
     programs.powerline-go = {
       enable = true;
     };
@@ -291,6 +294,8 @@
         set -g @catppuccin_session_text "#{?client_prefix,#S: prefix,#S: normal}"
       '';
     };
+
+    services.flameshot.enable = true;
 
     home.stateVersion = "24.11";
   };
