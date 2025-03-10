@@ -258,7 +258,7 @@
       clock24 = true;
       mouse = true;
       prefix = "C-a";
-      #terminal = "screen-256color";
+      terminal = "screen-256color";
       # Search plugins: nix-env -f '<nixpkgs>' -qaP -A tmuxPlugins
       plugins = with pkgs; [
         tmuxPlugins.better-mouse-mode
@@ -276,8 +276,6 @@
         bind s split-window -v
         bind v split-window -h
         set -g automatic-rename on
-        set -g default-terminal "alacritty"
-        set-option -a terminal-overrides ",alacritty:RGB"
 
         set -g @catppuccin_flavour 'mocha'
         set -g @catppuccin_window_left_separator ""
