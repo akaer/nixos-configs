@@ -18,6 +18,7 @@
   boot.loader.grub.copyKernels = true; # Activate automatic copying of kernel files
   boot.loader.grub.efiSupport = true; # Enable EFI support for GRUB
   boot.loader.grub.enableCryptodisk = true; # Enable GRUB support for encrypted disks
+  boot.loader.grub.theme = "${pkgs.catppuccin-grub}";
   boot.loader.efi.efiSysMountPoint = "/boot"; # Mount point of the EFI system partition
   boot.loader.efi.canTouchEfiVariables = true; # Allow GRUB to modify EFI variables for boot entry management
 
@@ -121,14 +122,62 @@
 
   home-manager.useUserPackages = true;
   home-manager.useGlobalPkgs = true;
+
+  # Find options: https://nix-community.github.io/home-manager/options.xhtml
   home-manager.users.andrer = { pkgs, ... }: {
     nixpkgs.config.allowUnfree = true;
+
+    fonts.fontconfig = {
+      enable = true;
+      defaultFonts.monospace = [
+        "IosevkaTerm Nerd Font"
+      ];
+    };
 
     home.packages = with pkgs; [
       chromium
       vscode
-      vim
+      (pkgs.nerdfonts.override {
+        fonts = [
+          "IBMPlexMono"
+          "Iosevka"
+          "IosevkaTerm"
+        ];
+      })
     ];
+
+    programs.alacritty = {
+      enable = true;
+      settings = {
+        font = {
+          normal = {
+            family = "IosevkaTerm Nerd Font";
+            style = "Regular";
+          };
+          bold = {
+            family = "IosevkaTerm Nerd Font";
+            style = "Bold";
+          };
+          italic = {
+            family = "IosevkaTerm Nerd Font";
+            style = "Italic";
+          };
+          bold_italic = {
+            family = "IosevkaTerm Nerd Font";
+            style = "Bold Italic";
+          };
+        };
+      };
+    };
+
+    programs.powerline-go = {
+      enable = true;
+    };
+    programs.fzf = {
+      enable = true;
+      enableBashIntegration = true;
+      tmux.enableShellIntegration = true;
+    };
     programs.bash = {
       enable = true;
       historyControl = [ "ignoreboth" "erasedups" ];
@@ -145,15 +194,58 @@
       enable = true;
       userName = "André Raabe";
       userEmail = "andre.raabe@gmail.com";
+      aliases = {
+        lg = "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit";
+      };
     };
     programs.vim = {
       enable = true;
       settings = {
         number = true;
       };
+      # Search plugins: nix-env -f '<nixpkgs>' -qaP -A vimPlugins
       plugins = with pkgs.vimPlugins; [
         airline
+        vim-airline-themes
+        command-t
+        fugitive
+        nerdtree
+        sensible
+        supertab
+        syntastic
+        vim-bufferline
       ];
+      extraConfig = ''
+        set laststatus=2
+        set pastetoggle=<f11>
+        let mapleader=","
+        set showmatch
+
+        set hlsearch
+        set smartcase
+        set ignorecase
+        set incsearch
+
+        set autoindent
+        set expandtab
+        set background=dark
+        set shiftwidth=4
+        set tabstop=4
+        set softtabstop=4
+        set smarttab
+        set smartindent
+
+        set cursorline
+
+        nnoremap <f2> :NERDTreeToggle<cr>
+        let g:airline_powerline_fonts=1
+        let g:airline_theme='badwolf'
+        let g:airline#extensions#tabline#enabled=1
+        let g:airline#extensions#tabline#fnamemod=':t'
+        let g:airline#extensions#tabline#formatter='unique_tail'
+
+        set t_Co=256
+      '';
     };
     programs.tmux = {
       enable = true;
@@ -165,12 +257,39 @@
       # Search plugins: nix-env -f '<nixpkgs>' -qaP -A tmuxPlugins
       plugins = with pkgs; [
         tmuxPlugins.better-mouse-mode
+        tmuxPlugins.cpu
         tmuxPlugins.sensible
         tmuxPlugins.tmux-powerline
-        tmuxPlugins.yank
         tmuxPlugins.tokyo-night-tmux
-        tmuxPlugins.cpu
+        tmuxPlugins.catppuccin
+        tmuxPlugins.yank
       ];
+      extraConfig = ''
+        set -g set-titles on
+        set -g set-titles-string "#I:#P - #W - #T"
+        set -g update-environment "SSH_ASKPASS SSH_AUTH_SOCK SSH_AGENT_PID SSH_CONNECTION"
+        bind s split-window -v
+        bind v split-window -h
+        set -g automatic-rename on
+
+        set -g @catppuccin_flavour 'mocha'
+        set -g @catppuccin_window_left_separator ""
+        set -g @catppuccin_window_right_separator " "
+        set -g @catppuccin_window_middle_separator " | "
+        set -g @catppuccin_window_number_position "right"
+        set -g @catppuccin_window_default_fill "none"
+        set -g @catppuccin_window_current_fill "all"
+        set -g @catppuccin_window_current_text "#{b:pane_current_path}"
+        set -g @catppuccin_window_default_text "#{b:pane_current_path}"
+        set -g @catppuccin_status_modules_right "application session"
+        set -g @catppuccin_status_left_separator ""
+        set -g @catppuccin_status_right_separator "█"
+        set -g @catppuccin_status_right_separator_inverse "no"
+        set -g @catppuccin_status_fill "icon"
+        set -g @catppuccin_status_connect_separator "yes"
+        set -g @catppuccin_date_time_text "%Y-%m-%d %H:%M"
+        set -g @catppuccin_session_text "#{?client_prefix,#S: prefix,#S: normal}"
+      '';
     };
 
     home.stateVersion = "24.11";
@@ -185,6 +304,8 @@
     };
     dconf.enable = true;
   };
+
+  fonts.enableDefaultPackages = true;
 
   services.acpid.enable = true;
 

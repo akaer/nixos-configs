@@ -54,7 +54,7 @@
 
   networking.hostName = "nixtest"; # Define your hostname.
   networking.wireless.enable = false;
-  networking.networkmanager.enable = true; # Easiest to use and most distros use this by default.
+  networking.networkmanager.enable = true;
 
   # Set your time zone.
   time.timeZone = "Europe/Berlin";
