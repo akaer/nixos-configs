@@ -13,8 +13,8 @@ As the NIXOS configuration is maintained inside this GIT repository we have to m
 This can easily be done by symlinking the configs:
 
 ```
-sudo ln -s ~/nixos-configs/<hostname>/configuration.nix /etc/nixos/configuration.nix
-sudo ln -s ~/nixos-configs/<hostname>/hardware-configuration.nix /etc/nixos/hardware-configuration.nix
+sudo ln -s ~/nixos-configs/$HOSTNAME/configuration.nix /etc/nixos/configuration.nix
+sudo ln -s ~/nixos-configs/$HOSTNAME/hardware-configuration.nix /etc/nixos/hardware-configuration.nix
 ```
 
 ## Build the system
@@ -64,3 +64,5 @@ sudo nix-env -p /nix/var/nix/profiles/system --list-generations
 https://github.com/enoren5/vbox-nixos-configs/tree/main
 
 https://gvolpe.com/blog/home-manager-dotfiles-management/
+
+https://github.com/Alan01252/nixos-config/
