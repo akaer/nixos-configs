@@ -89,8 +89,8 @@
     bc
     binutils
     btop
-    curl
     colordiff
+    curl
     dconf
     direnv
     dunst
@@ -100,12 +100,15 @@
     ghostty
     git
     htop
+    jq
     killall
     linux-firmware
+    lxappearance
     mc
     most
     nixpkgs-fmt
     pulseaudioFull
+    sqlite
     tmux
     tree
     unrar
@@ -115,6 +118,9 @@
     wget
     which
     xclip
+    xorg.xdpyinfo
+    xorg.xrandr
+    xsel
   ];
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
@@ -151,6 +157,22 @@
       })
     ];
 
+    programs.chromium = {
+      enable = true;
+      extensions = [
+        "ddkjiahejlhfcafbddmgiahcphecmpfh" # uBlock Origin Lite
+        "nngceckbapebfimnlniiiahkandclblb" # Bitwarden
+        "bnjjngeaknajbdcgpfkgnonkmififhfo" # Fake Filler
+        "gneeeeckemnjlgopgpchamgmfpkglgaj" # Proxy Switcher
+        "gnldpbnocfnlkkicnaplmkaphfdnlplb" # Test & Feedback
+        "efhedldbjahpgjcneebmbolkalbhckfi" # Bug Magnet
+      ];
+      dictionaries = [
+        pkgs.hunspellDictsChromium.en_US
+        pkgs.hunspellDictsChromium.de_DE
+      ];
+    };
+
     programs.alacritty = {
       enable = true;
       settings = {
@@ -174,7 +196,9 @@
         };
       };
     };
-
+    programs.rofi = {
+      enable = true;
+    };
     programs.powerline-go = {
       enable = true;
     };
@@ -256,17 +280,14 @@
       enable = true;
       baseIndex = 1;
       clock24 = true;
-      mouse = true;
+      mouse = false;
       prefix = "C-a";
       terminal = "screen-256color";
       # Search plugins: nix-env -f '<nixpkgs>' -qaP -A tmuxPlugins
       plugins = with pkgs; [
-        tmuxPlugins.better-mouse-mode
         tmuxPlugins.cpu
         tmuxPlugins.sensible
         tmuxPlugins.tmux-powerline
-        tmuxPlugins.tokyo-night-tmux
-        tmuxPlugins.catppuccin
         tmuxPlugins.yank
       ];
       extraConfig = ''
@@ -276,26 +297,10 @@
         bind s split-window -v
         bind v split-window -h
         set -g automatic-rename on
-
-        set -g @catppuccin_flavour 'mocha'
-        set -g @catppuccin_window_left_separator ""
-        set -g @catppuccin_window_right_separator " "
-        set -g @catppuccin_window_middle_separator " | "
-        set -g @catppuccin_window_number_position "right"
-        set -g @catppuccin_window_default_fill "none"
-        set -g @catppuccin_window_current_fill "all"
-        set -g @catppuccin_window_current_text "#{b:pane_current_path}"
-        set -g @catppuccin_window_default_text "#{b:pane_current_path}"
-        set -g @catppuccin_status_modules_right "application session"
-        set -g @catppuccin_status_left_separator ""
-        set -g @catppuccin_status_right_separator "█"
-        set -g @catppuccin_status_right_separator_inverse "no"
-        set -g @catppuccin_status_fill "icon"
-        set -g @catppuccin_status_connect_separator "yes"
-        set -g @catppuccin_date_time_text "%Y-%m-%d %H:%M"
-        set -g @catppuccin_session_text "#{?client_prefix,#S: prefix,#S: normal}"
       '';
     };
+
+    services.flameshot.enable = true;
 
     home.stateVersion = "24.11";
   };
