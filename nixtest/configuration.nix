@@ -141,7 +141,7 @@
     fonts.fontconfig = {
       enable = true;
       defaultFonts.monospace = [
-        "IosevkaTerm Nerd Font"
+        "Iosevka Nerd Font"
       ];
     };
 
@@ -150,9 +150,7 @@
       vscode
       (pkgs.nerdfonts.override {
         fonts = [
-          "IBMPlexMono"
           "Iosevka"
-          "IosevkaTerm"
         ];
       })
     ];
@@ -178,19 +176,19 @@
       settings = {
         font = {
           normal = {
-            family = "IosevkaTerm Nerd Font";
+            family = "Iosevka Nerd Font";
             style = "Regular";
           };
           bold = {
-            family = "IosevkaTerm Nerd Font";
+            family = "Iosevka Nerd Font";
             style = "Bold";
           };
           italic = {
-            family = "IosevkaTerm Nerd Font";
+            family = "Iosevka Nerd Font";
             style = "Italic";
           };
           bold_italic = {
-            family = "IosevkaTerm Nerd Font";
+            family = "Iosevka Nerd Font";
             style = "Bold Italic";
           };
         };
