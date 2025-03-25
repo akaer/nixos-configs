@@ -101,6 +101,7 @@
     lxappearance
     mc
     most
+    ncdu
     nixpkgs-fmt
     pulseaudioFull
     sqlite
@@ -136,21 +137,33 @@
     fonts.fontconfig = {
       enable = true;
       defaultFonts.monospace = [
-        "IosevkaTerm Nerd Font"
+        "Iosevka Nerd Font"
       ];
+    };
+
+    home.sessionVariables = {
+      PROMPT_COMMAND = "history -a";
     };
 
     home.packages = with pkgs; [
       chromium
+      firefox
       vscode
       (pkgs.nerdfonts.override {
         fonts = [
-          "IBMPlexMono"
           "Iosevka"
-          "IosevkaTerm"
         ];
       })
     ];
+
+    xresources.extraConfig = builtins.readFile (
+      pkgs.fetchFromGitHub {
+        owner = "nordtheme";
+        repo = "xresources";
+        rev = "ba3b1b61bf6314abad4055eacef2f7cbea1924fb";
+        sha256 = "sha256-vw0lD2XLKhPS1zElNkVOb3zP/Kb4m0VVgOakwoJxj74=";
+      } + "/src/nord"
+    );
 
     programs.chromium = {
       enable = true;
@@ -173,19 +186,19 @@
       settings = {
         font = {
           normal = {
-            family = "IosevkaTerm Nerd Font";
+            family = "Iosevka Nerd Font";
             style = "Regular";
           };
           bold = {
-            family = "IosevkaTerm Nerd Font";
+            family = "Iosevka Nerd Font";
             style = "Bold";
           };
           italic = {
-            family = "IosevkaTerm Nerd Font";
+            family = "Iosevka Nerd Font";
             style = "Italic";
           };
           bold_italic = {
-            family = "IosevkaTerm Nerd Font";
+            family = "Iosevka Nerd Font";
             style = "Bold Italic";
           };
         };
@@ -196,6 +209,21 @@
     };
     programs.powerline-go = {
       enable = true;
+      newline = true;
+      settings = {
+        hostname-only-if-ssh = true;
+        numeric-exit-codes = true;
+        theme = "gruvbox";
+      };
+      modules = [
+        "time"
+        "user"
+        "host"
+        "ssh"
+        "cwd"
+        "gitlite"
+        "nix-shell"
+      ];
     };
     programs.fzf = {
       enable = true;
@@ -204,7 +232,30 @@
     };
     programs.bash = {
       enable = true;
+      enableCompletion = true;
       historyControl = [ "ignoreboth" "erasedups" ];
+      historyFileSize = 90000;
+      historySize = 10000;
+      historyIgnore = [
+        "?"
+        "??"
+        "???"
+        "bash"
+        "clear"
+        "exit"
+        "man*"
+        "*--help"
+      ];
+      bashrcExtra = ''
+        # Workaround for nix-shell --pure
+        if [ "$IN_NIX_SHELL" == "pure" ]; then
+            if [ -x "$HOME/.nix-profile/bin/powerline-go" ]; then
+                alias powerline-go="$HOME/.nix-profile/bin/powerline-go"
+            elif [ -x "/run/current-system/sw/bin/powerline-go" ]; then
+                alias powerline-go="/run/current-system/sw/bin/powerline-go"
+            fi
+        fi
+      '';
       shellAliases = {
         ll = "ls --color=auto -lha";
         myextip = "curl ipinfo.io/ip";
@@ -238,6 +289,7 @@
         supertab
         syntastic
         vim-bufferline
+        nord-vim
       ];
       extraConfig = ''
         set laststatus=2
@@ -259,11 +311,12 @@
         set smarttab
         set smartindent
 
-        set cursorline
-
         nnoremap <f2> :NERDTreeToggle<cr>
+
+        colorscheme nord
+
         let g:airline_powerline_fonts=1
-        let g:airline_theme='badwolf'
+        let g:airline_theme='nord'
         let g:airline#extensions#tabline#enabled=1
         let g:airline#extensions#tabline#fnamemod=':t'
         let g:airline#extensions#tabline#formatter='unique_tail'
@@ -275,15 +328,17 @@
       enable = true;
       baseIndex = 1;
       clock24 = true;
-      mouse = false;
+      mouse = true;
       prefix = "C-a";
       terminal = "screen-256color";
       # Search plugins: nix-env -f '<nixpkgs>' -qaP -A tmuxPlugins
-      plugins = with pkgs; [
-        tmuxPlugins.cpu
-        tmuxPlugins.sensible
-        tmuxPlugins.tmux-powerline
-        tmuxPlugins.yank
+      plugins = with pkgs.tmuxPlugins; [
+        cpu
+        sensible
+        battery
+        yank
+        nord
+        prefix-highlight
       ];
       extraConfig = ''
         set -g set-titles on
