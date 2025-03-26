@@ -356,7 +356,6 @@
   };
 
   programs = {
-    bash.completion.enable = true;
     mtr.enable = true;
     gnupg.agent = {
       enable = true;
