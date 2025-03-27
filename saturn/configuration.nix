@@ -149,6 +149,8 @@
       chromium
       firefox
       vscode
+      corefonts
+      scrcpy
       (pkgs.nerdfonts.override {
         fonts = [
           "Iosevka"
@@ -164,6 +166,14 @@
         sha256 = "sha256-vw0lD2XLKhPS1zElNkVOb3zP/Kb4m0VVgOakwoJxj74=";
       } + "/src/nord"
     );
+
+    programs.bat = {
+      enable = true;
+      config = {
+        theme = "Nord";
+        pager = "less -FR";
+      };
+    };
 
     programs.chromium = {
       enable = true;
@@ -321,6 +331,8 @@
         let g:airline#extensions#tabline#fnamemod=':t'
         let g:airline#extensions#tabline#formatter='unique_tail'
 
+        let g:nord_cursor_line_number_background = 1
+
         set t_Co=256
       '';
     };
@@ -401,9 +413,9 @@
       enable = true;
       extraPackages = with pkgs; [
         dmenu
-        i3status
         i3lock
         i3blocks
+        i3status
       ];
     };
   };
