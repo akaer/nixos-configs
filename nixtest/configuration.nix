@@ -99,6 +99,7 @@
     fzf
     ghostty
     git
+    glow
     htop
     jq
     killall
