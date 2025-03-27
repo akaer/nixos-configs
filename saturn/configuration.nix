@@ -113,6 +113,7 @@
     watch
     wget
     which
+    wireshark
     xclip
     xorg.xdpyinfo
     xorg.xrandr
@@ -123,7 +124,7 @@
   users.users.andrer = {
     isNormalUser = true;
     description = "André Raabe";
-    extraGroups = [ "networkmanager" "wheel" "video" ];
+    extraGroups = [ "networkmanager" "wheel" "video" "wireshark" ];
     packages = with pkgs; [ ];
   };
 
@@ -173,6 +174,15 @@
       config = {
         theme = "Nord";
         pager = "less -FR";
+      };
+    };
+
+    programs.btop = {
+      enable = true;
+      settings = {
+        truecolor = true;
+        color_theme = "nord";
+        theme_background = true;
       };
     };
 
@@ -383,6 +393,7 @@
       enableSSHSupport = true;
     };
     dconf.enable = true;
+    wireshark.enable = true;
   };
 
   fonts.enableDefaultPackages = true;
