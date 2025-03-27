@@ -147,10 +147,11 @@
 
     home.packages = with pkgs; [
       chromium
-      firefox
-      vscode
       corefonts
+      firefox
+      nordic
       scrcpy
+      vscode
       (pkgs.nerdfonts.override {
         fonts = [
           "Iosevka"
@@ -298,7 +299,6 @@
         sensible
         supertab
         syntastic
-        vim-bufferline
         nord-vim
       ];
       extraConfig = ''
@@ -314,16 +314,21 @@
 
         set autoindent
         set expandtab
-        set background=dark
         set shiftwidth=4
         set tabstop=4
         set softtabstop=4
         set smarttab
         set smartindent
 
+        set cursorline
+
         nnoremap <f2> :NERDTreeToggle<cr>
 
-        colorscheme nord
+        " this is needed to let vim do the color stuff correctly within just alacritty
+        if (has("termguicolors"))
+          set termguicolors
+        endif
+        "set t_Co=256
 
         let g:airline_powerline_fonts=1
         let g:airline_theme='nord'
@@ -331,9 +336,11 @@
         let g:airline#extensions#tabline#fnamemod=':t'
         let g:airline#extensions#tabline#formatter='unique_tail'
 
+        colorscheme nord
+        let g:nord_italic = 1
+        let g:nord_italic_comments = 1
+        let g:nord_underline = 1
         let g:nord_cursor_line_number_background = 1
-
-        set t_Co=256
       '';
     };
     programs.tmux = {
@@ -342,7 +349,7 @@
       clock24 = true;
       mouse = true;
       prefix = "C-a";
-      terminal = "screen-256color";
+      terminal = "tmux-256color";
       # Search plugins: nix-env -f '<nixpkgs>' -qaP -A tmuxPlugins
       plugins = with pkgs.tmuxPlugins; [
         cpu
@@ -359,6 +366,8 @@
         bind s split-window -v
         bind v split-window -h
         set -g automatic-rename on
+        set -g allow-passthrough on
+        set-option -sa terminal-overrides ',alacritty:RGB'
       '';
     };
 
