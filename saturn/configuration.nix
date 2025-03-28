@@ -76,6 +76,13 @@
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
+  # To allow Firefox addons
+  nixpkgs.config.packageOverrides = pkgs: {
+    nur = import (builtins.fetchTarball "https://github.com/nix-community/NUR/archive/main.tar.gz") {
+      inherit pkgs;
+    };
+  };
+
   environment.systemPackages = with pkgs; [
     _7zz
     acpi
@@ -104,6 +111,7 @@
     ncdu
     nixpkgs-fmt
     pulseaudioFull
+    glow
     sqlite
     tmux
     tree
@@ -147,9 +155,7 @@
     };
 
     home.packages = with pkgs; [
-      chromium
       corefonts
-      firefox
       nordic
       scrcpy
       vscode
@@ -159,6 +165,44 @@
         ];
       })
     ];
+
+    programs.firefox = {
+      enable = true;
+      languagePacks = [
+        "en-US"
+        "de"
+      ];
+      policies = {
+        AutofillAddressEnabled = false;
+        AutofillCreditCardEnabled = false;
+        DisableFeedbackCommands = true;
+        DisableFirefoxScreenshots = true;
+        DisableFirefoxStudies = true;
+        DisableFormHistory = true;
+        DisablePasswordReveal = true;
+        DisablePocket = true;
+        DisableSetDesktopBackground = true;
+        DisableTelemetry = true;
+        DisplayBookmarksToolbar = "always";
+      };
+      profiles = {
+        default = {
+          id = 0;
+          settings = {
+            "extensions.autoDisableScopes" = 0;
+            "browser.startup.homepage" = "https://nixos.org";
+          };
+          extensions = with pkgs.nur.repos.rycee.firefox-addons; [
+            privacy-badger
+            bitwarden
+            darkreader
+            link-cleaner
+            ublock-origin
+          ];
+        };
+      };
+
+    };
 
     xresources.extraConfig = builtins.readFile (
       pkgs.fetchFromGitHub {
@@ -302,14 +346,14 @@
       # Search plugins: nix-env -f '<nixpkgs>' -qaP -A vimPlugins
       plugins = with pkgs.vimPlugins; [
         airline
-        vim-airline-themes
         command-t
         fugitive
         nerdtree
+        nord-vim
         sensible
         supertab
         syntastic
-        nord-vim
+        vim-airline-themes
       ];
       extraConfig = ''
         set laststatus=2
@@ -362,12 +406,13 @@
       terminal = "tmux-256color";
       # Search plugins: nix-env -f '<nixpkgs>' -qaP -A tmuxPlugins
       plugins = with pkgs.tmuxPlugins; [
-        cpu
-        sensible
         battery
-        yank
+        cpu
+        fzf-tmux-url
         nord
         prefix-highlight
+        sensible
+        yank
       ];
       extraConfig = ''
         set -g set-titles on
