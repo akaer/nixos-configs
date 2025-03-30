@@ -71,6 +71,7 @@
   console = {
     font = "Lat2-Terminus16";
     keyMap = "de";
+    colors = [ "2e3440" "bf616a" "a3be8c" "d08770" "81a1c1" "b48ead" "88c0d0" "8fbcbb" "3b4252" "bf616a" "5e81ac" "8fbcbb" "8fbcbb" "434c5e" "d8dee9" "ebcb8b" ]; # blue red green orange light-blue pink cyan? light-pink(turquoise)? polar-night2 deepred teal lessteal purple grey
   };
 
   # Allow unfree packages
@@ -172,10 +173,14 @@
         "en-US"
         "de"
       ];
+      # https://mozilla.github.io/policy-templates/
       policies = {
         AutofillAddressEnabled = false;
         AutofillCreditCardEnabled = false;
+        DisableAccounts = true;
+        DisableAppUpdate = true;
         DisableFeedbackCommands = true;
+        DisableFirefoxAccounts = true;
         DisableFirefoxScreenshots = true;
         DisableFirefoxStudies = true;
         DisableFormHistory = true;
@@ -184,33 +189,66 @@
         DisableSetDesktopBackground = true;
         DisableTelemetry = true;
         DisplayBookmarksToolbar = "always";
+        DontCheckDefaultBrowser = true;
+        OverrideFirstRunPage = "";
+        OverridePostUpdatePage = "";
+        SearchBar = "unified";
       };
       profiles = {
         default = {
           id = 0;
           settings = {
             "extensions.autoDisableScopes" = 0;
-            "browser.startup.homepage" = "https://nixos.org";
+            "extensions.update.enabled" = false;
+            "browser.aboutConfig.showWarning" = false;
+            "browser.contentblocking.category" = "standard";
+            "privacy.donottrackheader.enabled" = true;
+            "widget.disable-workspace-management" = true;
+            "browser.startup.homepage" = "about:home";
+            "browser.search.region" = "US";
+            "browser.search.isUS" = false;
+            "browser.search.defaultenginename" = "DuckDuckGo";
+            "browser.search.order.1" = "DuckDuckGo";
+            "distribution.searchplugins.defaultLocale" = "en-US";
+            "general.useragent.locale" = "en-US";
+            "browser.newtabpage.pinned" = "";
+            "browser.topsites.contile.enabled" = false;
+            "browser.newtabpage.activity-stream.showSponsored" = false;
+            "browser.newtabpage.activity-stream.system.showSponsored" = false;
+            "browser.newtabpage.activity-stream.showSponsoredTopSites" = false;
+            "doh-rollout.balrog-migration-done" = true;
+            "doh-rollout.doneFirstRun" = true;
+            "dom.forms.autocomplete.formautofill" = false;
           };
           extensions = with pkgs.nur.repos.rycee.firefox-addons; [
-            privacy-badger
             bitwarden
             darkreader
             link-cleaner
+            privacy-badger
             ublock-origin
+            foxyproxy-standard
+            i-dont-care-about-cookies
+            languagetool
           ];
         };
       };
 
     };
 
+    programs.direnv = {
+      enable = true;
+      enableBashIntegration = true;
+      nix-direnv.enable = true;
+    };
+
     xresources.extraConfig = builtins.readFile (
-      pkgs.fetchFromGitHub {
-        owner = "nordtheme";
-        repo = "xresources";
-        rev = "ba3b1b61bf6314abad4055eacef2f7cbea1924fb";
-        sha256 = "sha256-vw0lD2XLKhPS1zElNkVOb3zP/Kb4m0VVgOakwoJxj74=";
-      } + "/src/nord"
+      pkgs.fetchFromGitHub
+        {
+          owner = "nordtheme";
+          repo = "xresources";
+          rev = "ba3b1b61bf6314abad4055eacef2f7cbea1924fb";
+          sha256 = "sha256-vw0lD2XLKhPS1zElNkVOb3zP/Kb4m0VVgOakwoJxj74=";
+        } + "/src/nord"
     );
 
     programs.bat = {
@@ -294,6 +332,7 @@
       enable = true;
       enableBashIntegration = true;
       tmux.enableShellIntegration = true;
+      defaultOptions = ["--color 16"];
     };
     programs.bash = {
       enable = true;
@@ -332,10 +371,12 @@
     };
     programs.git = {
       enable = true;
+      lfs.enable = true;
       userName = "André Raabe";
       userEmail = "andre.raabe@gmail.com";
       aliases = {
         lg = "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit";
+        graph = "log --decorate --oneline --graph";
       };
     };
     programs.vim = {
@@ -490,7 +531,7 @@
   environment.variables = {
     EDITOR = "vim";
     TERMINAL = "alacritty";
-    BROWSER = "chromium";
+    BROWSER = "firefox";
   };
 
   # Open ports in the firewall.

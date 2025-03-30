@@ -61,8 +61,8 @@ sudo nix-env -p /nix/var/nix/profiles/system --list-generations
 
 ## Resources
 
-https://github.com/enoren5/vbox-nixos-configs/tree/main
+  - https://github.com/enoren5/vbox-nixos-configs/tree/main
+  - https://gvolpe.com/blog/home-manager-dotfiles-management/
+  - https://github.com/Alan01252/nixos-config/
+  - https://github.com/BirdeeHub/birdeeSystems/
 
-https://gvolpe.com/blog/home-manager-dotfiles-management/
-
-https://github.com/Alan01252/nixos-config/
