@@ -198,32 +198,39 @@
         OverrideFirstRunPage = "";
         OverridePostUpdatePage = "";
         SearchBar = "unified";
+        EnableTrackingProtection = {
+          Value = true;
+          Locked = true;
+          Cryptomining = true;
+          Fingerprinting = true;
+        };
       };
       profiles = {
         default = {
           id = 0;
           settings = {
-            "extensions.autoDisableScopes" = 0;
-            "extensions.update.enabled" = false;
             "browser.aboutConfig.showWarning" = false;
             "browser.contentblocking.category" = "standard";
-            "privacy.donottrackheader.enabled" = true;
-            "widget.disable-workspace-management" = true;
-            "browser.startup.homepage" = "about:home";
-            "browser.search.region" = "US";
-            "browser.search.isUS" = false;
-            "browser.search.defaultenginename" = "DuckDuckGo";
-            "browser.search.order.1" = "DuckDuckGo";
-            "distribution.searchplugins.defaultLocale" = "en-US";
-            "general.useragent.locale" = "en-US";
-            "browser.newtabpage.pinned" = "";
-            "browser.topsites.contile.enabled" = false;
             "browser.newtabpage.activity-stream.showSponsored" = false;
-            "browser.newtabpage.activity-stream.system.showSponsored" = false;
             "browser.newtabpage.activity-stream.showSponsoredTopSites" = false;
+            "browser.newtabpage.activity-stream.system.showSponsored" = false;
+            "browser.newtabpage.pinned" = "";
+            "browser.search.defaultenginename" = "DuckDuckGo";
+            "browser.search.isUS" = false;
+            "browser.search.order.1" = "DuckDuckGo";
+            "browser.search.region" = "US";
+            "browser.startup.homepage" = "about:home";
+            "browser.topsites.contile.enabled" = false;
+            "browser.translations.automaticallyPopup" = false;
+            "distribution.searchplugins.defaultLocale" = "en-US";
             "doh-rollout.balrog-migration-done" = true;
             "doh-rollout.doneFirstRun" = true;
             "dom.forms.autocomplete.formautofill" = false;
+            "extensions.autoDisableScopes" = 0;
+            "extensions.update.enabled" = false;
+            "general.useragent.locale" = "en-US";
+            "privacy.donottrackheader.enabled" = true;
+            "widget.disable-workspace-management" = true;
           };
           extensions = with pkgs.nur.repos.rycee.firefox-addons; [
             bitwarden
