@@ -51,7 +51,10 @@
 
   hardware = {
     enableAllFirmware = true;
+    enableRedistributableFirmware = true;
     cpu.intel.updateMicrocode = true;
+    bluetooth.enable = true;
+    bluetooth.powerOnBoot = true;
   };
 
   fileSystems."/".options = [ "noatime" "nodiratime" "discard" ];
@@ -292,22 +295,6 @@
         color_theme = "nord";
         theme_background = true;
       };
-    };
-
-    programs.chromium = {
-      enable = true;
-      extensions = [
-        "ddkjiahejlhfcafbddmgiahcphecmpfh" # uBlock Origin Lite
-        "nngceckbapebfimnlniiiahkandclblb" # Bitwarden
-        "bnjjngeaknajbdcgpfkgnonkmififhfo" # Fake Filler
-        "gneeeeckemnjlgopgpchamgmfpkglgaj" # Proxy Switcher
-        "gnldpbnocfnlkkicnaplmkaphfdnlplb" # Test & Feedback
-        "efhedldbjahpgjcneebmbolkalbhckfi" # Bug Magnet
-      ];
-      dictionaries = [
-        pkgs.hunspellDictsChromium.en_US
-        pkgs.hunspellDictsChromium.de_DE
-      ];
     };
 
     programs.alacritty = {
