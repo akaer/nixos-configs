@@ -47,7 +47,7 @@
 
   boot.blacklistedKernelModules = ["nouveau"];
 
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelPackages = pkgs.linuxPackages;
 
   hardware = {
     enableAllFirmware = true;
@@ -95,10 +95,19 @@
   console = {
     font = "Lat2-Terminus16";
     keyMap = "de";
+    colors = [ "2e3440" "bf616a" "a3be8c" "d08770" "81a1c1" "b48ead" "88c0d0" "8fbcbb" "3b4252" "bf616a" "5e81ac" "8fbcbb" "8fbcbb" "434c5e" "d8dee9" "ebcb8b" ]; # blue red green orange light-blue pink cyan? light-pink(turquoise)? polar-night2 deepred teal lessteal purple grey
   };
+
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
+
+  # To allow Firefox addons
+  nixpkgs.config.packageOverrides = pkgs: {
+    nur = import (builtins.fetchTarball "https://github.com/nix-community/NUR/archive/main.tar.gz") {
+      inherit pkgs;
+    };
+  };
 
   environment.systemPackages = with pkgs; [
     _7zz
@@ -108,8 +117,8 @@
     bc
     binutils
     btop
-    curl
     colordiff
+    curl
     dconf
     direnv
     dunst
@@ -119,12 +128,18 @@
     ghostty
     git
     htop
+    jq
     killall
     linux-firmware
+    litecli
+    lxappearance
     mc
     most
+    ncdu
     nixpkgs-fmt
     pulseaudioFull
+    glow
+    sqlite
     tmux
     tree
     unrar
@@ -133,8 +148,11 @@
     watch
     wget
     which
-    xorg.xdpyinfo
+    wireshark
     xclip
+    xorg.xdpyinfo
+    xorg.xrandr
+    xsel
   ];
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
@@ -155,62 +173,219 @@
     fonts.fontconfig = {
       enable = true;
       defaultFonts.monospace = [
-        "IosevkaTerm Nerd Font"
+        "Iosevka Nerd Font"
       ];
     };
 
+    home.sessionVariables = {
+      PROMPT_COMMAND = "history -a";
+    };
+
     home.packages = with pkgs; [
-      chromium
+      corefonts
+      nordic
+      scrcpy
       vscode
       (pkgs.nerdfonts.override {
         fonts = [
-          "IBMPlexMono"
           "Iosevka"
-          "IosevkaTerm"
         ];
       })
     ];
+
+    programs.firefox = {
+      enable = true;
+      languagePacks = [
+        "en-US"
+        "de"
+      ];
+      # https://mozilla.github.io/policy-templates/
+      policies = {
+        AutofillAddressEnabled = false;
+        AutofillCreditCardEnabled = false;
+        DisableAccounts = true;
+        DisableAppUpdate = true;
+        DisableFeedbackCommands = true;
+        DisableFirefoxAccounts = true;
+        DisableFirefoxScreenshots = true;
+        DisableFirefoxStudies = true;
+        DisableFormHistory = true;
+        DisablePasswordReveal = true;
+        DisablePocket = true;
+        DisableSetDesktopBackground = true;
+        DisableTelemetry = true;
+        DisplayBookmarksToolbar = "always";
+        DontCheckDefaultBrowser = true;
+        OverrideFirstRunPage = "";
+        OverridePostUpdatePage = "";
+        SearchBar = "unified";
+      };
+      profiles = {
+        default = {
+          id = 0;
+          settings = {
+            "extensions.autoDisableScopes" = 0;
+            "extensions.update.enabled" = false;
+            "browser.aboutConfig.showWarning" = false;
+            "browser.contentblocking.category" = "standard";
+            "privacy.donottrackheader.enabled" = true;
+            "widget.disable-workspace-management" = true;
+            "browser.startup.homepage" = "about:home";
+            "browser.search.region" = "US";
+            "browser.search.isUS" = false;
+            "browser.search.defaultenginename" = "DuckDuckGo";
+            "browser.search.order.1" = "DuckDuckGo";
+            "distribution.searchplugins.defaultLocale" = "en-US";
+            "general.useragent.locale" = "en-US";
+            "browser.newtabpage.pinned" = "";
+            "browser.topsites.contile.enabled" = false;
+            "browser.newtabpage.activity-stream.showSponsored" = false;
+            "browser.newtabpage.activity-stream.system.showSponsored" = false;
+            "browser.newtabpage.activity-stream.showSponsoredTopSites" = false;
+            "doh-rollout.balrog-migration-done" = true;
+            "doh-rollout.doneFirstRun" = true;
+            "dom.forms.autocomplete.formautofill" = false;
+          };
+          extensions = with pkgs.nur.repos.rycee.firefox-addons; [
+            bitwarden
+            darkreader
+            link-cleaner
+            privacy-badger
+            ublock-origin
+            foxyproxy-standard
+            i-dont-care-about-cookies
+            languagetool
+          ];
+        };
+      };
+
+    };
+
+    programs.direnv = {
+      enable = true;
+      enableBashIntegration = true;
+      nix-direnv.enable = true;
+    };
+
+    xresources.extraConfig = builtins.readFile (
+      pkgs.fetchFromGitHub
+        {
+          owner = "nordtheme";
+          repo = "xresources";
+          rev = "ba3b1b61bf6314abad4055eacef2f7cbea1924fb";
+          sha256 = "sha256-vw0lD2XLKhPS1zElNkVOb3zP/Kb4m0VVgOakwoJxj74=";
+        } + "/src/nord"
+    );
+
+    programs.bat = {
+      enable = true;
+      config = {
+        theme = "Nord";
+        pager = "less -FR";
+      };
+    };
+
+    programs.btop = {
+      enable = true;
+      settings = {
+        truecolor = true;
+        color_theme = "nord";
+        theme_background = true;
+      };
+    };
+
+    programs.chromium = {
+      enable = true;
+      extensions = [
+        "ddkjiahejlhfcafbddmgiahcphecmpfh" # uBlock Origin Lite
+        "nngceckbapebfimnlniiiahkandclblb" # Bitwarden
+        "bnjjngeaknajbdcgpfkgnonkmififhfo" # Fake Filler
+        "gneeeeckemnjlgopgpchamgmfpkglgaj" # Proxy Switcher
+        "gnldpbnocfnlkkicnaplmkaphfdnlplb" # Test & Feedback
+        "efhedldbjahpgjcneebmbolkalbhckfi" # Bug Magnet
+      ];
+      dictionaries = [
+        pkgs.hunspellDictsChromium.en_US
+        pkgs.hunspellDictsChromium.de_DE
+      ];
+    };
 
     programs.alacritty = {
       enable = true;
       settings = {
         font = {
           normal = {
-            family = "IosevkaTerm Nerd Font";
+            family = "Iosevka Nerd Font";
             style = "Regular";
           };
           bold = {
-            family = "IosevkaTerm Nerd Font";
+            family = "Iosevka Nerd Font";
             style = "Bold";
           };
           italic = {
-            family = "IosevkaTerm Nerd Font";
+            family = "Iosevka Nerd Font";
             style = "Italic";
           };
           bold_italic = {
-            family = "IosevkaTerm Nerd Font";
+            family = "Iosevka Nerd Font";
             style = "Bold Italic";
           };
-          size = 22;
         };
-        env = {
-          WINIT_X11_SCALE_FACTOR = "1.0";
-          TERM = "screen-256color";
         };
       };
+    programs.rofi = {
+      enable = true;
     };
-
     programs.powerline-go = {
       enable = true;
+      newline = true;
+      settings = {
+        hostname-only-if-ssh = true;
+        numeric-exit-codes = true;
+        theme = "gruvbox";
+      };
+      modules = [
+        "time"
+        "user"
+        "host"
+        "ssh"
+        "cwd"
+        "gitlite"
+        "nix-shell"
+      ];
     };
     programs.fzf = {
       enable = true;
       enableBashIntegration = true;
       tmux.enableShellIntegration = true;
+      defaultOptions = ["--color 16"];
     };
     programs.bash = {
       enable = true;
+      enableCompletion = true;
       historyControl = [ "ignoreboth" "erasedups" ];
+      historyFileSize = 90000;
+      historySize = 10000;
+      historyIgnore = [
+        "?"
+        "??"
+        "???"
+        "bash"
+        "clear"
+        "exit"
+        "man*"
+        "*--help"
+      ];
+      bashrcExtra = ''
+        # Workaround for nix-shell --pure
+        if [ "$IN_NIX_SHELL" == "pure" ]; then
+            if [ -x "$HOME/.nix-profile/bin/powerline-go" ]; then
+                alias powerline-go="$HOME/.nix-profile/bin/powerline-go"
+            elif [ -x "/run/current-system/sw/bin/powerline-go" ]; then
+                alias powerline-go="/run/current-system/sw/bin/powerline-go"
+            fi
+        fi
+      '';
       shellAliases = {
         ll = "ls --color=auto -lha";
         myextip = "curl ipinfo.io/ip";
@@ -222,10 +397,12 @@
     };
     programs.git = {
       enable = true;
+      lfs.enable = true;
       userName = "André Raabe";
       userEmail = "andre.raabe@gmail.com";
       aliases = {
         lg = "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit";
+        graph = "log --decorate --oneline --graph";
       };
     };
     programs.vim = {
@@ -236,14 +413,14 @@
       # Search plugins: nix-env -f '<nixpkgs>' -qaP -A vimPlugins
       plugins = with pkgs.vimPlugins; [
         airline
-        vim-airline-themes
         command-t
         fugitive
         nerdtree
+        nord-vim
         sensible
         supertab
         syntastic
-        vim-bufferline
+        vim-airline-themes
       ];
       extraConfig = ''
         set laststatus=2
@@ -258,7 +435,6 @@
 
         set autoindent
         set expandtab
-        set background=dark
         set shiftwidth=4
         set tabstop=4
         set softtabstop=4
@@ -268,13 +444,24 @@
         set cursorline
 
         nnoremap <f2> :NERDTreeToggle<cr>
+
+        " this is needed to let vim do the color stuff correctly within just alacritty
+        if (has("termguicolors"))
+          set termguicolors
+        endif
+        "set t_Co=256
+
         let g:airline_powerline_fonts=1
-        let g:airline_theme='badwolf'
+        let g:airline_theme='nord'
         let g:airline#extensions#tabline#enabled=1
         let g:airline#extensions#tabline#fnamemod=':t'
         let g:airline#extensions#tabline#formatter='unique_tail'
 
-        set t_Co=256
+        colorscheme nord
+        let g:nord_italic = 1
+        let g:nord_italic_comments = 1
+        let g:nord_underline = 1
+        let g:nord_cursor_line_number_background = 1
       '';
     };
     programs.tmux = {
@@ -283,16 +470,16 @@
       clock24 = true;
       mouse = true;
       prefix = "C-a";
-      terminal = "screen-256color";
+      terminal = "tmux-256color";
       # Search plugins: nix-env -f '<nixpkgs>' -qaP -A tmuxPlugins
-      plugins = with pkgs; [
-        tmuxPlugins.better-mouse-mode
-        tmuxPlugins.cpu
-        tmuxPlugins.sensible
-        tmuxPlugins.tmux-powerline
-        tmuxPlugins.tokyo-night-tmux
-        tmuxPlugins.catppuccin
-        tmuxPlugins.yank
+      plugins = with pkgs.tmuxPlugins; [
+        battery
+        cpu
+        fzf-tmux-url
+        nord
+        prefix-highlight
+        sensible
+        yank
       ];
       extraConfig = ''
         set -g set-titles on
@@ -301,38 +488,24 @@
         bind s split-window -v
         bind v split-window -h
         set -g automatic-rename on
-
-        set -g @catppuccin_flavour 'mocha'
-        set -g @catppuccin_window_left_separator ""
-        set -g @catppuccin_window_right_separator " "
-        set -g @catppuccin_window_middle_separator " | "
-        set -g @catppuccin_window_number_position "right"
-        set -g @catppuccin_window_default_fill "none"
-        set -g @catppuccin_window_current_fill "all"
-        set -g @catppuccin_window_current_text "#{b:pane_current_path}"
-        set -g @catppuccin_window_default_text "#{b:pane_current_path}"
-        set -g @catppuccin_status_modules_right "application session date_time"
-        set -g @catppuccin_status_left_separator ""
-        set -g @catppuccin_status_right_separator ""
-        set -g @catppuccin_status_right_separator_inverse "no"
-        set -g @catppuccin_status_fill "icon"
-        set -g @catppuccin_status_connect_separator "yes"
-        set -g @catppuccin_date_time_text "%Y-%m-%d %H:%M"
-        set -g @catppuccin_session_text "#{?client_prefix,#S: prefix,#S: normal}"
+        set -g allow-passthrough on
+        set-option -sa terminal-overrides ',alacritty:RGB'
       '';
     };
+
+    services.flameshot.enable = true;
 
     home.stateVersion = "24.11";
   };
 
   programs = {
-    bash.completion.enable = true;
     mtr.enable = true;
     gnupg.agent = {
       enable = true;
       enableSSHSupport = true;
     };
     dconf.enable = true;
+    wireshark.enable = true;
   };
 
   fonts.enableDefaultPackages = true;
@@ -358,9 +531,6 @@
 
   services.xserver = {
     enable = true;
-    #dpi = 112;
-    dpi = 192;
-    upscaleDefaultCursor = true;
     xkb = {
       layout = "de";
       options = "eurosign:e,terminate:ctrl_alt_bksp";
@@ -373,9 +543,9 @@
       enable = true;
       extraPackages = with pkgs; [
         dmenu
-        i3status
         i3lock
         i3blocks
+        i3status
       ];
     };
   };
@@ -385,12 +555,7 @@
   environment.variables = {
     EDITOR = "vim";
     TERMINAL = "alacritty";
-    BROWSER = "chromium";
-    #GDK_SCALE = "2.2";
-    #GDK_DPI_SCALE = "0.4";
-    #_JAVA_OPTIONS = "-Dsun.java2d.uiScale=2.2";
-    QT_AUTO_SCREEN_SCALE_FACTOR = "1";
-    XCURSOR_SIZE = "64";
+    BROWSER = "firefox";
   };
 
   # Open ports in the firewall.
@@ -405,8 +570,5 @@
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-
   system.stateVersion = "24.11"; # Did you read the comment?
-
 }
-
