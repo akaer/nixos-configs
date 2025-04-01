@@ -45,7 +45,7 @@
     options nouveau modeset=0
   '';
 
-  boot.blacklistedKernelModules = ["nouveau"];
+  boot.blacklistedKernelModules = [ "nouveau" ];
 
   boot.kernelPackages = pkgs.linuxPackages;
 
@@ -55,6 +55,7 @@
     cpu.intel.updateMicrocode = true;
     bluetooth.enable = true;
     bluetooth.powerOnBoot = true;
+    pulseaudio.enable = false; # Use Pipewire, the modern sound subsystem
   };
 
   fileSystems."/".options = [ "noatime" "nodiratime" "discard" ];
@@ -72,7 +73,7 @@
         ];
         pskRaw = "69728e0f38eaf31ee08ba76d4104202e05f7212d5d5323d8c96da4b03c29fa66";
       };
-      open_wifi_stealing_ur_datas = {};
+      open_wifi_stealing_ur_datas = { };
     };
   };
 
@@ -119,6 +120,8 @@
     bat
     bc
     binutils
+    bluez
+    bluez-tools
     btop
     colordiff
     curl
@@ -130,6 +133,7 @@
     fzf
     ghostty
     git
+    glow
     htop
     jq
     killall
@@ -140,9 +144,12 @@
     most
     ncdu
     nixpkgs-fmt
+    pamixer
+    pavucontrol
+    pciutils
     pulseaudioFull
-    glow
     sqlite
+    tldr
     tmux
     tree
     unrar
@@ -162,7 +169,7 @@
   users.users.andrer = {
     isNormalUser = true;
     description = "André Raabe";
-    extraGroups = [ "networkmanager" "wheel" "video" ];
+    extraGroups = [ "networkmanager" "wheel" "video" "audio" "wireshark" ];
     packages = with pkgs; [ ];
   };
 
@@ -222,42 +229,51 @@
         OverrideFirstRunPage = "";
         OverridePostUpdatePage = "";
         SearchBar = "unified";
+        EnableTrackingProtection = {
+          Value = true;
+          Locked = true;
+          Cryptomining = true;
+          Fingerprinting = true;
+        };
       };
       profiles = {
         default = {
           id = 0;
           settings = {
-            "extensions.autoDisableScopes" = 0;
-            "extensions.update.enabled" = false;
             "browser.aboutConfig.showWarning" = false;
             "browser.contentblocking.category" = "standard";
-            "privacy.donottrackheader.enabled" = true;
-            "widget.disable-workspace-management" = true;
-            "browser.startup.homepage" = "about:home";
-            "browser.search.region" = "US";
-            "browser.search.isUS" = false;
-            "browser.search.defaultenginename" = "DuckDuckGo";
-            "browser.search.order.1" = "DuckDuckGo";
-            "distribution.searchplugins.defaultLocale" = "en-US";
-            "general.useragent.locale" = "en-US";
-            "browser.newtabpage.pinned" = "";
-            "browser.topsites.contile.enabled" = false;
             "browser.newtabpage.activity-stream.showSponsored" = false;
-            "browser.newtabpage.activity-stream.system.showSponsored" = false;
             "browser.newtabpage.activity-stream.showSponsoredTopSites" = false;
+            "browser.newtabpage.activity-stream.system.showSponsored" = false;
+            "browser.newtabpage.pinned" = "";
+            "browser.search.defaultenginename" = "DuckDuckGo";
+            "browser.search.isUS" = false;
+            "browser.search.order.1" = "DuckDuckGo";
+            "browser.search.region" = "US";
+            "browser.startup.homepage" = "about:home";
+            "browser.topsites.contile.enabled" = false;
+            "browser.translations.automaticallyPopup" = false;
+            "distribution.searchplugins.defaultLocale" = "en-US";
             "doh-rollout.balrog-migration-done" = true;
             "doh-rollout.doneFirstRun" = true;
             "dom.forms.autocomplete.formautofill" = false;
+            "extensions.autoDisableScopes" = 0;
+            "extensions.update.enabled" = false;
+            "general.useragent.locale" = "en-US";
+            "privacy.donottrackheader.enabled" = true;
+            "widget.disable-workspace-management" = true;
           };
           extensions = with pkgs.nur.repos.rycee.firefox-addons; [
             bitwarden
             darkreader
-            link-cleaner
-            privacy-badger
-            ublock-origin
             foxyproxy-standard
             i-dont-care-about-cookies
             languagetool
+            link-cleaner
+            linkding-extension
+            privacy-badger
+            theme-nord-polar-night
+            ublock-origin
           ];
         };
       };
@@ -318,8 +334,8 @@
             style = "Bold Italic";
           };
         };
-        };
       };
+    };
     programs.rofi = {
       enable = true;
     };
@@ -345,7 +361,7 @@
       enable = true;
       enableBashIntegration = true;
       tmux.enableShellIntegration = true;
-      defaultOptions = ["--color 16"];
+      defaultOptions = [ "--color 16" ];
     };
     programs.bash = {
       enable = true;
@@ -511,10 +527,13 @@
 
   services.pipewire = {
     enable = true;
+    audio.enable = true;
+    pulse.enable = true;
     alsa.enable = true;
     alsa.support32Bit = true;
-    pulse.enable = true;
   };
+
+  security.rtkit.enable = true;
 
   services.xserver = {
     enable = true;

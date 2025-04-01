@@ -44,7 +44,9 @@
 
   hardware = {
     enableAllFirmware = true;
+    enableRedistributableFirmware = true;
     cpu.intel.updateMicrocode = true;
+    pulseaudio.enable = false; # Use Pipewire, the modern sound subsystem
   };
 
   fileSystems."/".options = [ "noatime" "nodiratime" "discard" ];
@@ -96,6 +98,8 @@
     bat
     bc
     binutils
+    bluez
+    bluez-tools
     btop
     colordiff
     curl
@@ -107,18 +111,23 @@
     fzf
     ghostty
     git
+    glow
     htop
     jq
     killall
     linux-firmware
+    litecli
     lxappearance
     mc
     most
     ncdu
     nixpkgs-fmt
+    pamixer
+    pavucontrol
+    pciutils
     pulseaudioFull
-    glow
     sqlite
+    tldr
     tmux
     tree
     unrar
@@ -138,7 +147,7 @@
   users.users.andrer = {
     isNormalUser = true;
     description = "André Raabe";
-    extraGroups = [ "networkmanager" "wheel" "video" "wireshark" ];
+    extraGroups = [ "networkmanager" "wheel" "video" "audio" "wireshark" ];
     packages = with pkgs; [ ];
   };
 
@@ -235,12 +244,14 @@
           extensions = with pkgs.nur.repos.rycee.firefox-addons; [
             bitwarden
             darkreader
-            link-cleaner
-            privacy-badger
-            ublock-origin
             foxyproxy-standard
             i-dont-care-about-cookies
             languagetool
+            link-cleaner
+            linkding-extension
+            privacy-badger
+            theme-nord-polar-night
+            ublock-origin
           ];
         };
       };
@@ -278,22 +289,6 @@
         color_theme = "nord";
         theme_background = true;
       };
-    };
-
-    programs.chromium = {
-      enable = true;
-      extensions = [
-        "ddkjiahejlhfcafbddmgiahcphecmpfh" # uBlock Origin Lite
-        "nngceckbapebfimnlniiiahkandclblb" # Bitwarden
-        "bnjjngeaknajbdcgpfkgnonkmififhfo" # Fake Filler
-        "gneeeeckemnjlgopgpchamgmfpkglgaj" # Proxy Switcher
-        "gnldpbnocfnlkkicnaplmkaphfdnlplb" # Test & Feedback
-        "efhedldbjahpgjcneebmbolkalbhckfi" # Bug Magnet
-      ];
-      dictionaries = [
-        pkgs.hunspellDictsChromium.en_US
-        pkgs.hunspellDictsChromium.de_DE
-      ];
     };
 
     programs.alacritty = {
@@ -344,7 +339,7 @@
       enable = true;
       enableBashIntegration = true;
       tmux.enableShellIntegration = true;
-      defaultOptions = ["--color 16"];
+      defaultOptions = [ "--color 16" ];
     };
     programs.bash = {
       enable = true;
@@ -510,10 +505,13 @@
 
   services.pipewire = {
     enable = true;
+    audio.enable = true;
+    pulse.enable = true;
     alsa.enable = true;
     alsa.support32Bit = true;
-    pulse.enable = true;
   };
+
+  security.rtkit.enable = true;
 
   services.xserver = {
     enable = true;
