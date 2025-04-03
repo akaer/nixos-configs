@@ -117,6 +117,8 @@
     _7zz
     acpi
     alacritty
+    arandr
+    autorandr
     bat
     bc
     binutils
@@ -160,6 +162,7 @@
     which
     wireshark
     xclip
+    xss-lock
     xorg.xdpyinfo
     xorg.xrandr
     xsel
@@ -193,12 +196,19 @@
 
     home.packages = with pkgs; [
       corefonts
+      font-awesome
+      font-awesome_5
+      font-awesome_4
       nordic
       scrcpy
       vscode
       (pkgs.nerdfonts.override {
         fonts = [
           "Iosevka"
+          "FiraCode"
+          "DejaVuSansMono"
+          "NerdFontsSymbolsOnly"
+          "SourceCodePro"
         ];
       })
     ];
@@ -338,6 +348,15 @@
     };
     programs.rofi = {
       enable = true;
+      font = "Iosevka Nerd Font 12";
+      location = "center";
+      theme = "Arc-Dark";
+      plugins = [
+        pkgs.rofi-calc
+        pkgs.rofi-emoji
+        pkgs.rofi-bluetooth
+        pkgs.rofi-power-menu
+      ];
     };
     programs.powerline-go = {
       enable = true;
@@ -474,6 +493,11 @@
       mouse = true;
       prefix = "C-a";
       terminal = "tmux-256color";
+      aggressiveResize = true;
+      historyLimit = 100000;
+      resizeAmount = 5;
+      escapeTime = 0;
+
       # Search plugins: nix-env -f '<nixpkgs>' -qaP -A tmuxPlugins
       plugins = with pkgs.tmuxPlugins; [
         battery
@@ -487,13 +511,131 @@
       extraConfig = ''
         set -g set-titles on
         set -g set-titles-string "#I:#P - #W - #T"
-        set -g update-environment "SSH_ASKPASS SSH_AUTH_SOCK SSH_AGENT_PID SSH_CONNECTION"
+        set -g update-environment "SSH_ASKPASS SSH_AUTH_SOCK SSH_AGENT_PID SSH_CONNECTION DISPLAY"
         bind s split-window -v
         bind v split-window -h
         set -g automatic-rename on
         set -g allow-passthrough on
         set-option -sa terminal-overrides ',alacritty:RGB'
       '';
+    };
+
+    programs.i3status-rust = {
+      enable = true;
+      bars = {
+        top = {
+          icons = "awesome5";
+          theme = "nord-dark";
+          blocks = [
+            {
+              block = "net";
+              device = "wlp0s20f3";
+              interval = 5;
+            }
+            {
+              block = "cpu";
+              format = " $icon $utilization ";
+              format_alt = " $icon $frequency{ $boost|} ";
+              interval = 3;
+            }
+            {
+              block = "load";
+              format = " $icon $1m ";
+              interval = 1;
+            }
+            {
+              block = "memory";
+              format = " $icon $mem_total_used_percents.eng(w:2)";
+              format_alt = " $icon_swap $swap_used_percents.eng(w:2) ";
+            }
+            {
+              block = "disk_space";
+              path = "/";
+              alert = 10.0;
+              warning = 20.0;
+              info_type = "available";
+              alert_unit = "GB";
+              interval = 60;
+              format = " $icon  /: $available.eng(w:2)";
+            }
+            {
+              block = "disk_space";
+              path = "/home";
+              alert = 10.0;
+              warning = 20.0;
+              info_type = "available";
+              alert_unit = "GB";
+              interval = 60;
+              format = " $icon  /home: $available.eng(w:2)";
+            }
+            {
+              block = "sound";
+              click = [
+                {
+                  button = "left";
+                  cmd = "pavucontrol";
+                }
+              ];
+            }
+            {
+              block = "battery";
+              format = " $icon  $percentage ";
+            }
+            {
+              block = "time";
+              interval = 60;
+              format = "$icon  $timestamp.datetime(f:'%a %d.%m.%Y (CW: %U) %H:%M') ";
+            }
+          ];
+        };
+      };
+    };
+
+    # https://nix-community.github.io/home-manager/options.xhtml#opt-xsession.windowManager.i3.enable
+    xsession.windowManager.i3 = {
+      enable = true;
+      extraConfig = ''
+        set $mode_system System (l) lock, (e) logout, (s) suspend, (r) reboot, (Shift+s) shutdown
+        mode "$mode_system" {
+          bindsym l exec --no-startup-id loginctl lock-session, mode "default"
+          bindsym e exec --no-startup-id i3-msg exit, mode "default"
+          bindsym s exec --no-startup-id loginctl lock-session && systemctl suspend, mode "default"
+          bindsym r exec --no-startup-id systemctl reboot, mode "default"
+          bindsym Shift+s exec --no-startup-id systemctl poweroff -i, mode "default"
+
+          # back to normal: Enter or Escape
+          bindsym Return mode "default"
+          bindsym Escape mode "default"
+        }
+      '';
+      config = {
+        modifier = "Mod4";
+        fonts = {
+          names = [ "Iosevka Nerd Font" ];
+          style = "Regular";
+          size = 8.0;
+        };
+        startup = [
+          { command = "flameshot"; notification = false; }
+          { command = "xss-lock --transfer-sleep-lock -- i3lock --nofork -e -f -c 03062C"; notification = false; }
+        ];
+        menu = "\"rofi -modi window,drun,run,calc -icon-theme 'Papirus' -show-icons -show drun -sidebar-mode -terminal i3-sensible-terminal\"";
+        keybindings = lib.mkOptionDefault {
+          "Mod4+Shift+e" = "mode \"$mode_system\"";
+        };
+        bars = [
+          {
+            position = "top";
+            fonts = {
+              names = [ "Iosevka Nerd Font" "Font Awesome 5 Free" ];
+              style = "Regular";
+              size = 10.0;
+            };
+            trayOutput = "primary";
+            statusCommand = "${pkgs.i3status-rust}/bin/i3status-rs ~/.config/i3status-rust/config-top.toml";
+          }
+        ];
+      };
     };
 
     services.flameshot.enable = true;
@@ -549,9 +691,11 @@
       enable = true;
       extraPackages = with pkgs; [
         dmenu
+        rofi
+        papirus-icon-theme
         i3lock
         i3blocks
-        i3status
+        i3status-rust
       ];
     };
   };
@@ -565,10 +709,11 @@
   };
 
   # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
+  networking.firewall.allowedTCPPorts = [ 22 ];
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
+  networking.firewall.allowPing = true;
+  networking.firewall.enable = false;
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions

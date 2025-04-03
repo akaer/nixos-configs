@@ -69,4 +69,5 @@ sudo nix-env -p /nix/var/nix/profiles/system --list-generations
   - https://www.reddit.com/r/NixOS/comments/1d0b1i3/setup_monitors_in_i3/
   - https://github.com/efim/dotfiles/blob/18c3dd12a596d5fd2a0ca3bc7b734fe9206637b0/nixpkgs/hosts/personal-laptop/home.nix
   - https://github.com/efim/dotfiles/blob/18c3dd12a596d5fd2a0ca3bc7b734fe9206637b0/nixpkgs/my-autorandr.nix
+  - https://github.com/nix-community/home-manager/pull/222
 
