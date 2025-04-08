@@ -175,6 +175,8 @@
     xss-lock
   ];
 
+  fonts.enableDefaultPackages = true;
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.andrer = {
     isNormalUser = true;
@@ -195,6 +197,48 @@
       defaultFonts.monospace = [
         "Iosevka Nerd Font"
       ];
+    };
+
+    xresources.extraConfig = builtins.readFile (
+      pkgs.fetchFromGitHub
+        {
+          owner = "nordtheme";
+          repo = "xresources";
+          rev = "ba3b1b61bf6314abad4055eacef2f7cbea1924fb";
+          sha256 = "sha256-vw0lD2XLKhPS1zElNkVOb3zP/Kb4m0VVgOakwoJxj74=";
+        } + "/src/nord"
+    );
+
+    gtk = {
+      enable = true;
+      theme.name = "Nordic";
+      gtk2 = {
+        extraConfig = ''
+          gtk-application-prefer-dark-theme=true;
+          gtk-font-name="FiraCode Nerd, 10";
+        '';
+      };
+      gtk3 = {
+        extraCss = ''
+          VteTerminal, vte-terminal {
+            padding: 30px;
+          }
+        '';
+        extraConfig = {
+          "gtk-application-prefer-dark-theme" = true;
+          "gtk-font-name" = "FiraCode Nerd, 10";
+        };
+      };
+      gtk4.extraConfig = {
+        "gtk-application-prefer-dark-theme" = true;
+        "gtk-font-name" = "FiraCode Nerd, 10";
+      };
+    };
+
+    qt = {
+      enable = true;
+      style.package = pkgs.libsForQt5.qtstyleplugins;
+      platformTheme = "gtk";
     };
 
     home.sessionVariables = {
@@ -296,7 +340,6 @@
           ];
         };
       };
-
     };
 
     programs.direnv = {
@@ -304,16 +347,6 @@
       enableBashIntegration = true;
       nix-direnv.enable = true;
     };
-
-    xresources.extraConfig = builtins.readFile (
-      pkgs.fetchFromGitHub
-        {
-          owner = "nordtheme";
-          repo = "xresources";
-          rev = "ba3b1b61bf6314abad4055eacef2f7cbea1924fb";
-          sha256 = "sha256-vw0lD2XLKhPS1zElNkVOb3zP/Kb4m0VVgOakwoJxj74=";
-        } + "/src/nord"
-    );
 
     programs.bat = {
       enable = true;
@@ -355,6 +388,7 @@
         };
       };
     };
+
     programs.rofi = {
       enable = true;
       font = "Iosevka Nerd Font 12";
@@ -367,6 +401,7 @@
         pkgs.rofi-power-menu
       ];
     };
+
     programs.powerline-go = {
       enable = true;
       newline = true;
@@ -385,12 +420,14 @@
         "nix-shell"
       ];
     };
+
     programs.fzf = {
       enable = true;
       enableBashIntegration = true;
       tmux.enableShellIntegration = true;
       defaultOptions = [ "--color 16" ];
     };
+
     programs.bash = {
       enable = true;
       enableCompletion = true;
@@ -426,6 +463,7 @@
         ln = "ln -i";
       };
     };
+
     programs.git = {
       enable = true;
       lfs.enable = true;
@@ -436,6 +474,7 @@
         graph = "log --decorate --oneline --graph";
       };
     };
+
     programs.vim = {
       enable = true;
       settings = {
@@ -495,6 +534,7 @@
         let g:nord_cursor_line_number_background = 1
       '';
     };
+
     programs.tmux = {
       enable = true;
       baseIndex = 1;
@@ -695,7 +735,6 @@
     wireshark.enable = true;
   };
 
-  fonts.enableDefaultPackages = true;
 
   services.acpid.enable = true;
 
