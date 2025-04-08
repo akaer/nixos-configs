@@ -70,4 +70,6 @@ sudo nix-env -p /nix/var/nix/profiles/system --list-generations
   - https://github.com/efim/dotfiles/blob/18c3dd12a596d5fd2a0ca3bc7b734fe9206637b0/nixpkgs/hosts/personal-laptop/home.nix
   - https://github.com/efim/dotfiles/blob/18c3dd12a596d5fd2a0ca3bc7b734fe9206637b0/nixpkgs/my-autorandr.nix
   - https://github.com/nix-community/home-manager/pull/222
+  - https://discourse.nixos.org/t/lightdm-dwm-issues/32661
+  - https://discourse.nixos.org/t/lightdm-greeter-with-nm-applet-or-any-other-network-connectivity-tool/10454
 

@@ -102,7 +102,6 @@
     colors = [ "2e3440" "bf616a" "a3be8c" "d08770" "81a1c1" "b48ead" "88c0d0" "8fbcbb" "3b4252" "bf616a" "5e81ac" "8fbcbb" "8fbcbb" "434c5e" "d8dee9" "ebcb8b" ]; # blue red green orange light-blue pink cyan? light-pink(turquoise)? polar-night2 deepred teal lessteal purple grey
   };
 
-
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
@@ -129,6 +128,8 @@
     curl
     dconf
     direnv
+    docker
+    docker-compose
     dunst
     file
     flameshot
@@ -137,42 +138,48 @@
     git
     glow
     htop
+    iptables
     jq
     killall
     linux-firmware
     litecli
+    lshw
     lxappearance
     mc
     most
     ncdu
+    nftables
     nixpkgs-fmt
     pamixer
     pavucontrol
     pciutils
     pulseaudioFull
+    remmina
     sqlite
+    teams-for-linux
     tldr
     tmux
     tree
     unrar
     unzip
     vim-full
+    vmware-horizon-client
     watch
     wget
     which
     wireshark
     xclip
-    xss-lock
     xorg.xdpyinfo
     xorg.xrandr
     xsel
+    xss-lock
   ];
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.andrer = {
     isNormalUser = true;
     description = "André Raabe";
-    extraGroups = [ "networkmanager" "wheel" "video" "audio" "wireshark" ];
+    extraGroups = [ "networkmanager" "wheel" "video" "audio" "wireshark" "docker"];
     packages = with pkgs; [ ];
   };
 
@@ -202,6 +209,8 @@
       nordic
       scrcpy
       vscode
+      vlc
+      mpv
       (pkgs.nerdfonts.override {
         fonts = [
           "Iosevka"
@@ -520,6 +529,34 @@
       '';
     };
 
+    programs.autorandr = {
+      enable = true;
+      profiles = {
+        "arbeitszimmer" = {
+          fingerprint = {
+            eDP-1 = "00ffffffffffff004c836441000000000b1f0104b5221678020cf1ae523cb9230c50540000000101010101010101010101010101010171df0050f06020902008880058d71000001b71df0050f06020902008880058d71000001b000000fe0044334b4a468031363059563033000000000003040300010000000b010a202001f802030f00e3058000e606050174600700000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000b7";
+            DP-4 = "00ffffffffffff0004720705c1280000101d0103804627782aa0b59d5952a0260d5054bfef808180e1c0d1c0a940b300d100a9c081c0565e00a0a0a0295030203500bb892100001a000000ff005447434545303031335030300a000000fd00174c0f5a1e000a202020202020000000fc0045423332314851550a202020200116020327f052100504030207061f14131211161520212201230907078301000067030c0010001042023a801871382d40582c4500bb892100001e011d8018711c1620582c2500bb892100009e011d007251d01e206e285500bb892100001e8c0ad08a20e02d10103e9600bb89210000180000000000000000000000000000000093";
+          };
+          config = {
+            eDP-1 = {
+              enable = true;
+              primary = false;
+              mode = "1920x1200";
+              rate = "60.0";
+              position = "2560x0";
+            };
+            DP-4 = {
+              enable = true;
+              primary = true;
+              mode = "2560x1440";
+              rate = "60.0";
+              position = "0x0";
+            };
+          };
+        };
+      };
+    };
+
     programs.i3status-rust = {
       enable = true;
       bars = {
@@ -639,6 +676,11 @@
     };
 
     services.flameshot.enable = true;
+    services.remmina.enable = true;
+    services.remmina.addRdpMimeTypeAssoc = true;
+    services.remmina.systemdService.enable = true;
+    services.autorandr.enable = true;
+    services.autorandr.ignoreLid = true;
 
     home.stateVersion = "24.11";
   };
@@ -656,6 +698,9 @@
   fonts.enableDefaultPackages = true;
 
   services.acpid.enable = true;
+
+  services.fstrim.enable = true;
+  services.tlp.enable = true;
 
   services.dbus.enable = true;
   services.dbus.packages = [ pkgs.dconf ];
@@ -698,22 +743,43 @@
         i3status-rust
       ];
     };
+    displayManager.lightdm = {
+      enable = true;
+      greeters.gtk = {
+        enable = true;
+        theme.package = pkgs.nordic;
+        theme.name = "Nordic";
+      };
+      extraConfig = ''
+        logind-check-graphical=true
+      '';
+    };
   };
   services.displayManager.autoLogin.enable = true;
   services.displayManager.autoLogin.user = "andrer";
+  services.displayManager.logToFile = true;
+
+  virtualisation.docker.enable = true;
+  virtualisation.docker.rootless = {
+    enable = true;
+    setSocketVariable = true;
+  };
 
   environment.variables = {
     EDITOR = "vim";
     TERMINAL = "alacritty";
     BROWSER = "firefox";
+    NIXPKGS_ALLOW_UNFREE = 1;
   };
 
-  # Open ports in the firewall.
-  networking.firewall.allowedTCPPorts = [ 22 ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  networking.firewall.allowPing = true;
-  networking.firewall.enable = false;
+  networking.nftables.enable = true;
+  networking.firewall = {
+    enable = true;
+    allowedTCPPorts = [ 22 ];
+    # networking.firewall.allowedUDPPorts = [ ... ];
+    # Or disable the firewall altogether.
+    allowPing = true;
+  };
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
