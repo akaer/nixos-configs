@@ -138,9 +138,11 @@
     git
     glow
     htop
+    inotify-tools
     iptables
     jq
     killall
+    libnotify
     linux-firmware
     litecli
     lshw
@@ -148,6 +150,7 @@
     mc
     most
     ncdu
+    nemo-with-extensions
     nftables
     nixpkgs-fmt
     pamixer
@@ -160,14 +163,15 @@
     tldr
     tmux
     tree
+    udisks
     unrar
     unzip
+    usbutils
     vim-full
     vmware-horizon-client
     watch
     wget
     which
-    wireshark
     xclip
     xorg.xdpyinfo
     xorg.xrandr
@@ -181,7 +185,7 @@
   users.users.andrer = {
     isNormalUser = true;
     description = "André Raabe";
-    extraGroups = [ "networkmanager" "wheel" "video" "audio" "wireshark" "docker"];
+    extraGroups = [ "networkmanager" "wheel" "video" "audio" "wireshark" "docker" ];
     packages = with pkgs; [ ];
   };
 
@@ -191,6 +195,28 @@
   # Find options: https://nix-community.github.io/home-manager/options.xhtml
   home-manager.users.andrer = { pkgs, ... }: {
     nixpkgs.config.allowUnfree = true;
+
+    xdg.desktopEntries.nemo = {
+      name = "Nemo";
+      exec = "${pkgs.nemo-with-extensions}/bin/nemo";
+    };
+
+    xdg.mimeApps = {
+      enable = true;
+      defaultApplications = {
+        "inode/directory" = [ "nemo.desktop" ];
+        "application/x-gnome-saved-search" = [ "nemo.desktop" ];
+      };
+    };
+
+    dconf = {
+      settings = {
+        "org/cinnamon/desktop/applications/terminal" = {
+          exec = "alacritty";
+          # exec-arg = ""; # argument
+        };
+      };
+    };
 
     fonts.fontconfig = {
       enable = true;
@@ -473,6 +499,15 @@
         lg = "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit";
         graph = "log --decorate --oneline --graph";
       };
+      delta = {
+        enable = true;
+        options = {
+          syntax-theme = "Nord";
+          minus-style = "#fdf6e3 #dc322f";
+          plus-style = "#fdf6e3 #859900";
+          side-by-side = false;
+        };
+      };
     };
 
     programs.vim = {
@@ -572,6 +607,21 @@
     programs.autorandr = {
       enable = true;
       profiles = {
+        "notebook" = {
+          fingerprint = {
+            eDP-1 = "00ffffffffffff004c836441000000000b1f0104b5221678020cf1ae523cb9230c50540000000101010101010101010101010101010171df0050f06020902008880058d71000001b71df0050f06020902008880058d71000001b000000fe0044334b4a468031363059563033000000000003040300010000000b010a202001f802030f00e3058000e606050174600700000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000b7";
+          };
+          config = {
+            eDP-1 = {
+              enable = true;
+              primary = true;
+              mode = "1920x1200";
+              rate = "60.0";
+              position = "0x0";
+              filter = "nearest";
+            };
+          };
+        };
         "arbeitszimmer" = {
           fingerprint = {
             eDP-1 = "00ffffffffffff004c836441000000000b1f0104b5221678020cf1ae523cb9230c50540000000101010101010101010101010101010171df0050f06020902008880058d71000001b71df0050f06020902008880058d71000001b000000fe0044334b4a468031363059563033000000000003040300010000000b010a202001f802030f00e3058000e606050174600700000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000b7";
@@ -696,7 +746,7 @@
           { command = "flameshot"; notification = false; }
           { command = "xss-lock --transfer-sleep-lock -- i3lock --nofork -e -f -c 03062C"; notification = false; }
         ];
-        menu = "\"rofi -modi window,drun,run,calc -icon-theme 'Papirus' -show-icons -show drun -sidebar-mode -terminal i3-sensible-terminal\"";
+        menu = "\"rofi -modi window,drun,run,calc -icon-theme 'Papirus-Nord' -show-icons -show drun -sidebar-mode -terminal i3-sensible-terminal\"";
         keybindings = lib.mkOptionDefault {
           "Mod4+Shift+e" = "mode \"$mode_system\"";
         };
@@ -712,6 +762,57 @@
             statusCommand = "${pkgs.i3status-rust}/bin/i3status-rs ~/.config/i3status-rust/config-top.toml";
           }
         ];
+      };
+    };
+
+    services.dunst = {
+      enable = true;
+      iconTheme = {
+        name = "papirus-nord";
+        package = pkgs.papirus-nord;
+      };
+      settings = {
+        global = {
+          width = 300;
+          height = 300;
+          offset = "30x50";
+          origin = "top-right";
+          transparency = 10;
+          frame_color = "#eceff1";
+          font = "Iosevka Nerd Font 9";
+        };
+
+        urgency_low = {
+          background = "#2E3440";
+          foreground = "#D8DEE9";
+          timeout = 10;
+        };
+
+        urgency_normal = {
+          background = "#2E3440";
+          foreground = "#D8DEE9";
+          timeout = 10;
+        };
+
+        urgency_critical = {
+          background = "#2E3440";
+          foreground = "#D8DEE9";
+          frame_color = "#BF616A";
+          timeout = 20;
+        };
+
+      };
+    };
+
+    services.udiskie = {
+      enable = true;
+      automount = true;
+      notify = true;
+      tray = "always";
+      settings = {
+        program_options = {
+          file_manager = "${pkgs.nemo-with-extensions}/bin/nemo";
+        };
       };
     };
 
@@ -735,21 +836,21 @@
     wireshark.enable = true;
   };
 
-
   services.acpid.enable = true;
-
   services.fstrim.enable = true;
   services.tlp.enable = true;
-
   services.dbus.enable = true;
   services.dbus.packages = [ pkgs.dconf ];
-
-  services.openssh.enable = true;
+  services.openssh = {
+    enable = true;
+    allowSFTP = true;
+  };
 
   # Enable touchpad support (enabled default in most desktopManager).
   services.libinput.enable = true;
 
   services.printing.enable = true;
+  services.udisks2.enable = true;
 
   services.pipewire = {
     enable = true;
@@ -760,6 +861,7 @@
   };
 
   security.rtkit.enable = true;
+  security.polkit.enable = true;
 
   services.xserver = {
     enable = true;
@@ -776,7 +878,7 @@
       extraPackages = with pkgs; [
         dmenu
         rofi
-        papirus-icon-theme
+        papirus-nord
         i3lock
         i3blocks
         i3status-rust
