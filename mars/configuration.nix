@@ -125,19 +125,28 @@
     bluez-tools
     btop
     colordiff
+    cpufetch # Terminal CPU info
+    croc # Terminal file transfer
     curl
+    curlie # Terminal HTTP client
     dconf
     direnv
     docker
     docker-compose
+    dos2unix
     dunst
     file
+    file # Terminal file info
     flameshot
+    frogmouth # Terminal markdown viewer
     fzf
     ghostty
+    girouette # Modern Unix weather
     git
     glow
     htop
+    httpie # Terminal HTTP client
+    hueadm # Terminal Philips Hue client
     inotify-tools
     iptables
     jq
@@ -147,22 +156,28 @@
     litecli
     lshw
     lxappearance
+    marp-cli # Terminal Markdown presenter
     mc
     most
+    mtr # Modern Unix `traceroute`
     ncdu
     nemo-with-extensions
     nftables
     nixpkgs-fmt
+    optipng # Terminal PNG optimizer
     pamixer
     pavucontrol
     pciutils
     pulseaudioFull
     remmina
+    rsync
+    speedtest-go # Terminal speedtest.net
     sqlite
     teams-for-linux
     tldr
     tmux
     tree
+    udiskie
     udisks
     unrar
     unzip
@@ -172,6 +187,7 @@
     watch
     wget
     which
+    wormhole-william # Terminal file transfer
     xclip
     xorg.xdpyinfo
     xorg.xrandr
@@ -185,7 +201,7 @@
   users.users.andrer = {
     isNormalUser = true;
     description = "André Raabe";
-    extraGroups = [ "networkmanager" "wheel" "video" "audio" "wireshark" "docker" ];
+    extraGroups = [ "networkmanager" "wheel" "video" "audio" "wireshark" "docker" "kvm" ];
     packages = with pkgs; [ ];
   };
 
@@ -269,6 +285,9 @@
 
     home.sessionVariables = {
       PROMPT_COMMAND = "history -a";
+      MANPAGER = "sh -c 'col --no-backspaces --spaces | bat --language man'";
+      MANROFFOPT = "-c";
+      PAGER = "bat";
     };
 
     home.packages = with pkgs; [
@@ -374,8 +393,18 @@
       nix-direnv.enable = true;
     };
 
+    programs.dircolors = {
+      enable = true;
+      enableBashIntegration = true;
+    };
+
     programs.bat = {
       enable = true;
+      extraPackages = with pkgs.bat-extras; [
+        batgrep
+        batwatch
+        prettybat
+      ];
       config = {
         theme = "Nord";
         pager = "less -FR";
@@ -487,6 +516,7 @@
         mv = "mv -i";
         cp = "cp -i";
         ln = "ln -i";
+        dmesg = "dmesg --human --color=always";
       };
     };
 
@@ -830,10 +860,10 @@
     mtr.enable = true;
     gnupg.agent = {
       enable = true;
-      enableSSHSupport = true;
     };
     dconf.enable = true;
     wireshark.enable = true;
+    ssh.startAgent = true;
   };
 
   services.acpid.enable = true;
@@ -913,7 +943,7 @@
     NIXPKGS_ALLOW_UNFREE = 1;
   };
 
-  networking.nftables.enable = true;
+  networking.nftables.enable = false;
   networking.firewall = {
     enable = true;
     allowedTCPPorts = [ 22 ];
