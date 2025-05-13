@@ -941,6 +941,8 @@
     dconf.enable = true;
     wireshark.enable = true;
     ssh.startAgent = true;
+
+    steam.enable = true;
   };
 
   services.acpid.enable = true;
