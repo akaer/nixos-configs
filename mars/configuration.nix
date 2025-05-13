@@ -47,7 +47,8 @@
 
   boot.blacklistedKernelModules = [ "nouveau" ];
 
-  boot.kernelPackages = pkgs.linuxPackages;
+  #boot.kernelPackages = pkgs.linuxPackages;
+  boot.kernelPackages = pkgs.linuxPackages_latest;
 
   hardware = {
     enableAllFirmware = true;
@@ -56,6 +57,7 @@
     bluetooth.enable = true;
     bluetooth.powerOnBoot = true;
     pulseaudio.enable = false; # Use Pipewire, the modern sound subsystem
+    i2c.enable = true;
   };
 
   fileSystems."/".options = [ "noatime" "nodiratime" "discard" ];
@@ -78,6 +80,9 @@
   };
 
   networking.networkmanager.enable = false;
+
+  # Workaround for strange Docker issues with dhcp active on bridge network. See: https://github.com/NixOS/nixpkgs/issues/109389
+  networking.dhcpcd.denyInterfaces = [ "veth*" ];
 
   # Set your time zone.
   time.timeZone = "Europe/Berlin";
@@ -115,6 +120,7 @@
   environment.systemPackages = with pkgs; [
     _7zz
     acpi
+    acpid
     alacritty
     arandr
     autorandr
@@ -130,12 +136,13 @@
     curl
     curlie # Terminal HTTP client
     dconf
+    ddcutil # Query and change Linux monitor settings using DDC/CI and USB
+    ddcui # Graphical user interface for ddcutil - control monitor settings
     direnv
-    docker
+    docker_28
     docker-compose
     dos2unix
     dunst
-    file
     file # Terminal file info
     flameshot
     frogmouth # Terminal markdown viewer
@@ -143,10 +150,11 @@
     ghostty
     girouette # Modern Unix weather
     git
-    glow
+    glow # Terminal Markdown viewer
     htop
     httpie # Terminal HTTP client
     hueadm # Terminal Philips Hue client
+    illum # Daemon that wires button presses to screen backlight level
     inotify-tools
     iptables
     jq
@@ -171,6 +179,7 @@
     pulseaudioFull
     remmina
     rsync
+    rtkit
     speedtest-go # Terminal speedtest.net
     sqlite
     teams-for-linux
@@ -201,7 +210,7 @@
   users.users.andrer = {
     isNormalUser = true;
     description = "André Raabe";
-    extraGroups = [ "networkmanager" "wheel" "video" "audio" "wireshark" "docker" "kvm" ];
+    extraGroups = [ "networkmanager" "wheel" "video" "audio" "wireshark" "docker" "kvm" "i2c" ];
     packages = with pkgs; [ ];
   };
 
@@ -869,8 +878,17 @@
   services.acpid.enable = true;
   services.fstrim.enable = true;
   services.tlp.enable = true;
+  services.printing.enable = true;
+  services.avahi = {
+    enable = true;
+    nssmdns4 = true;
+    ipv4 = true;
+    ipv6 = true;
+    #openFirewall = true;
+  };
   services.dbus.enable = true;
   services.dbus.packages = [ pkgs.dconf ];
+  services.illum.enable = true;
   services.openssh = {
     enable = true;
     allowSFTP = true;
@@ -878,8 +896,6 @@
 
   # Enable touchpad support (enabled default in most desktopManager).
   services.libinput.enable = true;
-
-  services.printing.enable = true;
   services.udisks2.enable = true;
 
   services.pipewire = {
@@ -926,14 +942,14 @@
       '';
     };
   };
+
   services.displayManager.autoLogin.enable = true;
   services.displayManager.autoLogin.user = "andrer";
   services.displayManager.logToFile = true;
 
-  virtualisation.docker.enable = true;
-  virtualisation.docker.rootless = {
+  virtualisation.docker = {
     enable = true;
-    setSocketVariable = true;
+    package = pkgs.docker_28;
   };
 
   environment.variables = {
@@ -945,11 +961,7 @@
 
   networking.nftables.enable = false;
   networking.firewall = {
-    enable = true;
-    allowedTCPPorts = [ 22 ];
-    # networking.firewall.allowedUDPPorts = [ ... ];
-    # Or disable the firewall altogether.
-    allowPing = true;
+    enable = false;
   };
 
   # This value determines the NixOS release from which the default
