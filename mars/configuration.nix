@@ -48,7 +48,8 @@
   boot.blacklistedKernelModules = [ "nouveau" ];
 
   #boot.kernelPackages = pkgs.linuxPackages;
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  #boot.kernelPackages = pkgs.linuxPackages_latest;
+  #boot.kernelPackages = pkgs.linuxKernel.packages.linux_latest_libre.nvidia_x11;
 
   hardware = {
     enableAllFirmware = true;
@@ -58,6 +59,30 @@
     bluetooth.powerOnBoot = true;
     pulseaudio.enable = false; # Use Pipewire, the modern sound subsystem
     i2c.enable = true;
+    sane.enable = true;
+    graphics.enable = true;
+    graphics.enable32Bit = true;
+    graphics.extraPackages = with pkgs; [
+      nvidia-vaapi-driver
+      vulkan-loader # Core Vulkan runtime
+      vulkan-tools # Diagnostic tools (e.g., `vulkaninfo`)
+    ];
+    graphics.extraPackages32 = with pkgs.pkgsi686Linux; [
+      vulkan-loader # Vulkan runtime (32-bit)
+    ];
+    nvidia = {
+      open = false;
+      modesetting.enable = true;
+      powerManagement.enable = true;
+      prime = {
+        offload.enable = true;
+        offload.enableOffloadCmd = true;
+
+        intelBusId = "PCI:0:2:0";
+        nvidiaBusId = "PCI:1:0:0";
+      };
+    };
+    nvidia-container-toolkit.enable = true;
   };
 
   fileSystems."/".options = [ "noatime" "nodiratime" "discard" ];
@@ -136,13 +161,17 @@
     curl
     curlie # Terminal HTTP client
     dconf
-    ddcutil # Query and change Linux monitor settings using DDC/CI and USB
     ddcui # Graphical user interface for ddcutil - control monitor settings
+    ddcutil # Query and change Linux monitor settings using DDC/CI and USB
     direnv
     docker_28
     docker-compose
     dos2unix
     dunst
+    keychain
+    dxvk # Direct3D 9/10/11 to Vulkan translation (Wine/Proton)
+    exfat # Read/write exFAT (for USB drives/cameras)
+    ffmpeg-full # Complete FFmpeg suite for audio/video encoding, decoding, transcoding, and streaming
     file # Terminal file info
     flameshot
     frogmouth # Terminal markdown viewer
@@ -151,35 +180,63 @@
     girouette # Modern Unix weather
     git
     glow # Terminal Markdown viewer
-    htop
+    gst_all_1.gst-libav # GStreamer plugin wrapping FFmpeg/libav for broad codec support
+    gst_all_1.gst-plugins-bad # Experimental or less maintained plugins, still open-source (e.g. newer formats)
+    gst_all_1.gst-plugins-base # Core set of essential GStreamer plugins (e.g. Ogg, Theora, Vorbis)
+    gst_all_1.gst-plugins-good # Well-supported plugins under good licensing (e.g. Matroska, FLAC, RTP)
+    gst_all_1.gst-plugins-ugly # Plugins with potential licensing or patent issues (e.g. MP3, MPEG-2)
+    gst_all_1.gst-vaapi # Plugin enabling VA-API hardware-accelerated video encoding/decoding
+    htop # Interactive system monitor (like a better 'top')
     httpie # Terminal HTTP client
     hueadm # Terminal Philips Hue client
     illum # Daemon that wires button presses to screen backlight level
+    imagemagick # Powerful image manipulation tool (for converting, resizing, and editing images)
     inotify-tools
     iptables
     jq
-    killall
+    killall # Stop running processes by name
+    libaom # AOMedia Video 1 (AV1) codec library
+    libexif # EXIF metadata support (extract metadata like camera info and timestamps)
+    libjpeg # JPEG image support (commonly used format)
     libnotify
+    libpng # PNG image support (including transparent images)
+    libraw # RAW image format support (for images from digital cameras)
+    libtheora # Theora video compression codec (open VP3 implementation)
+    libtiff # TIFF format support (used for high-quality images and scanning)
+    libva # Video Acceleration API (VA-API) for hardware-accelerated video decoding/encoding
+    libva-utils
+    libvpx # VP8/VP9 video codec library from Google
+    libwebp # WebP format support (modern image format, often used on websites)
     linux-firmware
     litecli
+    lm_sensors # Read CPU temperatures, fan speeds, voltages, etc.
+    logrotate # Required for rotating logs and automatic updates
     lshw
     lxappearance
+    man-pages # Man pages for command-line tools
     marp-cli # Terminal Markdown presenter
     mc
+    mesa-demos
     most
+    mpv # Backend for SMPlayer.
     mtr # Modern Unix `traceroute`
     ncdu
     nemo-with-extensions
     nftables
     nixpkgs-fmt
+    ntfs3g # Read/write NTFS (Windows) drives
+    nvtopPackages.full # Real-time GPU monitor (NVIDIA/AMD/Intel)
+    openjpeg # JPEG 2000 format support (used in some PDFs, publishing, and archival)
     optipng # Terminal PNG optimizer
     pamixer
     pavucontrol
-    pciutils
+    pciutils # `lspci` — list PCI devices (e.g., GPUs, Wi-Fi cards)
     pulseaudioFull
     remmina
     rsync
     rtkit
+    sane-backends
+    smplayer # A more feature-rich media player with the mpv backend, offering advanced controls and customization.
     speedtest-go # Terminal speedtest.net
     sqlite
     teams-for-linux
@@ -190,14 +247,19 @@
     udisks
     unrar
     unzip
-    usbutils
+    usbutils # `lsusb` — list USB devices
     vim-full
+    vkbasalt # Vulkan post-processing (e.g., contrast, sharpening)
+    vkd3d # Direct3D 12 to Vulkan translation (Wine/Proton)
     vmware-horizon-client
     watch
-    wget
+    wget # Download files from the web (handy for scripts or terminal use)
     which
     wormhole-william # Terminal file transfer
+    x264 # H.264/MPEG-4 AVC video encoder
+    x265 # H.265/HEVC video encoder
     xclip
+    xdg-utils # Desktop environment integration (e.g., `xdg-open`)
     xorg.xdpyinfo
     xorg.xrandr
     xsel
@@ -265,8 +327,8 @@
       theme.name = "Nordic";
       gtk2 = {
         extraConfig = ''
-          gtk-application-prefer-dark-theme=true;
-          gtk-font-name="FiraCode Nerd, 10";
+          gtk-application-prefer-dark-theme=true
+          gtk-font-name="FiraCode Nerd, 10"
         '';
       };
       gtk3 = {
@@ -357,6 +419,12 @@
         default = {
           id = 0;
           settings = {
+            "gfx.webrender.all" = true;
+            "media.ffmpeg.vaapi.enabled" = true;
+            "media.hardware-video-decoding.force-enabled" = true;
+            "media.rdd-ffmpeg.enabled" = true;
+            "gfx.x11-egl.force-enabled" = true;
+            "widget.dmabuf.force-enabled" = true;
             "browser.aboutConfig.showWarning" = false;
             "browser.contentblocking.category" = "standard";
             "browser.newtabpage.activity-stream.showSponsored" = false;
@@ -517,6 +585,9 @@
                 alias powerline-go="/run/current-system/sw/bin/powerline-go"
             fi
         fi
+      '';
+      initExtra = ''
+        if command -v keychain > /dev/null 2>&1; then eval $(keychain --eval --nogui id_rsa  --quiet); fi
       '';
       shellAliases = {
         ll = "ls --color=auto -lha";
@@ -867,9 +938,6 @@
 
   programs = {
     mtr.enable = true;
-    gnupg.agent = {
-      enable = true;
-    };
     dconf.enable = true;
     wireshark.enable = true;
     ssh.startAgent = true;
@@ -900,7 +968,7 @@
 
   services.pipewire = {
     enable = true;
-    audio.enable = true;
+    #audio.enable = true;
     pulse.enable = true;
     alsa.enable = true;
     alsa.support32Bit = true;
@@ -916,8 +984,7 @@
       options = "eurosign:e,terminate:ctrl_alt_bksp";
     };
     videoDrivers = [
-      "modesetting"
-      "fbdev"
+      "nvidia"
     ];
     windowManager.i3 = {
       enable = true;
@@ -950,6 +1017,9 @@
   virtualisation.docker = {
     enable = true;
     package = pkgs.docker_28;
+    daemon.settings = {
+      userland-proxy = false;
+    };
   };
 
   environment.variables = {
@@ -957,6 +1027,16 @@
     TERMINAL = "alacritty";
     BROWSER = "firefox";
     NIXPKGS_ALLOW_UNFREE = 1;
+
+    # Necessary to correctly enable va-api (video codec hardware
+    # acceleration). If this isn't set, the libvdpau backend will be
+    # picked, and that one doesn't work with most things, including
+    # Firefox.
+    LIBVA_DRIVER_NAME = "nvidia";
+
+    # Required to use va-api it in Firefox. See
+    # https://github.com/elFarto/nvidia-vaapi-driver/issues/96
+    MOZ_DISABLE_RDD_SANDBOX = "1";
   };
 
   networking.nftables.enable = false;
