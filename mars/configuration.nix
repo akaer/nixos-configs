@@ -168,7 +168,6 @@
     docker-compose
     dos2unix
     dunst
-    keychain
     dxvk # Direct3D 9/10/11 to Vulkan translation (Wine/Proton)
     exfat # Read/write exFAT (for USB drives/cameras)
     ffmpeg-full # Complete FFmpeg suite for audio/video encoding, decoding, transcoding, and streaming
@@ -194,6 +193,7 @@
     inotify-tools
     iptables
     jq
+    keychain
     killall # Stop running processes by name
     libaom # AOMedia Video 1 (AV1) codec library
     libexif # EXIF metadata support (extract metadata like camera info and timestamps)
@@ -203,8 +203,8 @@
     libraw # RAW image format support (for images from digital cameras)
     libtheora # Theora video compression codec (open VP3 implementation)
     libtiff # TIFF format support (used for high-quality images and scanning)
-    libva # Video Acceleration API (VA-API) for hardware-accelerated video decoding/encoding
     libva-utils
+    libva # Video Acceleration API (VA-API) for hardware-accelerated video decoding/encoding
     libvpx # VP8/VP9 video codec library from Google
     libwebp # WebP format support (modern image format, often used on websites)
     linux-firmware
@@ -227,11 +227,13 @@
     ntfs3g # Read/write NTFS (Windows) drives
     nvtopPackages.full # Real-time GPU monitor (NVIDIA/AMD/Intel)
     openjpeg # JPEG 2000 format support (used in some PDFs, publishing, and archival)
+    openssl
     optipng # Terminal PNG optimizer
     pamixer
     pavucontrol
     pciutils # `lspci` — list PCI devices (e.g., GPUs, Wi-Fi cards)
     pulseaudioFull
+    qbittorrent
     remmina
     rsync
     rtkit
@@ -351,7 +353,7 @@
     qt = {
       enable = true;
       style.package = pkgs.libsForQt5.qtstyleplugins;
-      platformTheme = "gtk";
+      platformTheme.name = "gtk";
     };
 
     home.sessionVariables = {
@@ -1021,6 +1023,7 @@
     package = pkgs.docker_28;
     daemon.settings = {
       userland-proxy = false;
+      features.cdi = true;
     };
   };
 
