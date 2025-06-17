@@ -50,18 +50,17 @@
   #boot.kernelPackages = pkgs.linuxPackages;
   #boot.kernelPackages = pkgs.linuxPackages_latest;
   #boot.kernelPackages = pkgs.linuxKernel.packages.linux_latest_libre.nvidia_x11;
+  boot.kernelPackages = pkgs.linuxPackages_6_14;
 
   hardware = {
-    enableAllFirmware = true;
-    enableRedistributableFirmware = true;
-    cpu.intel.updateMicrocode = true;
+    alsa.enablePersistence = true;
     bluetooth.enable = true;
     bluetooth.powerOnBoot = true;
-    pulseaudio.enable = false; # Use Pipewire, the modern sound subsystem
-    i2c.enable = true;
-    sane.enable = true;
-    graphics.enable = true;
+    cpu.intel.updateMicrocode = true;
+    enableAllFirmware = true;
+    enableRedistributableFirmware = true;
     graphics.enable32Bit = true;
+    graphics.enable = true;
     graphics.extraPackages = with pkgs; [
       nvidia-vaapi-driver
       vulkan-loader # Core Vulkan runtime
@@ -70,6 +69,8 @@
     graphics.extraPackages32 = with pkgs.pkgsi686Linux; [
       vulkan-loader # Vulkan runtime (32-bit)
     ];
+    i2c.enable = true;
+    sane.enable = true;
     nvidia = {
       open = false;
       modesetting.enable = true;
@@ -152,10 +153,12 @@
     bat
     bc
     binutils
+    blobby # Blobby volleyball game
     bluez
     bluez-tools
     btop
     colordiff
+    corefonts
     cpufetch # Terminal CPU info
     croc # Terminal file transfer
     curl
@@ -173,6 +176,9 @@
     ffmpeg-full # Complete FFmpeg suite for audio/video encoding, decoding, transcoding, and streaming
     file # Terminal file info
     flameshot
+    font-awesome
+    font-awesome_4
+    font-awesome_5
     frogmouth # Terminal markdown viewer
     fzf
     ghostty
@@ -218,12 +224,19 @@
     mc
     mesa-demos
     most
+    mpv
     mpv # Backend for SMPlayer.
     mtr # Modern Unix `traceroute`
     ncdu
     nemo-with-extensions
+    nerd-fonts.dejavu-sans-mono
+    nerd-fonts.fira-code
+    nerd-fonts.iosevka
+    nerd-fonts.sauce-code-pro
+    nerd-fonts.symbols-only
     nftables
     nixpkgs-fmt
+    nordic
     ntfs3g # Read/write NTFS (Windows) drives
     nvtopPackages.full # Real-time GPU monitor (NVIDIA/AMD/Intel)
     openjpeg # JPEG 2000 format support (used in some PDFs, publishing, and archival)
@@ -238,6 +251,7 @@
     rsync
     rtkit
     sane-backends
+    scrcpy
     smplayer # A more feature-rich media player with the mpv backend, offering advanced controls and customization.
     speedtest-go # Terminal speedtest.net
     sqlite
@@ -251,9 +265,12 @@
     unzip
     usbutils # `lsusb` — list USB devices
     vim-full
+    virtualboxWithExtpack
     vkbasalt # Vulkan post-processing (e.g., contrast, sharpening)
     vkd3d # Direct3D 12 to Vulkan translation (Wine/Proton)
+    vlc
     vmware-horizon-client
+    vscode
     watch
     wget # Download files from the web (handy for scripts or terminal use)
     which
@@ -314,6 +331,23 @@
       ];
     };
 
+    home.packages = with pkgs; [
+      corefonts
+      font-awesome
+      font-awesome_5
+      font-awesome_4
+      nordic
+      scrcpy
+      vscode
+      vlc
+      mpv
+      nerd-fonts.dejavu-sans-mono
+      nerd-fonts.fira-code
+      nerd-fonts.iosevka
+      nerd-fonts.sauce-code-pro
+      nerd-fonts.symbols-only
+    ];
+
     xresources.extraConfig = builtins.readFile (
       pkgs.fetchFromGitHub
         {
@@ -362,27 +396,6 @@
       MANROFFOPT = "-c";
       PAGER = "bat";
     };
-
-    home.packages = with pkgs; [
-      corefonts
-      font-awesome
-      font-awesome_5
-      font-awesome_4
-      nordic
-      scrcpy
-      vscode
-      vlc
-      mpv
-      (pkgs.nerdfonts.override {
-        fonts = [
-          "Iosevka"
-          "FiraCode"
-          "DejaVuSansMono"
-          "NerdFontsSymbolsOnly"
-          "SourceCodePro"
-        ];
-      })
-    ];
 
     programs.firefox = {
       enable = true;
@@ -454,7 +467,6 @@
             bitwarden
             darkreader
             foxyproxy-standard
-            i-dont-care-about-cookies
             languagetool
             link-cleaner
             linkding-extension
@@ -943,6 +955,7 @@
     dconf.enable = true;
     wireshark.enable = true;
     ssh.startAgent = true;
+    i3lock.enable = true;
 
     steam.enable = true;
   };
@@ -950,6 +963,7 @@
   services.acpid.enable = true;
   services.fstrim.enable = true;
   services.tlp.enable = true;
+  services.fwupd.enable = true;
   services.printing.enable = true;
   services.avahi = {
     enable = true;
@@ -972,7 +986,6 @@
 
   services.pipewire = {
     enable = true;
-    #audio.enable = true;
     pulse.enable = true;
     alsa.enable = true;
     alsa.support32Bit = true;
@@ -1025,6 +1038,12 @@
       userland-proxy = false;
       features.cdi = true;
     };
+  };
+
+  virtualisation.virtualbox.host = {
+    enable = true;
+    enableExtensionPack = true;
+    addNetworkInterface = true;
   };
 
   environment.variables = {
