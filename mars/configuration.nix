@@ -196,6 +196,7 @@
     ddcui # Graphical user interface for ddcutil - control monitor settings
     ddcutil # Query and change Linux monitor settings using DDC/CI and USB
     direnv
+    dnsutils
     docker_28
     docker-compose
     dos2unix
@@ -290,6 +291,7 @@
     sane-backends
     scrcpy
     shellcheck # Shell script analysis tool
+    signal-desktop # Private, simple, and secure messenger
     smplayer # A more feature-rich media player with the mpv backend, offering advanced controls and customization.
     speedtest-go # Terminal speedtest.net
     sqlite
@@ -313,6 +315,7 @@
     watch
     wget # Download files from the web (handy for scripts or terminal use)
     which
+    wireshark # Powerful network protocol analyzer
     wormhole-william # Terminal file transfer
     x264 # H.264/MPEG-4 AVC video encoder
     x265 # H.265/HEVC video encoder
@@ -366,15 +369,6 @@
         };
       };
 
-      dconf = {
-        settings = {
-          "org/cinnamon/desktop/applications/terminal" = {
-            exec = "alacritty";
-            # exec-arg = ""; # argument
-          };
-        };
-      };
-
       fonts.fontconfig = {
         enable = true;
         defaultFonts.monospace = [
@@ -425,13 +419,12 @@
             }
           '';
           extraConfig = {
-            "gtk-application-prefer-dark-theme" = true;
-            "gtk-font-name" = "FiraCode Nerd, 10";
+            "gtk-application-prefer-dark-theme"=true;
+            "gtk-font-name"="FiraCode Nerd, 10";
           };
         };
         gtk4.extraConfig = {
-          "gtk-application-prefer-dark-theme" = true;
-          "gtk-font-name" = "FiraCode Nerd, 10";
+          "gtk-font-name"="FiraCode Nerd,10";
         };
       };
 
@@ -778,7 +771,6 @@
           bind v split-window -h
           set -g automatic-rename on
           set -g allow-passthrough on
-          set-option -sa terminal-overrides ',alacritty:RGB'
         '';
       };
 
@@ -1100,6 +1092,7 @@
     daemon.settings = {
       userland-proxy = false;
       features.cdi = true;
+      data-root = "/home/docker";
     };
   };
 
@@ -1111,7 +1104,7 @@
 
   environment.variables = {
     EDITOR = "vim";
-    TERMINAL = "alacritty";
+    TERMINAL = "ghostty";
     BROWSER = "firefox";
     NIXPKGS_ALLOW_UNFREE = 1;
 
@@ -1124,6 +1117,8 @@
     # Required to use va-api it in Firefox. See
     # https://github.com/elFarto/nvidia-vaapi-driver/issues/96
     MOZ_DISABLE_RDD_SANDBOX = "1";
+
+    GTK_THEME = "Nordic";
   };
 
   networking.nftables.enable = false;
