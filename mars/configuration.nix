@@ -179,6 +179,7 @@
     alacritty
     arandr
     autorandr
+    azuredatastudio
     bat
     bc
     binutils
@@ -192,6 +193,7 @@
     croc # Terminal file transfer
     curl
     curlie # Terminal HTTP client
+    dbeaver-bin
     dconf
     ddcui # Graphical user interface for ddcutil - control monitor settings
     ddcutil # Query and change Linux monitor settings using DDC/CI and USB
@@ -226,6 +228,9 @@
     htop # Interactive system monitor (like a better 'top')
     httpie # Terminal HTTP client
     hueadm # Terminal Philips Hue client
+    hunspell
+    hunspellDicts.de_DE
+    hyphenDicts.de_DE
     illum # Daemon that wires button presses to screen backlight level
     imagemagick # Powerful image manipulation tool (for converting, resizing, and editing images)
     inetutils # Collection of common network programs
@@ -240,6 +245,7 @@
     libnotify
     libpng # PNG image support (including transparent images)
     libraw # RAW image format support (for images from digital cameras)
+    libreoffice-bin
     libtheora # Theora video compression codec (open VP3 implementation)
     libtiff # TIFF format support (used for high-quality images and scanning)
     libva-utils
@@ -294,6 +300,7 @@
     signal-desktop # Private, simple, and secure messenger
     smplayer # A more feature-rich media player with the mpv backend, offering advanced controls and customization.
     speedtest-go # Terminal speedtest.net
+    sqlcmd
     sqlite
     teams-for-linux
     tldr
@@ -1090,6 +1097,7 @@
     enable = true;
     package = pkgs.docker_28;
     daemon.settings = {
+      ipv6 = true;
       userland-proxy = false;
       features.cdi = true;
       data-root = "/home/docker";
