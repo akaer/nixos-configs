@@ -183,6 +183,7 @@
     bat
     bc
     binutils
+    binwalk # Firmware Analysis Tool
     blobby # Blobby volleyball game
     bluez
     bluez-tools
@@ -225,6 +226,8 @@
     gst_all_1.gst-plugins-ugly # Plugins with potential licensing or patent issues (e.g. MP3, MPEG-2)
     gst_all_1.gst-vaapi # Plugin enabling VA-API hardware-accelerated video encoding/decoding
     guvcview # Simple interface for devices supported by the linux UVC driver
+    hexedit # View and edit files in hexadecimal or in ASCII
+    hextazy # TUI hexeditor in Rust with colored bytes
     htop # Interactive system monitor (like a better 'top')
     httpie # Terminal HTTP client
     hueadm # Terminal Philips Hue client
@@ -245,7 +248,7 @@
     libnotify
     libpng # PNG image support (including transparent images)
     libraw # RAW image format support (for images from digital cameras)
-    libreoffice-bin
+    libreoffice-still
     libtheora # Theora video compression codec (open VP3 implementation)
     libtiff # TIFF format support (used for high-quality images and scanning)
     libva-utils
@@ -324,6 +327,7 @@
     which
     wireshark # Powerful network protocol analyzer
     wormhole-william # Terminal file transfer
+    wxhexeditor # Hex Editor / Disk Editor for Huge Files or Devices
     x264 # H.264/MPEG-4 AVC video encoder
     x265 # H.265/HEVC video encoder
     xclip
