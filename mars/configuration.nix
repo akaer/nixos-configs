@@ -205,6 +205,7 @@
     dos2unix
     dunst
     dxvk # Direct3D 9/10/11 to Vulkan translation (Wine/Proton)
+    exfatprogs # exFAT filesystem userspace utilities
     exfat # Read/write exFAT (for USB drives/cameras)
     feh # Light-weight image viewer
     ffmpeg-full # Complete FFmpeg suite for audio/video encoding, decoding, transcoding, and streaming
@@ -336,7 +337,9 @@
     xorg.xrandr
     xsel
     xss-lock
+    yt-dlp # Command-line tool to download videos from YouTube.com and other sites (youtube-dl fork)
     zenmap # Offical nmap Security Scanner GUI
+    (texlive.combine { inherit (texlive) scheme-medium xifthen ifmtarg framed paralist titlesec dvisvgm dvipng wrapfig amsmath ulem hyperref capt-of; })
   ];
 
   fonts.enableDefaultPackages = true;
