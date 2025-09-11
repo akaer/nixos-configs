@@ -241,6 +241,7 @@
     inotify-tools
     iptables
     jq
+    filezilla
     keychain
     killall # Stop running processes by name
     libaom # AOMedia Video 1 (AV1) codec library
@@ -310,6 +311,7 @@
     tldr
     tmux
     tree
+    mupdf # Lightweight PDF, XPS, and E-book viewer and toolkit written in portable C
     udiskie
     udisks
     unrar
