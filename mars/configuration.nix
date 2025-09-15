@@ -54,7 +54,7 @@
   #boot.kernelPackages = pkgs.linuxPackages;
   #boot.kernelPackages = pkgs.linuxPackages_latest;
   #boot.kernelPackages = pkgs.linuxKernel.packages.linux_latest_libre.nvidia_x11;
-  boot.kernelPackages = pkgs.linuxKernel.packages.linux_6_15;
+  boot.kernelPackages = pkgs.linuxKernel.packages.linux_6_16;
 
   hardware = {
     alsa.enablePersistence = true;
@@ -180,6 +180,7 @@
     arandr
     autorandr
     azuredatastudio
+    azure-cli
     bat
     bc
     binutils
@@ -341,7 +342,23 @@
     xss-lock
     yt-dlp # Command-line tool to download videos from YouTube.com and other sites (youtube-dl fork)
     zenmap # Offical nmap Security Scanner GUI
-    (texlive.combine { inherit (texlive) scheme-medium xifthen ifmtarg framed paralist titlesec dvisvgm dvipng wrapfig amsmath ulem hyperref capt-of; })
+    (texlive.combine {
+      inherit (texlive)
+        scheme-medium
+        xifthen
+        ifmtarg
+        framed
+        paralist
+        titlesec
+        dvisvgm
+        dvipng
+        wrapfig
+        amsmath
+        ulem
+        hyperref
+        capt-of
+        ;
+    })
   ];
 
   fonts.enableDefaultPackages = true;
@@ -435,12 +452,12 @@
             }
           '';
           extraConfig = {
-            "gtk-application-prefer-dark-theme"=true;
-            "gtk-font-name"="FiraCode Nerd, 10";
+            "gtk-application-prefer-dark-theme" = true;
+            "gtk-font-name" = "FiraCode Nerd, 10";
           };
         };
         gtk4.extraConfig = {
-          "gtk-font-name"="FiraCode Nerd,10";
+          "gtk-font-name" = "FiraCode Nerd,10";
         };
       };
 
@@ -494,14 +511,10 @@
           default = {
             id = 0;
             settings = {
-              "gfx.webrender.all" = true;
-              "media.ffmpeg.vaapi.enabled" = true;
-              "media.hardware-video-decoding.force-enabled" = true;
-              "media.rdd-ffmpeg.enabled" = true;
-              "gfx.x11-egl.force-enabled" = true;
-              "widget.dmabuf.force-enabled" = true;
               "browser.aboutConfig.showWarning" = false;
               "browser.contentblocking.category" = "standard";
+              "browser.download.useDownloadDir" = true;
+              "browser.ml.chat.enabled" = false;
               "browser.newtabpage.activity-stream.showSponsored" = false;
               "browser.newtabpage.activity-stream.showSponsoredTopSites" = false;
               "browser.newtabpage.activity-stream.system.showSponsored" = false;
@@ -510,6 +523,7 @@
               "browser.search.isUS" = false;
               "browser.search.order.1" = "DuckDuckGo";
               "browser.search.region" = "US";
+              "browser.shell.checkDefaultBrowser" = false;
               "browser.startup.homepage" = "about:home";
               "browser.topsites.contile.enabled" = false;
               "browser.translations.automaticallyPopup" = false;
@@ -518,10 +532,23 @@
               "doh-rollout.doneFirstRun" = true;
               "dom.forms.autocomplete.formautofill" = false;
               "extensions.autoDisableScopes" = 0;
+              "extensions.formautofill.addresses.enabled" = false;
+              "extensions.formautofill.creditCards.enabled" = false;
+              "extensions.pocket.enabled" = false;
               "extensions.update.enabled" = false;
               "general.useragent.locale" = "en-US";
+              "gfx.webrender.all" = true;
+              "gfx.x11-egl.force-enabled" = true;
+              "identity.fxaccounts.enabled" = false;
+              "keyword.enabled" = true;
+              "media.ffmpeg.vaapi.enabled" = true;
+              "media.gmp-widevinecdm.enabled" = true;
+              "media.hardware-video-decoding.force-enabled" = true;
+              "media.rdd-ffmpeg.enabled" = true;
               "privacy.donottrackheader.enabled" = true;
+              "signon.rememberSignons" = false;
               "widget.disable-workspace-management" = true;
+              "widget.dmabuf.force-enabled" = true;
             };
             extensions = with pkgs.nur.repos.rycee.firefox-addons; [
               bitwarden
@@ -592,6 +619,15 @@
               style = "Bold Italic";
             };
           };
+        };
+      };
+
+      programs.ghostty = {
+        enableBashIntegration = true;
+        enableFishIntegration = false;
+
+        settings = {
+          bold-is-bright = true;
         };
       };
 
@@ -670,6 +706,7 @@
           ll = "ls --color=auto -lha";
           myextip = "curl ipinfo.io/ip";
           grep = "grep --color=auto";
+          diff = "diff --color=auto"
           mv = "mv -i";
           cp = "cp -i";
           ln = "ln -i";
