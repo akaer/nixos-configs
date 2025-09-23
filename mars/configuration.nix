@@ -179,8 +179,8 @@
     alacritty
     arandr
     autorandr
-    azuredatastudio
     azure-cli
+    azuredatastudio
     bat
     bc
     binutils
@@ -211,6 +211,7 @@
     feh # Light-weight image viewer
     ffmpeg-full # Complete FFmpeg suite for audio/video encoding, decoding, transcoding, and streaming
     file # Terminal file info
+    filezilla
     flameshot
     font-awesome
     font-awesome_4
@@ -242,7 +243,6 @@
     inotify-tools
     iptables
     jq
-    filezilla
     keychain
     killall # Stop running processes by name
     libaom # AOMedia Video 1 (AV1) codec library
@@ -274,6 +274,7 @@
     mpv
     mpv # Backend for SMPlayer.
     mtr # Modern Unix `traceroute`
+    mupdf # Lightweight PDF, XPS, and E-book viewer and toolkit written in portable C
     ncdu
     nemo-with-extensions
     nerd-fonts.dejavu-sans-mono
@@ -312,7 +313,6 @@
     tldr
     tmux
     tree
-    mupdf # Lightweight PDF, XPS, and E-book viewer and toolkit written in portable C
     udiskie
     udisks
     unrar
@@ -368,14 +368,14 @@
     isNormalUser = true;
     description = "André Raabe";
     extraGroups = [
-      "networkmanager"
-      "wheel"
-      "video"
       "audio"
-      "wireshark"
       "docker"
-      "kvm"
       "i2c"
+      "kvm"
+      "networkmanager"
+      "video"
+      "wheel"
+      "wireshark"
     ];
     packages = with pkgs; [ ];
   };
@@ -412,18 +412,18 @@
       home.packages = with pkgs; [
         corefonts
         font-awesome
-        font-awesome_5
         font-awesome_4
-        nordic
-        scrcpy
-        vscode
-        vlc
+        font-awesome_5
         mpv
         nerd-fonts.dejavu-sans-mono
         nerd-fonts.fira-code
         nerd-fonts.iosevka
         nerd-fonts.sauce-code-pro
         nerd-fonts.symbols-only
+        nordic
+        scrcpy
+        vlc
+        vscode
       ];
 
       xresources.extraConfig = builtins.readFile (
@@ -501,52 +501,112 @@
           OverridePostUpdatePage = "";
           SearchBar = "unified";
           EnableTrackingProtection = {
-            Value = true;
-            Locked = true;
             Cryptomining = true;
             Fingerprinting = true;
+            Locked = true;
+            Value = true;
           };
         };
         profiles = {
           default = {
             id = 0;
             settings = {
+              "accessibility.typeaheadfind.flashBar" = 0;
+              "app.normandy.first_run" = false;
+              "app.normandy.migrationsApplied" = 12;
+              "app.shield.optoutstudies.enabled" = false;
               "browser.aboutConfig.showWarning" = false;
               "browser.contentblocking.category" = "standard";
+              "browser.crashReporter.memtest" = false;
+              "browser.download.animateNotifications" = false;
               "browser.download.useDownloadDir" = true;
               "browser.ml.chat.enabled" = false;
+              "browser.ml.chat.sidebar" = false;
+              "browser.ml.enable" = false;
+              "browser.newtabpage.activity-stream.asrouter.userprefs.cfr.addons" = false;
+              "browser.newtabpage.activity-stream.asrouter.userprefs.cfr.features" = false;
+              "browser.newtabpage.activity-stream.feeds.smartshortcutsfeed" = false;
+              "browser.newtabpage.activity-stream.feeds.telemetry" = false;
+              "browser.newtabpage.activity-stream.images.smart" = false;
+              "browser.newtabpage.activity-stream.section.highlights.includePocket" = false;
               "browser.newtabpage.activity-stream.showSponsored" = false;
               "browser.newtabpage.activity-stream.showSponsoredTopSites" = false;
               "browser.newtabpage.activity-stream.system.showSponsored" = false;
+              "browser.newtabpage.activity-stream.telemetry" = false;
               "browser.newtabpage.pinned" = "";
+              "browser.ping-centre.telemetry" = false;
+              "browser.safebrowsing.downloads.enabled" = false;
+              "browser.safebrowsing.enabled" = false;
+              "browser.safebrowsing.malware.enabled" = false;
+              "browser.safebrowsing.phishing.enabled" = false;
               "browser.search.defaultenginename" = "DuckDuckGo";
+              "browser.search.geoip.url" = "blank";
               "browser.search.isUS" = false;
               "browser.search.order.1" = "DuckDuckGo";
               "browser.search.region" = "US";
               "browser.shell.checkDefaultBrowser" = false;
-              "browser.startup.homepage" = "about:home";
+              "browser.startup.homepage" = "about:profiles";
+              "browser.tabs.animate" = false;
+              "browser.tabs.crashReporting.sendReport" = false;
+              "browser.tabs.groups.smart.enabled" = false;
+              "browser.tabs.groups.smart.searchTopicEnabled" = false;
+              "browser.tabs.groups.smart.userEnabled" = false;
               "browser.topsites.contile.enabled" = false;
               "browser.translations.automaticallyPopup" = false;
+              "browser.urlbar.autoFill" = false;
+              "datareporting.healthreport.uploadEnabled" = false;
+              "datareporting.policy.dataSubmissionPolicyAcceptedVersion" = 2;
               "distribution.searchplugins.defaultLocale" = "en-US";
               "doh-rollout.balrog-migration-done" = true;
               "doh-rollout.doneFirstRun" = true;
+              "dom.battery.enabled" = false;
               "dom.forms.autocomplete.formautofill" = false;
               "extensions.autoDisableScopes" = 0;
               "extensions.formautofill.addresses.enabled" = false;
               "extensions.formautofill.creditCards.enabled" = false;
               "extensions.pocket.enabled" = false;
               "extensions.update.enabled" = false;
+              "font.name.monospace.x-western" = "FiraCode Nerd Font";
               "general.useragent.locale" = "en-US";
+              "geo.enabled" = false;
+              "geo.wifi.uri" = "blank";
               "gfx.webrender.all" = true;
               "gfx.x11-egl.force-enabled" = true;
               "identity.fxaccounts.enabled" = false;
               "keyword.enabled" = true;
+              "media.autoplay.default" = 2;
               "media.ffmpeg.vaapi.enabled" = true;
               "media.gmp-widevinecdm.enabled" = true;
               "media.hardware-video-decoding.force-enabled" = true;
+              "media.peerconnection.ice.no_host" = false;
               "media.rdd-ffmpeg.enabled" = true;
+              "media.videocontrols.picture-in-picture.video-toggle.has-used" = true;
+              "network.dns.disablePrefetch" = true;
+              "network.http.speculative-parallel-limit" = 0;
+              "network.predictor.enabled" = false;
+              "network.prefetch-next" = false;
+              "network.trr.mode" = 2;
+              "network.trr.uri" = "https://mozilla.cloudflare-dns.com/dns-query";
+              "pdfjs.enableScripting" = false;
+              "plugins.enumerable_names" = "blank";
               "privacy.donottrackheader.enabled" = true;
+              "privacy.purge_trackers.date_in_cookie_database" = 0;
+              "privacy.resistFingerprinting" = false;
+              "privacy.resistFingerprinting.letterboxing" = false;
+              "privacy.sanitize.pending" = "[{'id':'newtab-container','itemsToClear':[],'options':{}}]";
+              "privacy.trackingprotection.enabled" = true;
+              "privacy.trackingprotection.socialtracking.enabled" = true;
               "signon.rememberSignons" = false;
+              "toolkit.telemetry.archive.enabled" = false;
+              "toolkit.telemetry.bhrPing.enabled" = false;
+              "toolkit.telemetry.enabled" = false;
+              "toolkit.telemetry.firstShutdownPing.enabled" = false;
+              "toolkit.telemetry.hybridContent.enabled" = false;
+              "toolkit.telemetry.newProfilePing.enabled" = false;
+              "toolkit.telemetry.reportingpolicy.firstRun" = false;
+              "toolkit.telemetry.shutdownPingSender.enabled" = false;
+              "toolkit.telemetry.unified" = false;
+              "toolkit.telemetry.updatePing.enabled" = false;
               "widget.disable-workspace-management" = true;
               "widget.dmabuf.force-enabled" = true;
             };
@@ -706,7 +766,7 @@
           ll = "ls --color=auto -lha";
           myextip = "curl ipinfo.io/ip";
           grep = "grep --color=auto";
-          diff = "diff --color=auto"
+          diff = "diff --color=auto";
           mv = "mv -i";
           cp = "cp -i";
           ln = "ln -i";
