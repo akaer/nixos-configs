@@ -378,10 +378,8 @@
       "wheel"
       "wireshark"
     ];
-    packages = with pkgs; [ ];
   };
 
-  home-manager.useUserPackages = true;
   home-manager.useGlobalPkgs = true;
 
   # Find options: https://nix-community.github.io/home-manager/options.xhtml
@@ -616,12 +614,9 @@
               "widget.disable-workspace-management" = true;
               "widget.dmabuf.force-enabled" = true;
             };
-            extensions = with pkgs.nur.repos.rycee.firefox-addons; [
+            extensions.packages = with pkgs.nur.repos.rycee.firefox-addons; [
               bitwarden
-              darkreader
-              foxyproxy-standard
               languagetool
-              link-cleaner
               linkding-extension
               privacy-badger
               theme-nord-polar-night
