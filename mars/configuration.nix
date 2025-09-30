@@ -228,6 +228,7 @@
     gst_all_1.gst-plugins-good # Well-supported plugins under good licensing (e.g. Matroska, FLAC, RTP)
     gst_all_1.gst-plugins-ugly # Plugins with potential licensing or patent issues (e.g. MP3, MPEG-2)
     gst_all_1.gst-vaapi # Plugin enabling VA-API hardware-accelerated video encoding/decoding
+    gtk-engine-murrine # Very flexible theme engine
     guvcview # Simple interface for devices supported by the linux UVC driver
     hexedit # View and edit files in hexadecimal or in ASCII
     hextazy # TUI hexeditor in Rust with colored bytes
@@ -474,6 +475,11 @@
         PAGER = "bat";
       };
 
+      programs.chromium = {
+        enable = true;
+        package = pkgs.ungoogled-chromium;
+      };
+
       programs.firefox = {
         enable = true;
         languagePacks = [
@@ -585,8 +591,8 @@
               "network.http.speculative-parallel-limit" = 0;
               "network.predictor.enabled" = false;
               "network.prefetch-next" = false;
-              "network.trr.mode" = 2;
-              "network.trr.uri" = "https://mozilla.cloudflare-dns.com/dns-query";
+              "network.trr.mode" = 5;
+              "network.trr.uri" = "";
               "pdfjs.enableScripting" = false;
               "plugins.enumerable_names" = "blank";
               "privacy.donottrackheader.enabled" = true;
