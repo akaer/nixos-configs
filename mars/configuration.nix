@@ -54,7 +54,7 @@
   #boot.kernelPackages = pkgs.linuxPackages;
   #boot.kernelPackages = pkgs.linuxPackages_latest;
   #boot.kernelPackages = pkgs.linuxKernel.packages.linux_latest_libre.nvidia_x11;
-  boot.kernelPackages = pkgs.linuxKernel.packages.linux_6_16;
+  boot.kernelPackages = pkgs.linuxKernel.packages.linux_6_12;
 
   hardware = {
     alsa.enablePersistence = true;
@@ -188,6 +188,7 @@
     blobby # Blobby volleyball game
     bluez
     bluez-tools
+    bridge-utils # Userspace tool to configure linux bridges (deprecated in favour or iproute2)
     btop
     colordiff
     corefonts
@@ -242,6 +243,7 @@
     imagemagick # Powerful image manipulation tool (for converting, resizing, and editing images)
     inetutils # Collection of common network programs
     inotify-tools
+    iproute2 # Collection of utilities for controlling TCP/IP networking and traffic control in Linux
     iptables
     jq
     keychain
@@ -320,8 +322,8 @@
     unzip
     usbutils # `lsusb` — list USB devices
     v4l-utils # V4L utils and libv4l, provide common image formats regardless of the v4l device
+    vde2 # Virtual Distributed Ethernet, an Ethernet compliant virtual network
     vim-full
-    virtualboxWithExtpack
     vkbasalt # Vulkan post-processing (e.g., contrast, sharpening)
     vkd3d # Direct3D 12 to Vulkan translation (Wine/Proton)
     vlc
@@ -1139,7 +1141,7 @@
     nssmdns4 = true;
     ipv4 = true;
     ipv6 = true;
-    #openFirewall = true;
+    openFirewall = true;
   };
   services.dbus.enable = true;
   services.dbus.packages = [ pkgs.dconf ];
@@ -1203,18 +1205,18 @@
   virtualisation.docker = {
     enable = true;
     package = pkgs.docker_28;
+    logDriver = "json-file";
     daemon.settings = {
       ipv6 = true;
+      experimental = true;
       userland-proxy = false;
       features.cdi = true;
       data-root = "/home/docker";
+      log-opts = {
+        "max-size" = "10m";
+        "max-file" = "3";
+      };
     };
-  };
-
-  virtualisation.virtualbox.host = {
-    enable = true;
-    enableExtensionPack = true;
-    addNetworkInterface = true;
   };
 
   environment.variables = {
@@ -1239,6 +1241,8 @@
   networking.nftables.enable = false;
   networking.firewall = {
     enable = false;
+    #trustedInterfaces = [ "br+" ];
+    #allowedTCPPorts = [ 8001 8002 ];
   };
 
   # This value determines the NixOS release from which the default
