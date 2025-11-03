@@ -220,6 +220,7 @@
     frogmouth # Terminal markdown viewer
     fzf
     ghostty
+    gimp3-with-plugins # GNU Image Manipulation Program
     girouette # Modern Unix weather
     git
     glow # Terminal Markdown viewer
@@ -245,6 +246,7 @@
     inotify-tools
     iproute2 # Collection of utilities for controlling TCP/IP networking and traffic control in Linux
     iptables
+    iptables-legacy # Program to configure the Linux IP packet filtering ruleset
     jq
     keychain
     killall # Stop running processes by name
@@ -285,7 +287,6 @@
     nerd-fonts.iosevka
     nerd-fonts.sauce-code-pro
     nerd-fonts.symbols-only
-    nftables
     nixfmt-rfc-style # Nixfmt is the official formatter for Nix language code
     nixfmt-tree
     nmap # Free and open source utility for network discovery and security auditing
@@ -299,6 +300,7 @@
     pavucontrol
     pciutils # `lspci` — list PCI devices (e.g., GPUs, Wi-Fi cards)
     pdfstudioviewer
+    powershell # Powerful cross-platform (Windows, Linux, and macOS) shell and scripting language based on .NET
     pulseaudioFull
     qbittorrent
     remmina
@@ -330,6 +332,7 @@
     vmware-horizon-client
     vscode
     watch
+    webex # All-in-one app to call, meet, message, and get work done
     wget # Download files from the web (handy for scripts or terminal use)
     which
     wireshark # Powerful network protocol analyzer
