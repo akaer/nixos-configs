@@ -247,6 +247,7 @@
     iproute2 # Collection of utilities for controlling TCP/IP networking and traffic control in Linux
     iptables
     iptables-legacy # Program to configure the Linux IP packet filtering ruleset
+    jpegoptim # Optimize JPEG files
     jq
     keychain
     killall # Stop running processes by name
@@ -295,11 +296,13 @@
     nvtopPackages.full # Real-time GPU monitor (NVIDIA/AMD/Intel)
     openjpeg # JPEG 2000 format support (used in some PDFs, publishing, and archival)
     openssl
+    optipng # PNG optimizer
     optipng # Terminal PNG optimizer
     pamixer
     pavucontrol
     pciutils # `lspci` — list PCI devices (e.g., GPUs, Wi-Fi cards)
     pdfstudioviewer
+    pngoptimizer # PNG optimizer and converter
     powershell # Powerful cross-platform (Windows, Linux, and macOS) shell and scripting language based on .NET
     pulseaudioFull
     qbittorrent
@@ -807,6 +810,7 @@
         };
         # Search plugins: nix-env -f '<nixpkgs>' -qaP -A vimPlugins
         plugins = with pkgs.vimPlugins; [
+          ale
           airline
           command-t
           fugitive
@@ -837,6 +841,33 @@
           set smartindent
 
           set cursorline
+
+          " Set encoding
+          set encoding=utf-8
+
+          " Disable Backup and Swap files
+          set noswapfile
+          set nobackup
+          set nowritebackup
+
+          set list listchars=tab:»·,trail:·
+          " Disable Mode Display because Status line is on
+          set noshowmode
+
+          " Strip trailing whitespaces on each save
+          fun! <SID>StripTrailingWhitespaces()
+            let l = line(".")
+            let c = col(".")
+            %s/\s\+$//e
+            call cursor(l, c)
+          endfun
+          autocmd BufWritePre * :call <SID>StripTrailingWhitespaces()
+
+          " Close window if last remaining window is NerdTree
+          autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
+          " Disable code folding
+          set nofoldenable
 
           nnoremap <f2> :NERDTreeToggle<cr>
 
