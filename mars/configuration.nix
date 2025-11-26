@@ -266,6 +266,7 @@
     libwebp # WebP format support (modern image format, often used on websites)
     linux-firmware
     litecli
+    libvirt
     lm_sensors # Read CPU temperatures, fan speeds, voltages, etc.
     logrotate # Required for rotating logs and automatic updates
     lshw
@@ -306,6 +307,8 @@
     powershell # Powerful cross-platform (Windows, Linux, and macOS) shell and scripting language based on .NET
     pulseaudioFull
     qbittorrent
+    qemu_kvm
+    quickemu
     remmina
     rsync
     rtkit
@@ -329,6 +332,7 @@
     v4l-utils # V4L utils and libv4l, provide common image formats regardless of the v4l device
     vde2 # Virtual Distributed Ethernet, an Ethernet compliant virtual network
     vim-full
+    virt-manager
     vkbasalt # Vulkan post-processing (e.g., contrast, sharpening)
     vkd3d # Direct3D 12 to Vulkan translation (Wine/Proton)
     vlc
@@ -1183,6 +1187,11 @@
   services.openssh = {
     enable = true;
     allowSFTP = true;
+    settings = {
+      GatewayPorts = "yes";
+      X11Forwarding = true;
+      UseDns = false;
+    };
   };
 
   # Enable touchpad support (enabled default in most desktopManager).
