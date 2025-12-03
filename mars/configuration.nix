@@ -180,7 +180,6 @@
     arandr
     autorandr
     azure-cli
-    azuredatastudio
     bat
     bc
     binutils
@@ -217,6 +216,7 @@
     font-awesome
     font-awesome_4
     font-awesome_5
+    font-awesome_6
     frogmouth # Terminal markdown viewer
     fzf
     ghostty
@@ -238,6 +238,7 @@
     httpie # Terminal HTTP client
     hueadm # Terminal Philips Hue client
     hunspell
+    gnome-themes-extra
     hunspellDicts.de_DE
     hyphenDicts.de_DE
     illum # Daemon that wires button presses to screen backlight level
@@ -262,11 +263,11 @@
     libtiff # TIFF format support (used for high-quality images and scanning)
     libva-utils
     libva # Video Acceleration API (VA-API) for hardware-accelerated video decoding/encoding
+    libvirt
     libvpx # VP8/VP9 video codec library from Google
     libwebp # WebP format support (modern image format, often used on websites)
     linux-firmware
     litecli
-    libvirt
     lm_sensors # Read CPU temperatures, fan speeds, voltages, etc.
     logrotate # Required for rotating logs and automatic updates
     lshw
@@ -278,7 +279,6 @@
     mfcl3770cdwcupswrapper
     mfcl3770cdwlpr # Brother MFCL3770CDW driver
     most
-    mpv
     mpv # Backend for SMPlayer.
     mtr # Modern Unix `traceroute`
     mupdf # Lightweight PDF, XPS, and E-book viewer and toolkit written in portable C
@@ -295,9 +295,9 @@
     nordic
     ntfs3g # Read/write NTFS (Windows) drives
     nvtopPackages.full # Real-time GPU monitor (NVIDIA/AMD/Intel)
+    omnissa-horizon-client
     openjpeg # JPEG 2000 format support (used in some PDFs, publishing, and archival)
     openssl
-    optipng # PNG optimizer
     optipng # Terminal PNG optimizer
     pamixer
     pavucontrol
@@ -336,7 +336,6 @@
     vkbasalt # Vulkan post-processing (e.g., contrast, sharpening)
     vkd3d # Direct3D 12 to Vulkan translation (Wine/Proton)
     vlc
-    omnissa-horizon-client
     vscode
     watch
     webex # All-in-one app to call, meet, message, and get work done
@@ -399,8 +398,6 @@
   home-manager.users.andrer =
     { pkgs, ... }:
     {
-      nixpkgs.config.allowUnfree = true;
-
       xdg.desktopEntries.nemo = {
         name = "Nemo";
         exec = "${pkgs.nemo-with-extensions}/bin/nemo";
@@ -426,16 +423,12 @@
         font-awesome
         font-awesome_4
         font-awesome_5
-        mpv
+        font-awesome_6
         nerd-fonts.dejavu-sans-mono
         nerd-fonts.fira-code
         nerd-fonts.iosevka
         nerd-fonts.sauce-code-pro
         nerd-fonts.symbols-only
-        nordic
-        scrcpy
-        vlc
-        vscode
       ];
 
       xresources.extraConfig = builtins.readFile (
@@ -817,7 +810,6 @@
         };
         # Search plugins: nix-env -f '<nixpkgs>' -qaP -A vimPlugins
         plugins = with pkgs.vimPlugins; [
-          ale
           airline
           command-t
           fugitive
@@ -978,7 +970,7 @@
         enable = true;
         bars = {
           top = {
-            icons = "awesome5";
+            icons = "awesome6";
             theme = "nord-dark";
             blocks = [
               {
