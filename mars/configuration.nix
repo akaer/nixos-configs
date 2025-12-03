@@ -336,7 +336,7 @@
     vkbasalt # Vulkan post-processing (e.g., contrast, sharpening)
     vkd3d # Direct3D 12 to Vulkan translation (Wine/Proton)
     vlc
-    vmware-horizon-client
+    omnissa-horizon-client
     vscode
     watch
     webex # All-in-one app to call, meet, message, and get work done
@@ -389,6 +389,7 @@
       "video"
       "wheel"
       "wireshark"
+      "vboxusers"
     ];
   };
 
@@ -790,20 +791,22 @@
       programs.git = {
         enable = true;
         lfs.enable = true;
-        userName = "André Raabe";
-        userEmail = "andre.raabe@gmail.com";
-        aliases = {
+        settings.user.name = "André Raabe";
+        settings.user.email = "andre.raabe@gmail.com";
+        settings.aliases = {
           lg = "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit";
           graph = "log --decorate --oneline --graph";
         };
-        delta = {
-          enable = true;
-          options = {
-            syntax-theme = "Nord";
-            minus-style = "#fdf6e3 #dc322f";
-            plus-style = "#fdf6e3 #859900";
-            side-by-side = false;
-          };
+      };
+
+      programs.delta = {
+        enable = true;
+        enableGitIntegration = true;
+        options = {
+          syntax-theme = "Nord";
+          minus-style = "#fdf6e3 #dc322f";
+          plus-style = "#fdf6e3 #859900";
+          side-by-side = false;
         };
       };
 
@@ -1261,6 +1264,9 @@
       };
     };
   };
+
+  virtualisation.virtualbox.host.enable = true;
+  virtualisation.virtualbox.host.enableExtensionPack = true;
 
   environment.variables = {
     EDITOR = "vim";
