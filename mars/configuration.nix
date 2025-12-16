@@ -224,6 +224,8 @@
     girouette # Modern Unix weather
     git
     glow # Terminal Markdown viewer
+    gnome-themes-extra
+    gparted # Graphical disk partitioning tool
     gst_all_1.gst-libav # GStreamer plugin wrapping FFmpeg/libav for broad codec support
     gst_all_1.gst-plugins-bad # Experimental or less maintained plugins, still open-source (e.g. newer formats)
     gst_all_1.gst-plugins-base # Core set of essential GStreamer plugins (e.g. Ogg, Theora, Vorbis)
@@ -238,7 +240,6 @@
     httpie # Terminal HTTP client
     hueadm # Terminal Philips Hue client
     hunspell
-    gnome-themes-extra
     hunspellDicts.de_DE
     hyphenDicts.de_DE
     illum # Daemon that wires button presses to screen backlight level
