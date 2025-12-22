@@ -703,7 +703,6 @@
         enable = true;
         font = "Iosevka Nerd Font 12";
         location = "center";
-        theme = "Arc-Dark";
         plugins = [
           pkgs.rofi-calc
           pkgs.rofi-emoji
@@ -1072,7 +1071,7 @@
               notification = false;
             }
           ];
-          menu = "\"rofi -modi window,drun,run,calc -icon-theme 'Papirus-Nord' -show-icons -show drun -sidebar-mode -terminal i3-sensible-terminal\"";
+          menu = "\"rofi -modi window,drun,run,ssh,calc -icon-theme 'Papirus-Nord' -show-icons -show drun -sidebar-mode -terminal i3-sensible-terminal -theme 'Arc-Dark'\"";
           keybindings = lib.mkOptionDefault {
             "Mod4+Shift+e" = "mode \"$mode_system\"";
           };
