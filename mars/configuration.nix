@@ -54,7 +54,7 @@
   #boot.kernelPackages = pkgs.linuxPackages;
   #boot.kernelPackages = pkgs.linuxPackages_latest;
   #boot.kernelPackages = pkgs.linuxKernel.packages.linux_latest_libre.nvidia_x11;
-  boot.kernelPackages = pkgs.linuxKernel.packages.linux_6_12;
+  boot.kernelPackages = pkgs.linuxKernel.packages.linux_6_18;
 
   hardware = {
     alsa.enablePersistence = true;
@@ -475,6 +475,7 @@
 
       home.sessionVariables = {
         PROMPT_COMMAND = "history -a";
+        GREP_OPTIONS = "--color=auto";
         MANPAGER = "sh -c 'col --no-backspaces --spaces | bat --language man'";
         MANROFFOPT = "-c";
         PAGER = "bat";
@@ -757,6 +758,7 @@
           "*--help"
         ];
         bashrcExtra = ''
+          HISTTIMEFORMAT="(%d.%m.%y) "
           # Workaround for nix-shell --pure
           if [ "$IN_NIX_SHELL" == "pure" ]; then
               if [ -x "$HOME/.nix-profile/bin/powerline-go" ]; then
@@ -772,13 +774,19 @@
         shellAliases = {
           ll = "ls --color=auto -lha";
           myextip = "curl ipinfo.io/ip";
-          grep = "grep --color=auto";
-          diff = "diff --color=auto";
+          diff = "colordiff";
           mv = "mv -i";
           cp = "cp -i";
           ln = "ln -i";
           dmesg = "dmesg --human --color=always";
         };
+        shellOptions = [
+          "histappend"
+          "extglob"
+          "globstar"
+          "checkjobs"
+          "checkwinsize"
+        ];
       };
 
       programs.git = {
