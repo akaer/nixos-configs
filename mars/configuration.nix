@@ -308,8 +308,6 @@
     powershell # Powerful cross-platform (Windows, Linux, and macOS) shell and scripting language based on .NET
     pulseaudioFull
     qbittorrent
-    qemu_kvm
-    quickemu
     remmina
     rsync
     rtkit
@@ -384,7 +382,6 @@
       "audio"
       "docker"
       "i2c"
-      "kvm"
       "networkmanager"
       "video"
       "wheel"
