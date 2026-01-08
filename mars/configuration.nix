@@ -277,6 +277,7 @@
     man-pages # Man pages for command-line tools
     marp-cli # Terminal Markdown presenter
     mc
+    meld # Visual diff and merge tool
     mesa-demos
     mfcl3770cdwcupswrapper
     mfcl3770cdwlpr # Brother MFCL3770CDW driver
@@ -474,9 +475,9 @@
       home.sessionVariables = {
         PROMPT_COMMAND = "history -a";
         GREP_OPTIONS = "--color=auto";
-        MANPAGER = "sh -c 'col --no-backspaces --spaces | bat --language man'";
+        MANPAGER = "sh -c 'col --no-backspaces --spaces | bat --language man' --theme Nord --plain";
         MANROFFOPT = "-c";
-        PAGER = "bat";
+        PAGER = "bat --theme Nord --plain";
       };
 
       programs.chromium = {
@@ -767,7 +768,7 @@
           fi
         '';
         initExtra = ''
-          if command -v keychain > /dev/null 2>&1; then eval $(keychain --eval --nogui id_rsa  --quiet); fi
+          if command -v keychain > /dev/null 2>&1; then eval $(keychain --eval --nogui id_rsa --quiet); fi
         '';
         shellAliases = {
           ll = "ls --color=auto -lha";
@@ -790,11 +791,18 @@
       programs.git = {
         enable = true;
         lfs.enable = true;
-        settings.user.name = "André Raabe";
-        settings.user.email = "andre.raabe@gmail.com";
-        settings.aliases = {
-          lg = "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit";
-          graph = "log --decorate --oneline --graph";
+        settings = {
+          user.name = "André Raabe";
+          user.email = "andre.raabe@gmail.com";
+          branch.autosetuprebase = "always";
+          color.ui = true;
+          core.askPass = ""; # needs to be empty to use terminal for ask pass
+          github.user = "akaer";
+          alias = {
+            lg = "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative";
+            graph = "log --decorate --oneline --graph";
+          };
+          merge.tool = "meld";
         };
       };
 
@@ -921,7 +929,6 @@
         ];
         extraConfig = ''
           set -g set-titles on
-          set -g set-titles-string "#I:#P - #W - #T"
           set -g update-environment "SSH_ASKPASS SSH_AUTH_SOCK SSH_AGENT_PID SSH_CONNECTION DISPLAY"
           bind s split-window -v
           bind v split-window -h
