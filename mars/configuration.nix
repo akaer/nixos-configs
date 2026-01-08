@@ -223,6 +223,7 @@
     gimp3-with-plugins # GNU Image Manipulation Program
     girouette # Modern Unix weather
     git
+    github-copilot-cli # GitHub Copilot CLI brings the power of Copilot coding agent directly to your terminal
     glow # Terminal Markdown viewer
     gnome-themes-extra
     gparted # Graphical disk partitioning tool
@@ -817,6 +818,7 @@
         plugins = with pkgs.vimPlugins; [
           airline
           command-t
+          copilot-vim
           fugitive
           nerdtree
           nord-vim
