@@ -52,9 +52,9 @@
   boot.blacklistedKernelModules = [ "nouveau" ];
 
   #boot.kernelPackages = pkgs.linuxPackages;
-  #boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelPackages = pkgs.linuxPackages_latest;
   #boot.kernelPackages = pkgs.linuxKernel.packages.linux_latest_libre.nvidia_x11;
-  boot.kernelPackages = pkgs.linuxKernel.packages.linux_6_18;
+  #boot.kernelPackages = pkgs.linuxKernel.packages.linux_6_18;
 
   hardware = {
     alsa.enablePersistence = true;
@@ -201,7 +201,8 @@
     ddcutil # Query and change Linux monitor settings using DDC/CI and USB
     direnv
     dnsutils
-    docker_28
+    docker_29
+    docker-buildx
     docker-compose
     dos2unix
     dunst
@@ -295,6 +296,7 @@
     nixfmt-rfc-style # Nixfmt is the official formatter for Nix language code
     nixfmt-tree
     nmap # Free and open source utility for network discovery and security auditing
+    nodejs_24 # Event-driven I/O framework for the V8 JavaScript engine
     nordic
     ntfs3g # Read/write NTFS (Windows) drives
     nvtopPackages.full # Real-time GPU monitor (NVIDIA/AMD/Intel)
@@ -325,6 +327,7 @@
     tldr
     tmux
     tree
+    trivy # Simple and comprehensive vulnerability scanner for containers, suitable for CI
     udiskie
     udisks
     unrar
@@ -475,9 +478,9 @@
       home.sessionVariables = {
         PROMPT_COMMAND = "history -a";
         GREP_OPTIONS = "--color=auto";
-        MANPAGER = "sh -c 'col --no-backspaces --spaces | bat --language man' --theme Nord --plain";
+        MANPAGEA = "sh -c 'col --no-backspaces --spaces | bat --language man --theme Nord'";
         MANROFFOPT = "-c";
-        PAGER = "bat --theme Nord --plain";
+        PAGER = "bat --theme Nord";
       };
 
       programs.chromium = {
@@ -777,7 +780,7 @@
           mv = "mv -i";
           cp = "cp -i";
           ln = "ln -i";
-          dmesg = "dmesg --human --color=always";
+          dmesg = "sudo dmesg --human --color=always";
         };
         shellOptions = [
           "histappend"
@@ -815,6 +818,25 @@
           plus-style = "#fdf6e3 #859900";
           side-by-side = false;
         };
+      };
+
+      programs.readline = {
+        enable = true;
+        extraConfig = ''
+          # Show tab-completion options on first <tab> instead of waiting
+          # for multiple completions.
+          set show-all-if-ambiguous on
+
+          # Case insensitive tab-completion
+          set completion-ignore-case on
+
+          $if Bash
+            # In bash only, enable "magic space" so that typing space
+            # will show completions. i.e. !!_ (where _ is space)
+            # will expand !! for you.
+            Space: magic-space
+          $endif
+        '';
       };
 
       programs.vim = {
