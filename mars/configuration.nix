@@ -6,6 +6,7 @@
   config,
   lib,
   pkgs,
+  options,
   ...
 }:
 
@@ -122,6 +123,9 @@
   # Workaround for strange Docker issues with dhcp active on bridge network. See: https://github.com/NixOS/nixpkgs/issues/109389
   networking.dhcpcd.denyInterfaces = [ "veth*" ];
 
+  # Configure NTP time server
+  networking.timeServers = options.networking.timeServers.default ++ [ "ptbtime1.ptb.de" ];
+
   # Set your time zone.
   time.timeZone = "Europe/Berlin";
 
@@ -189,8 +193,8 @@
     bluez-tools
     bridge-utils # Userspace tool to configure linux bridges (deprecated in favour or iproute2)
     btop
+    chawan # Lightweight and featureful terminal web browser
     colordiff
-    corefonts
     cpufetch # Terminal CPU info
     croc # Terminal file transfer
     curl
@@ -214,10 +218,6 @@
     file # Terminal file info
     filezilla
     flameshot
-    font-awesome
-    font-awesome_4
-    font-awesome_5
-    font-awesome_6
     frogmouth # Terminal markdown viewer
     fzf
     ghostty
@@ -288,11 +288,6 @@
     mupdf # Lightweight PDF, XPS, and E-book viewer and toolkit written in portable C
     ncdu
     nemo-with-extensions
-    nerd-fonts.dejavu-sans-mono
-    nerd-fonts.fira-code
-    nerd-fonts.iosevka
-    nerd-fonts.sauce-code-pro
-    nerd-fonts.symbols-only
     nixfmt-rfc-style # Nixfmt is the official formatter for Nix language code
     nixfmt-tree
     nmap # Free and open source utility for network discovery and security auditing
@@ -423,9 +418,6 @@
 
       home.packages = with pkgs; [
         corefonts
-        font-awesome
-        font-awesome_4
-        font-awesome_5
         font-awesome_6
         nerd-fonts.dejavu-sans-mono
         nerd-fonts.fira-code
