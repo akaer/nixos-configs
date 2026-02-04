@@ -50,7 +50,7 @@
     options nouveau modeset=0
   '';
 
-  boot.blacklistedKernelModules = [ "nouveau" ];
+  boot.blacklistedKernelModules = [ "nouveau" "kvm_intel" ];
 
   #boot.kernelPackages = pkgs.linuxPackages;
   boot.kernelPackages = pkgs.linuxPackages_latest;
@@ -225,6 +225,7 @@
     girouette # Modern Unix weather
     git
     github-copilot-cli # GitHub Copilot CLI brings the power of Copilot coding agent directly to your terminal
+    gitui # Blazing fast terminal-ui for Git written in Rust
     glow # Terminal Markdown viewer
     gnome-themes-extra
     gparted # Graphical disk partitioning tool
@@ -284,6 +285,7 @@
     mfcl3770cdwlpr # Brother MFCL3770CDW driver
     most
     mpv # Backend for SMPlayer.
+    msbuild-structured-log-viewer # Terminal viewer for MSBuild structured log files, allowing you to analyze and debug .NET build processes
     mtr # Modern Unix `traceroute`
     mupdf # Lightweight PDF, XPS, and E-book viewer and toolkit written in portable C
     ncdu
@@ -308,14 +310,17 @@
     pulseaudioFull
     qbittorrent
     remmina
+    rich-cli # Terminal file previewer with support for images, PDFs, markdown, and more, using the rich library for beautiful formatting
     rsync
     rtkit
     sane-backends
     scrcpy
+    serie # Rich git commit graph in your terminal, like magic
     shellcheck # Shell script analysis tool
     signal-desktop # Private, simple, and secure messenger
     smplayer # A more feature-rich media player with the mpv backend, offering advanced controls and customization.
     speedtest-go # Terminal speedtest.net
+    sqlcl # Oracle SQL Developer Command Line
     sqlcmd
     sqlite
     teams-for-linux
@@ -351,6 +356,14 @@
     xorg.xrandr
     xsel
     xss-lock
+    yazi # Blazing fast terminal file manager written in Rust, based on async I/O
+    yaziPlugins.chmod # Add a chmod plugin to yazi to change file permissions from the file manager
+    yaziPlugins.full-border # Add a full border to yazi for better visibility and aesthetics
+    yaziPlugins.git # Show the status of Git file changes as linemode in the file list
+    yaziPlugins.gitui # Integrate gitui into yazi to show git status and perform git operations from the file manager
+    yaziPlugins.nord # Nord theme for yazi
+    yaziPlugins.rich-preview # Add a rich preview plugin to yazi to show file previews (e.g., images, PDFs, markdown) in a side panel
+    yaziPlugins.sudo # Allow yazi to ask for sudo password to perform privileged operations (e.g., delete files owned by root)
     yt-dlp # Command-line tool to download videos from YouTube.com and other sites (youtube-dl fork)
     zenmap # Offical nmap Security Scanner GUI
     (texlive.combine {
@@ -773,6 +786,7 @@
           cp = "cp -i";
           ln = "ln -i";
           dmesg = "sudo dmesg --human --color=always";
+          lzd = "docker run --rm -it --name lazydocker -v /var/run/docker.sock:/var/run/docker.sock -v /home/$HOME/.config/lazydocker:/.config/jesseduffield/lazydocker lazyteam/lazydocker";
         };
         shellOptions = [
           "histappend"
@@ -1183,13 +1197,13 @@
     };
 
   programs = {
-    mtr.enable = true;
     dconf.enable = true;
-    wireshark.enable = true;
-    ssh.startAgent = true;
     i3lock.enable = true;
-
+    mtr.enable = true;
+    nix-ld.enable = true;
+    ssh.startAgent = true;
     steam.enable = true;
+    wireshark.enable = true;
   };
 
   services.acpid.enable = true;
