@@ -326,6 +326,7 @@
     sqlcl # Oracle SQL Developer Command Line
     sqlcmd
     sqlite
+    tailspin # Log file highlighter
     teams-for-linux
     tldr
     tmux
