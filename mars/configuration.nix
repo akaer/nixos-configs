@@ -50,7 +50,10 @@
     options nouveau modeset=0
   '';
 
-  boot.blacklistedKernelModules = [ "nouveau" "kvm_intel" ];
+  boot.blacklistedKernelModules = [
+    "nouveau"
+    "kvm_intel"
+  ];
 
   #boot.kernelPackages = pkgs.linuxPackages;
   boot.kernelPackages = pkgs.linuxPackages_latest;
@@ -419,6 +422,17 @@
         defaultApplications = {
           "inode/directory" = [ "nemo.desktop" ];
           "application/x-gnome-saved-search" = [ "nemo.desktop" ];
+          "text/html" = "firefox.desktop";
+          "x-scheme-handler/http" = "firefox.desktop";
+          "x-scheme-handler/https" = "firefox.desktop";
+          "x-scheme-handler/about" = "firefox.desktop";
+          "x-scheme-handler/unknown" = "firefox.desktop";
+          "application/epub+zip" = "mupdf.desktop";
+          "application/oxps" = "mupdf.desktop";
+          "application/pdf" = "mupdf.desktop";
+          "application/vnd.ms-xpsdocument" = "mupdf.desktop";
+          "application/x-cbz" = "mupdf.desktop";
+          "application/x-pdf" = "mupdf.desktop";
         };
       };
 
@@ -1306,6 +1320,7 @@
     EDITOR = "vim";
     TERMINAL = "ghostty";
     BROWSER = "firefox";
+    DEFAULT_BROWSER = "firefox";
     NIXPKGS_ALLOW_UNFREE = 1;
 
     # Necessary to correctly enable va-api (video codec hardware
