@@ -718,13 +718,14 @@
         enableFishIntegration = false;
 
         settings = {
+          font-size = 10;
           bold-is-bright = true;
         };
       };
 
       programs.rofi = {
         enable = true;
-        font = "Iosevka Nerd Font 12";
+        font = "Iosevka Nerd Font 10";
         location = "center";
         plugins = [
           pkgs.rofi-calc
