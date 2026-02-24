@@ -56,9 +56,9 @@
   ];
 
   #boot.kernelPackages = pkgs.linuxPackages;
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  #boot.kernelPackages = pkgs.linuxPackages_latest;
   #boot.kernelPackages = pkgs.linuxKernel.packages.linux_latest_libre.nvidia_x11;
-  #boot.kernelPackages = pkgs.linuxKernel.packages.linux_6_18;
+  boot.kernelPackages = pkgs.linuxKernel.packages.linux_6_18;
 
   hardware = {
     alsa.enablePersistence = true;
@@ -1300,7 +1300,7 @@
 
   virtualisation.docker = {
     enable = true;
-    package = pkgs.docker_28;
+    package = pkgs.docker_29;
     logDriver = "json-file";
     daemon.settings = {
       ipv6 = true;
