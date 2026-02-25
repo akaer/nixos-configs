@@ -10,6 +10,14 @@
   ...
 }:
 
+let
+  unstable = import <nixos-unstable> {
+    config = {
+      allowUnfree = true;
+    };
+  };
+in
+
 {
   imports = [
     ./hardware-configuration.nix
@@ -344,7 +352,7 @@
     vkbasalt # Vulkan post-processing (e.g., contrast, sharpening)
     vkd3d # Direct3D 12 to Vulkan translation (Wine/Proton)
     vlc
-    vscode-fhs # Wrapped variant of vscode which launches in a FHS compatible environment, should allow for easy usage of extensions without nix-specific modifications
+    unstable.vscode-fhs # Wrapped variant of vscode which launches in a FHS compatible environment, should allow for easy usage of extensions without nix-specific modifications
     watch
     webex # All-in-one app to call, meet, message, and get work done
     wget # Download files from the web (handy for scripts or terminal use)
