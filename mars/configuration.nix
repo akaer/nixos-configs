@@ -204,6 +204,7 @@ in
     bluez-tools
     bridge-utils # Userspace tool to configure linux bridges (deprecated in favour or iproute2)
     btop
+    camset # GUI for Video4Linux adjustments of webcams
     chawan # Lightweight and featureful terminal web browser
     colordiff
     cpufetch # Terminal CPU info
@@ -294,6 +295,7 @@ in
     mesa-demos
     mfcl3770cdwcupswrapper
     mfcl3770cdwlpr # Brother MFCL3770CDW driver
+    mjpg-streamer # Takes JPGs from Linux-UVC compatible webcams, filesystem or other input plugins and streams them as M-JPEG via HTTP to webbrowsers, VLC and other software
     most
     mpv # Backend for SMPlayer.
     msbuild-structured-log-viewer # Terminal viewer for MSBuild structured log files, allowing you to analyze and debug .NET build processes
@@ -308,6 +310,9 @@ in
     nordic
     ntfs3g # Read/write NTFS (Windows) drives
     nvtopPackages.full # Real-time GPU monitor (NVIDIA/AMD/Intel)
+    obsidian-export # Rust library and CLI to export an Obsidian vault to regular Markdown
+    obsidian # Powerful knowledge base that works on top of a local folder of plain text Markdown files
+    obs-studio # Powerful open-source software for video recording and live streaming
     omnissa-horizon-client
     openjpeg # JPEG 2000 format support (used in some PDFs, publishing, and archival)
     openssl
@@ -343,6 +348,7 @@ in
     udiskie
     udisks
     unrar
+    unstable.vscode-fhs # Wrapped variant of vscode which launches in a FHS compatible environment, should allow for easy usage of extensions without nix-specific modifications
     unzip
     usbutils # `lsusb` — list USB devices
     v4l-utils # V4L utils and libv4l, provide common image formats regardless of the v4l device
@@ -352,8 +358,8 @@ in
     vkbasalt # Vulkan post-processing (e.g., contrast, sharpening)
     vkd3d # Direct3D 12 to Vulkan translation (Wine/Proton)
     vlc
-    unstable.vscode-fhs # Wrapped variant of vscode which launches in a FHS compatible environment, should allow for easy usage of extensions without nix-specific modifications
     watch
+    webcamoid # Webcam Capture Software
     webex # All-in-one app to call, meet, message, and get work done
     wget # Download files from the web (handy for scripts or terminal use)
     which
