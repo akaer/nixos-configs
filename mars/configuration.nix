@@ -118,14 +118,13 @@ in
     enable = true;
     userControlled.enable = true;
     networks = {
-      Wolkenkuckucksheim = {
+      "FRITZ!Box 6591 Cable HW" = {
         authProtocols = [
           "WPA-PSK"
           "WPA-PSK-SHA256"
         ];
-        pskRaw = "69728e0f38eaf31ee08ba76d4104202e05f7212d5d5323d8c96da4b03c29fa66";
+        pskRaw = "ea6284dd1f7062b2e20fd43440c8acef22ae2d7d98f31ad0218f869365cbf13c";
       };
-      open_wifi_stealing_ur_datas = { };
     };
   };
 
@@ -236,7 +235,7 @@ in
     gimp3-with-plugins # GNU Image Manipulation Program
     girouette # Modern Unix weather
     git
-    github-copilot-cli # GitHub Copilot CLI brings the power of Copilot coding agent directly to your terminal
+    unstable.github-copilot-cli # GitHub Copilot CLI brings the power of Copilot coding agent directly to your terminal
     gitui # Blazing fast terminal-ui for Git written in Rust
     glow # Terminal Markdown viewer
     gnome-themes-extra
@@ -1279,6 +1278,7 @@ in
     enable = true;
     xkb = {
       layout = "de";
+      variant = "";
       options = "eurosign:e,terminate:ctrl_alt_bksp";
     };
     videoDrivers = [
