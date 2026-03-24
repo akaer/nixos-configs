@@ -213,6 +213,7 @@ in
     cpufetch # Terminal CPU info
     croc # Terminal file transfer
     curl
+    lsd # A modern replacement for 'ls' with a focus on simplicity and color, written in Rust
     curlie # Terminal HTTP client
     dbeaver-bin
     dconf
@@ -256,6 +257,7 @@ in
     htop # Interactive system monitor (like a better 'top')
     httpie # Terminal HTTP client
     hueadm # Terminal Philips Hue client
+    lnav # Logfile Navigator
     hunspell
     hunspellDicts.de_DE
     hyphenDicts.de_DE
@@ -469,16 +471,22 @@ in
         defaultFonts.monospace = [
           "Iosevka Nerd Font"
         ];
+        hinting = "slight";
+        antialiasing = true;
+        subpixelRendering = "rgb";
       };
 
       home.packages = with pkgs; [
         corefonts
         font-awesome_6
+        noto-fonts
         nerd-fonts.dejavu-sans-mono
         nerd-fonts.fira-code
         nerd-fonts.iosevka
         nerd-fonts.sauce-code-pro
         nerd-fonts.symbols-only
+        nerd-fonts.noto
+        nerd-fonts.jetbrains-mono
       ];
 
       xresources.extraConfig = builtins.readFile (
