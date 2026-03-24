@@ -228,7 +228,6 @@ in
     dunst
     dxvk # Direct3D 9/10/11 to Vulkan translation (Wine/Proton)
     exfatprogs # exFAT filesystem userspace utilities
-    exfat # Read/write exFAT (for USB drives/cameras)
     feh # Light-weight image viewer
     ffmpeg-full # Complete FFmpeg suite for audio/video encoding, decoding, transcoding, and streaming
     file # Terminal file info
@@ -832,6 +831,7 @@ in
           dmesg = "sudo dmesg --human --color=always";
           ll = "ls --color=auto -lha";
           ln = "ln -iv";
+          # Latest version can be build with: docker build -t lazyteam/lazydocker https://github.com/jesseduffield/lazydocker.git
           lzd = "docker run --rm -it --name lazydocker -v /var/run/docker.sock:/var/run/docker.sock -v /home/$HOME/.config/lazydocker:/.config/jesseduffield/lazydocker lazyteam/lazydocker";
           mv = "mv -iv";
           myextip = "curl ipinfo.io/ip";
@@ -988,7 +988,7 @@ in
         clock24 = true;
         mouse = true;
         prefix = "C-a";
-        terminal = "tmux-256color";
+        terminal = "xterm-256color";
         aggressiveResize = true;
         historyLimit = 100000;
         resizeAmount = 5;
