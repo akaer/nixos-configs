@@ -114,21 +114,23 @@ in
   ];
 
   networking.hostName = "mars"; # Define your hostname.
-  networking.wireless = {
-    enable = true;
-    userControlled.enable = true;
-    networks = {
-      "Wolkenkuckucksheim" = {
-        authProtocols = [
-          "WPA-PSK"
-          "WPA-PSK-SHA256"
-        ];
-        pskRaw = "69728e0f38eaf31ee08ba76d4104202e05f7212d5d5323d8c96da4b03c29fa66";
-      };
-    };
-  };
+  #networking.wireless = {
+  #  enable = true;
+  #  userControlled.enable = true;
+  #  networks = {
+  #    "Wolkenkuckucksheim" = {
+  #      authProtocols = [
+  #        "WPA-PSK"
+  #        "WPA-PSK-SHA256"
+  #      ];
+  #      pskRaw = "69728e0f38eaf31ee08ba76d4104202e05f7212d5d5323d8c96da4b03c29fa66";
+  #    };
+  #  };
+  #};
 
-  networking.networkmanager.enable = false;
+  networking.networkmanager.enable = true;
+
+  networking.networkmanager.wifi.powersave = true;
 
   # Workaround for strange Docker issues with dhcp active on bridge network. See: https://github.com/NixOS/nixpkgs/issues/109389
   networking.dhcpcd.denyInterfaces = [ "veth*" ];
@@ -199,6 +201,7 @@ in
     bc
     binutils
     binwalk # Firmware Analysis Tool
+    bitwarden-cli # Secure and free password manager for all of your devices
     blobby # Blobby volleyball game
     bluez
     bluez-tools
@@ -260,10 +263,8 @@ in
     ifuse # optional, to mount using 'ifuse'
     illum # Daemon that wires button presses to screen backlight level
     imagemagick # Powerful image manipulation tool (for converting, resizing, and editing images)
-    inetutils # Collection of common network programs
     inotify-tools
     iproute2 # Collection of utilities for controlling TCP/IP networking and traffic control in Linux
-    iptables
     iptables-legacy # Program to configure the Linux IP packet filtering ruleset
     jpegoptim # Optimize JPEG files
     jq
@@ -277,13 +278,13 @@ in
     libpng # PNG image support (including transparent images)
     libraw # RAW image format support (for images from digital cameras)
     libreoffice-still
+    librewolf # Fork of Firefox, focused on privacy, security and freedom
     libtheora # Theora video compression codec (open VP3 implementation)
     libtiff # TIFF format support (used for high-quality images and scanning)
     libv4l # Video4Linux2 (V4L2) library for video capture and output (for webcams)
     libva-utils
     libva # Video Acceleration API (VA-API) for hardware-accelerated video decoding/encoding
     libvirt
-    net-tools # Set of tools for controlling the network subsystem in Linux
     libvpx # VP8/VP9 video codec library from Google
     libwebp # WebP format support (modern image format, often used on websites)
     linux-firmware
@@ -306,7 +307,11 @@ in
     mtr # Modern Unix `traceroute`
     mupdf # Lightweight PDF, XPS, and E-book viewer and toolkit written in portable C
     ncdu # Terminal disk usage analyzer with an ncurses interface, allowing you to easily find and manage large files and directories
+    networkmanagerapplet # System tray applet for NetworkManager, providing a graphical interface to manage network connections and settings
+    ifwifi # Terminal Wi-Fi manager for NetworkManager, allowing you to connect to and manage Wi-Fi networks from the command line
     nemo-with-extensions
+    #net-tools # Set of tools for controlling the network subsystem in Linux; deactivated because steam brings the same package / tools via depencencies for debian-hostname
+    inetutils # Collection of common network programs
     nixfmt-rfc-style # Nixfmt is the official formatter for Nix language code
     nixfmt-tree
     nmap # Free and open source utility for network discovery and security auditing
@@ -331,6 +336,7 @@ in
     qbittorrent
     remmina
     rich-cli # Terminal file previewer with support for images, PDFs, markdown, and more, using the rich library for beautiful formatting
+    rofi-rbw-x11 # Rofi frontend for Bitwarden
     rsync
     rtkit
     sane-backends
@@ -348,7 +354,6 @@ in
     tldr
     tmux
     tree
-    trivy # Simple and comprehensive vulnerability scanner for containers, suitable for CI
     udiskie
     udisks
     unrar
@@ -816,16 +821,21 @@ in
         '';
         initExtra = ''
           if command -v keychain > /dev/null 2>&1; then eval $(keychain --eval --nogui id_rsa --quiet); fi
+          if [[ "$TERM_PROGRAM" == "ghostty" ]]; then
+            export TERM=xterm-256color
+          fi
         '';
         shellAliases = {
-          ll = "ls --color=auto -lha";
-          myextip = "curl ipinfo.io/ip";
+          cal = "ncal -3 -M -w";
+          cp = "cp -iv";
           diff = "colordiff";
-          mv = "mv -i";
-          cp = "cp -i";
-          ln = "ln -i";
           dmesg = "sudo dmesg --human --color=always";
+          ll = "ls --color=auto -lha";
+          ln = "ln -iv";
           lzd = "docker run --rm -it --name lazydocker -v /var/run/docker.sock:/var/run/docker.sock -v /home/$HOME/.config/lazydocker:/.config/jesseduffield/lazydocker lazyteam/lazydocker";
+          mv = "mv -iv";
+          myextip = "curl ipinfo.io/ip";
+          rm = "rm -iv";
         };
         shellOptions = [
           "histappend"
@@ -1250,7 +1260,6 @@ in
     nix-ld.enable = true;
     ssh.startAgent = true;
     steam.enable = true;
-    wireshark.enable = true;
   };
 
   services.acpid.enable = true;
