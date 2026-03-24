@@ -118,12 +118,12 @@ in
     enable = true;
     userControlled.enable = true;
     networks = {
-      "FRITZ!Box 6591 Cable HW" = {
+      "Wolkenkuckucksheim" = {
         authProtocols = [
           "WPA-PSK"
           "WPA-PSK-SHA256"
         ];
-        pskRaw = "ea6284dd1f7062b2e20fd43440c8acef22ae2d7d98f31ad0218f869365cbf13c";
+        pskRaw = "69728e0f38eaf31ee08ba76d4104202e05f7212d5d5323d8c96da4b03c29fa66";
       };
     };
   };
@@ -191,6 +191,7 @@ in
     acpi
     acpid
     alacritty
+    alsa-tools # ALSA utilities for audio configuration and troubleshooting (e.g., `alsamixer`, `amixer`, `speaker-test`)
     arandr
     autorandr
     azure-cli
@@ -214,6 +215,7 @@ in
     dconf
     ddcui # Graphical user interface for ddcutil - control monitor settings
     ddcutil # Query and change Linux monitor settings using DDC/CI and USB
+    dell-command-configure # Dell Command | Configure CLI tool for managing Dell BIOS settings from Linux
     direnv
     dnsutils
     docker_29
@@ -230,13 +232,12 @@ in
     filezilla
     flameshot
     frogmouth # Terminal markdown viewer
-    fzf
-    ghostty
+    fzf # Command-line fuzzy finder for files, command history, processes, and more, with interactive preview and multi-select capabilities
+    ghostty # Terminal emulator with a focus on performance and simplicity, written in Rust
     gimp3-with-plugins # GNU Image Manipulation Program
     girouette # Modern Unix weather
-    git
-    unstable.github-copilot-cli # GitHub Copilot CLI brings the power of Copilot coding agent directly to your terminal
     gitui # Blazing fast terminal-ui for Git written in Rust
+    git # Version control system for tracking changes in source code during software development
     glow # Terminal Markdown viewer
     gnome-themes-extra
     gparted # Graphical disk partitioning tool
@@ -256,6 +257,7 @@ in
     hunspell
     hunspellDicts.de_DE
     hyphenDicts.de_DE
+    ifuse # optional, to mount using 'ifuse'
     illum # Daemon that wires button presses to screen backlight level
     imagemagick # Powerful image manipulation tool (for converting, resizing, and editing images)
     inetutils # Collection of common network programs
@@ -269,6 +271,7 @@ in
     killall # Stop running processes by name
     libaom # AOMedia Video 1 (AV1) codec library
     libexif # EXIF metadata support (extract metadata like camera info and timestamps)
+    libimobiledevice # Library to communicate with iOS devices (for tools like `ideviceinfo` and `idevicesyslog`)
     libjpeg # JPEG image support (commonly used format)
     libnotify
     libpng # PNG image support (including transparent images)
@@ -276,37 +279,39 @@ in
     libreoffice-still
     libtheora # Theora video compression codec (open VP3 implementation)
     libtiff # TIFF format support (used for high-quality images and scanning)
+    libv4l # Video4Linux2 (V4L2) library for video capture and output (for webcams)
     libva-utils
     libva # Video Acceleration API (VA-API) for hardware-accelerated video decoding/encoding
     libvirt
+    net-tools # Set of tools for controlling the network subsystem in Linux
     libvpx # VP8/VP9 video codec library from Google
     libwebp # WebP format support (modern image format, often used on websites)
     linux-firmware
-    litecli
+    litecli # Terminal client for SQLite databases with autocompletion and syntax highlighting
     lm_sensors # Read CPU temperatures, fan speeds, voltages, etc.
     logrotate # Required for rotating logs and automatic updates
-    lshw
+    lshw # Hardware lister (detailed info about hardware components)
     lxappearance
     man-pages # Man pages for command-line tools
     marp-cli # Terminal Markdown presenter
-    mc
+    mc # Midnight Commander, a powerful terminal file manager with a text user interface
     meld # Visual diff and merge tool
     mesa-demos
     mfcl3770cdwcupswrapper
     mfcl3770cdwlpr # Brother MFCL3770CDW driver
     mjpg-streamer # Takes JPGs from Linux-UVC compatible webcams, filesystem or other input plugins and streams them as M-JPEG via HTTP to webbrowsers, VLC and other software
-    most
+    most # Terminal pager with advanced features (e.g., multiple windows, horizontal scrolling, mouse support)
     mpv # Backend for SMPlayer.
     msbuild-structured-log-viewer # Terminal viewer for MSBuild structured log files, allowing you to analyze and debug .NET build processes
     mtr # Modern Unix `traceroute`
     mupdf # Lightweight PDF, XPS, and E-book viewer and toolkit written in portable C
-    ncdu
+    ncdu # Terminal disk usage analyzer with an ncurses interface, allowing you to easily find and manage large files and directories
     nemo-with-extensions
     nixfmt-rfc-style # Nixfmt is the official formatter for Nix language code
     nixfmt-tree
     nmap # Free and open source utility for network discovery and security auditing
     nodejs_24 # Event-driven I/O framework for the V8 JavaScript engine
-    nordic
+    nordic # Nordic GTK theme
     ntfs3g # Read/write NTFS (Windows) drives
     nvtopPackages.full # Real-time GPU monitor (NVIDIA/AMD/Intel)
     obsidian-export # Rust library and CLI to export an Obsidian vault to regular Markdown
@@ -329,15 +334,15 @@ in
     rsync
     rtkit
     sane-backends
-    scrcpy
+    scrcpy # Display and control Android devices connected via USB (or over TCP/IP)
     serie # Rich git commit graph in your terminal, like magic
     shellcheck # Shell script analysis tool
     signal-desktop # Private, simple, and secure messenger
     smplayer # A more feature-rich media player with the mpv backend, offering advanced controls and customization.
     speedtest-go # Terminal speedtest.net
     sqlcl # Oracle SQL Developer Command Line
-    sqlcmd
-    sqlite
+    sqlcmd # Microsoft SQL Server command-line tool
+    sqlite # Command-line interface for SQLite databases
     tailspin # Log file highlighter
     teams-for-linux
     tldr
@@ -347,10 +352,12 @@ in
     udiskie
     udisks
     unrar
+    unstable.github-copilot-cli # GitHub Copilot CLI brings the power of Copilot coding agent directly to your terminal
     unstable.vscode-fhs # Wrapped variant of vscode which launches in a FHS compatible environment, should allow for easy usage of extensions without nix-specific modifications
     unzip
+    usbmuxd # Daemon to multiplex connections to iOS devices (for tools like `ideviceinfo` and `idevicesyslog`)
     usbutils # `lsusb` — list USB devices
-    v4l-utils # V4L utils and libv4l, provide common image formats regardless of the v4l device
+    v4l-utils # V4L utils and libv4l, provide common image formats regardless of the v4l device (for webcams)
     vde2 # Virtual Distributed Ethernet, an Ethernet compliant virtual network
     vim-full
     virt-manager
@@ -369,7 +376,9 @@ in
     x265 # H.265/HEVC video encoder
     xclip
     xdg-utils # Desktop environment integration (e.g., `xdg-open`)
+    xdotool # Command-line X11 automation tool (simulate keyboard input, mouse activity, window management, etc.)
     xorg.xdpyinfo
+    xorg.xf86inputsynaptics # Synaptics touchpad driver for Xorg
     xorg.xrandr
     xsel
     xss-lock
@@ -412,11 +421,12 @@ in
       "audio"
       "docker"
       "i2c"
+      "input"
       "networkmanager"
+      "vboxusers"
       "video"
       "wheel"
       "wireshark"
-      "vboxusers"
     ];
   };
 
@@ -1141,6 +1151,14 @@ in
               command = "xss-lock --transfer-sleep-lock -- i3lock --nofork -e -f -c 03062C";
               notification = false;
             }
+            {
+              command = "nm-applet";
+              notification = false;
+            }
+            {
+              command = "blueman-applet";
+              notification = false;
+            }
           ];
           menu = "\"rofi -modi window,drun,run,ssh,calc -icon-theme 'Papirus-Nord' -show-icons -show drun -sidebar-mode -terminal i3-sensible-terminal -theme 'Arc-Dark'\"";
           keybindings = lib.mkOptionDefault {
@@ -1236,6 +1254,8 @@ in
   };
 
   services.acpid.enable = true;
+  services.blueman.enable = true;
+  services.usbmuxd.enable = true;
   services.fstrim.enable = true;
   services.tlp.enable = true;
   services.fwupd.enable = true;
