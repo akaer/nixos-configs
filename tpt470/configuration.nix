@@ -782,14 +782,13 @@ in
           fi
         '';
         shellAliases = {
-          cal = "ncal -3 -M -w";
           cp = "cp -iv";
           diff = "colordiff";
           dmesg = "sudo dmesg --human --color=always";
           ll = "ls --color=auto -lha";
           ln = "ln -iv";
           # Latest version can be build with: docker build -t lazyteam/lazydocker https://github.com/jesseduffield/lazydocker.git
-          lzd = "docker run --rm -it --name lazydocker -v /var/run/docker.sock:/var/run/docker.sock -v /home/$HOME/.config/lazydocker:/.config/jesseduffield/lazydocker lazyteam/lazydocker";
+          lzd = "docker run --rm -it --name lazydocker -v /var/run/docker.sock:/var/run/docker.sock -v $HOME/.config/lazydocker:/.config/jesseduffield/lazydocker lazyteam/lazydocker";
           mv = "mv -iv";
           myextip = "curl ipinfo.io/ip";
           rm = "rm -iv";
@@ -971,48 +970,48 @@ in
         '';
       };
 
-#      programs.autorandr = {
-#        enable = true;
-#        profiles = {
-#          "notebook" = {
-#            fingerprint = {
-#              eDP-1 = "00ffffffffffff004c836441000000000b1f0104b5221678020cf1ae523cb9230c50540000000101010101010101010101010101010171df0050f06020902008880058d71000001b71df0050f06020902008880058d71000001b000000fe0044334b4a468031363059563033000000000003040300010000000b010a202001f802030f00e3058000e606050174600700000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000b7";
-#            };
-#            config = {
-#              eDP-1 = {
-#                enable = true;
-#                primary = true;
-#                mode = "1920x1200";
-#                rate = "60.0";
-#                position = "0x0";
-#                filter = "nearest";
-#              };
-#            };
-#          };
-#          "arbeitszimmer" = {
-#            fingerprint = {
-#              eDP-1 = "00ffffffffffff004c836441000000000b1f0104b5221678020cf1ae523cb9230c50540000000101010101010101010101010101010171df0050f06020902008880058d71000001b71df0050f06020902008880058d71000001b000000fe0044334b4a468031363059563033000000000003040300010000000b010a202001f802030f00e3058000e606050174600700000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000b7";
-#              DP-4 = "00ffffffffffff0004720705c1280000101d0103804627782aa0b59d5952a0260d5054bfef808180e1c0d1c0a940b300d100a9c081c0565e00a0a0a0295030203500bb892100001a000000ff005447434545303031335030300a000000fd00174c0f5a1e000a202020202020000000fc0045423332314851550a202020200116020327f052100504030207061f14131211161520212201230907078301000067030c0010001042023a801871382d40582c4500bb892100001e011d8018711c1620582c2500bb892100009e011d007251d01e206e285500bb892100001e8c0ad08a20e02d10103e9600bb89210000180000000000000000000000000000000093";
-#            };
-#            config = {
-#              eDP-1 = {
-#                enable = true;
-#                primary = false;
-#                mode = "1920x1200";
-#                rate = "60.0";
-#                position = "2560x0";
-#              };
-#              DP-4 = {
-#                enable = true;
-#                primary = true;
-#                mode = "2560x1440";
-#                rate = "60.0";
-#                position = "0x0";
-#              };
-#            };
-#          };
-#        };
-#      };
+      programs.autorandr = {
+        enable = true;
+        profiles = {
+          "notebook" = {
+            fingerprint = {
+              eDP-1 = "00ffffffffffff0006af3d2400000000001a0104951f117802a2b591575894281c505400000001010101010101010101010101010101843a8034713828403064310035ad10000018d02e8034713828403064310035ad10000018000000fe0041554f0a202020202020202020000000fe004231343048414e30322e34200a00e4";
+            };
+            config = {
+              eDP-1 = {
+                enable = true;
+                primary = true;
+                mode = "1920x1200";
+                rate = "60.0";
+                position = "0x0";
+                filter = "nearest";
+              };
+            };
+          };
+          "arbeitszimmer" = {
+            fingerprint = {
+              eDP-1 = "00ffffffffffff0006af3d2400000000001a0104951f117802a2b591575894281c505400000001010101010101010101010101010101843a8034713828403064310035ad10000018d02e8034713828403064310035ad10000018000000fe0041554f0a202020202020202020000000fe004231343048414e30322e34200a00e4";
+              DP-4 = "00ffffffffffff0004720705c1280000101d0103804627782aa0b59d5952a0260d5054bfef808180e1c0d1c0a940b300d100a9c081c0565e00a0a0a0295030203500bb892100001a000000ff005447434545303031335030300a000000fd00174c0f5a1e000a202020202020000000fc0045423332314851550a202020200116020327f052100504030207061f14131211161520212201230907078301000067030c0010001042023a801871382d40582c4500bb892100001e011d8018711c1620582c2500bb892100009e011d007251d01e206e285500bb892100001e8c0ad08a20e02d10103e9600bb89210000180000000000000000000000000000000093";
+            };
+            config = {
+              eDP-1 = {
+                enable = true;
+                primary = false;
+                mode = "1920x1200";
+                rate = "60.0";
+                position = "2560x0";
+              };
+              DP-4 = {
+                enable = true;
+                primary = true;
+                mode = "2560x1440";
+                rate = "60.0";
+                position = "0x0";
+              };
+            };
+          };
+        };
+      };
 
       programs.i3status-rust = {
         enable = true;
