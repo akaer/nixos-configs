@@ -298,7 +298,6 @@ in
     linux-firmware
     litecli # Terminal client for SQLite databases with autocompletion and syntax highlighting
     lm_sensors # Read CPU temperatures, fan speeds, voltages, etc.
-    lnav # Logfile Navigator
     logrotate # Required for rotating logs and automatic updates
     lsd # A modern replacement for 'ls' with a focus on simplicity and color, written in Rust
     lshw # Hardware lister (detailed info about hardware components)
@@ -852,7 +851,7 @@ in
           ll = "ls --color=auto -lha";
           ln = "ln -iv";
           # Latest version can be build with: docker build -t lazyteam/lazydocker https://github.com/jesseduffield/lazydocker.git
-          lzd = "docker run --rm -it --name lazydocker -v /var/run/docker.sock:/var/run/docker.sock -v /home/$HOME/.config/lazydocker:/.config/jesseduffield/lazydocker lazyteam/lazydocker";
+          lzd = "docker run --rm -it --name lazydocker -v /var/run/docker.sock:/var/run/docker.sock -v $HOME/.config/lazydocker:/.config/jesseduffield/lazydocker lazyteam/lazydocker";
           mv = "mv -iv";
           myextip = "curl ipinfo.io/ip";
           rm = "rm -iv";

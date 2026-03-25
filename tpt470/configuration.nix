@@ -57,6 +57,20 @@ in
 
   boot.kernelPackages = pkgs.linuxKernel.packages.linux_6_18;
 
+  # Delete all files in /tmp during boot
+  boot.tmp.cleanOnBoot = true;
+
+  # quite - Don't show terminal output unless an error occurs
+  # splash - Show splash screen theme (if available)
+  # pti on/off - Enable/disable Page Table Isolation (PTI).
+  #              Protects from attacks on the shared user/kernel address space,
+  #              but with a cost of a little perfomance overhead
+  boot.kernelParams = [ "quiet" "splash" ];
+
+  # All Kernel Messages with a log level smaller
+  # than this setting will be printed to the console
+  boot.consoleLogLevel = 3;
+
   hardware = {
     alsa.enablePersistence = true;
     bluetooth.enable = true;
@@ -64,6 +78,9 @@ in
     cpu.intel.updateMicrocode = true;
     enableAllFirmware = true;
     enableRedistributableFirmware = true;
+    firmware = with pkgs; [
+      wireless-regdb
+    ];
     graphics.enable32Bit = true;
     graphics.enable = true;
     i2c.enable = true;
@@ -160,10 +177,10 @@ in
     camset # GUI for Video4Linux adjustments of webcams
     chawan # Lightweight and featureful terminal web browser
     colordiff
+    coreutils
     cpufetch # Terminal CPU info
     croc # Terminal file transfer
     curl
-    lsd # A modern replacement for 'ls' with a focus on simplicity and color, written in Rust
     curlie # Terminal HTTP client
     dbeaver-bin
     dconf
@@ -178,6 +195,7 @@ in
     dos2unix
     dunst
     dxvk # Direct3D 9/10/11 to Vulkan translation (Wine/Proton)
+    elfutils
     exfatprogs # exFAT filesystem userspace utilities
     feh # Light-weight image viewer
     ffmpeg-full # Complete FFmpeg suite for audio/video encoding, decoding, transcoding, and streaming
@@ -189,6 +207,7 @@ in
     ghostty # Terminal emulator with a focus on performance and simplicity, written in Rust
     gimp3-with-plugins # GNU Image Manipulation Program
     girouette # Modern Unix weather
+    git-lfs # Git extension for versioning large files (e.g., media assets, datasets) by storing them outside the main repository
     gitui # Blazing fast terminal-ui for Git written in Rust
     git # Version control system for tracking changes in source code during software development
     glow # Terminal Markdown viewer
@@ -207,13 +226,14 @@ in
     htop # Interactive system monitor (like a better 'top')
     httpie # Terminal HTTP client
     hueadm # Terminal Philips Hue client
-    lnav # Logfile Navigator
     hunspell
     hunspellDicts.de_DE
     hyphenDicts.de_DE
     ifuse # optional, to mount using 'ifuse'
+    ifwifi # Terminal Wi-Fi manager for NetworkManager, allowing you to connect to and manage Wi-Fi networks from the command line
     illum # Daemon that wires button presses to screen backlight level
     imagemagick # Powerful image manipulation tool (for converting, resizing, and editing images)
+    inetutils # Collection of common network programs
     inotify-tools
     iproute2 # Collection of utilities for controlling TCP/IP networking and traffic control in Linux
     iptables-legacy # Program to configure the Linux IP packet filtering ruleset
@@ -242,6 +262,7 @@ in
     litecli # Terminal client for SQLite databases with autocompletion and syntax highlighting
     lm_sensors # Read CPU temperatures, fan speeds, voltages, etc.
     logrotate # Required for rotating logs and automatic updates
+    lsd # A modern replacement for 'ls' with a focus on simplicity and color, written in Rust
     lshw # Hardware lister (detailed info about hardware components)
     lxappearance
     man-pages # Man pages for command-line tools
@@ -258,10 +279,9 @@ in
     mtr # Modern Unix `traceroute`
     mupdf # Lightweight PDF, XPS, and E-book viewer and toolkit written in portable C
     ncdu # Terminal disk usage analyzer with an ncurses interface, allowing you to easily find and manage large files and directories
-    networkmanagerapplet # System tray applet for NetworkManager, providing a graphical interface to manage network connections and settings
-    ifwifi # Terminal Wi-Fi manager for NetworkManager, allowing you to connect to and manage Wi-Fi networks from the command line
     nemo-with-extensions
-    inetutils # Collection of common network programs
+    net-tools # Set of tools for controlling the network subsystem in Linux; deactivated because steam brings the same package / tools via depencencies for debian-hostname
+    networkmanagerapplet # System tray applet for NetworkManager, providing a graphical interface to manage network connections and settings
     nixfmt-rfc-style # Nixfmt is the official formatter for Nix language code
     nixfmt-tree
     nmap # Free and open source utility for network discovery and security auditing
@@ -277,6 +297,7 @@ in
     openssl
     optipng # Terminal PNG optimizer
     pamixer
+    patchelf
     pavucontrol
     pciutils # `lspci` — list PCI devices (e.g., GPUs, Wi-Fi cards)
     pdfstudioviewer
@@ -291,6 +312,7 @@ in
     rtkit
     sane-backends
     scrcpy # Display and control Android devices connected via USB (or over TCP/IP)
+    screenfetch
     serie # Rich git commit graph in your terminal, like magic
     shellcheck # Shell script analysis tool
     signal-desktop # Private, simple, and secure messenger
@@ -312,6 +334,7 @@ in
     unzip
     usbmuxd # Daemon to multiplex connections to iOS devices (for tools like `ideviceinfo` and `idevicesyslog`)
     usbutils # `lsusb` — list USB devices
+    util-linux
     v4l-utils # V4L utils and libv4l, provide common image formats regardless of the v4l device (for webcams)
     vde2 # Virtual Distributed Ethernet, an Ethernet compliant virtual network
     vim-full
@@ -374,10 +397,13 @@ in
     description = "André Raabe";
     extraGroups = [
       "audio"
+      "dialout" # Allows access to serial ports (e.g., `/dev/ttyS*`, `/dev/ttyUSB*`), which is useful for serial communication and development
       "docker"
       "i2c"
       "input"
+      "lp"
       "networkmanager"
+      "scanner"
       "vboxusers"
       "video"
       "wheel"
