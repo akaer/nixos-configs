@@ -75,11 +75,6 @@ in
     "nodiratime"
     "discard"
   ];
- # fileSystems."/home".options = [
- #   "noatime"
- #   "nodiratime"
- #   "discard"
- # ];
 
   networking.hostName = "tpt470"; # Define your hostname.
 
@@ -1262,9 +1257,6 @@ in
       variant = "";
       options = "eurosign:e,terminate:ctrl_alt_bksp";
     };
-#    videoDrivers = [
-#      "nvidia"
-#    ];
     windowManager.i3 = {
       enable = true;
       extraPackages = with pkgs; [

@@ -27,9 +27,9 @@ in
   boot.initrd = {
     luks.devices = {
       luksCrypted = {
-        device = "/dev/nvme0n1p2"; # Replace with your UUID
-        preLVM = true; # Unlock before activating LVM
-        allowDiscards = true; # Allow TRIM commands for SSDs
+        device = "/dev/nvme0n1p2";
+        preLVM = true;
+        allowDiscards = true;
       };
     };
     checkJournalingFS = false;
@@ -75,6 +75,9 @@ in
     cpu.intel.updateMicrocode = true;
     enableAllFirmware = true;
     enableRedistributableFirmware = true;
+    firmware = with pkgs; [
+      wireless-regdb
+    ];
     graphics.enable32Bit = true;
     graphics.enable = true;
     graphics.extraPackages = with pkgs; [
@@ -114,19 +117,6 @@ in
   ];
 
   networking.hostName = "mars"; # Define your hostname.
-  #networking.wireless = {
-  #  enable = true;
-  #  userControlled.enable = true;
-  #  networks = {
-  #    "Wolkenkuckucksheim" = {
-  #      authProtocols = [
-  #        "WPA-PSK"
-  #        "WPA-PSK-SHA256"
-  #      ];
-  #      pskRaw = "69728e0f38eaf31ee08ba76d4104202e05f7212d5d5323d8c96da4b03c29fa66";
-  #    };
-  #  };
-  #};
 
   networking.networkmanager.enable = true;
 
@@ -833,7 +823,6 @@ in
           fi
         '';
         shellAliases = {
-          cal = "ncal -3 -M -w";
           cp = "cp -iv";
           diff = "colordiff";
           dmesg = "sudo dmesg --human --color=always";
