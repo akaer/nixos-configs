@@ -199,8 +199,8 @@ in
     dos2unix
     dunst
     dxvk # Direct3D 9/10/11 to Vulkan translation (Wine/Proton)
-    ethtool # Utility for controlling network drivers and hardware
     elfutils
+    ethtool # Utility for controlling network drivers and hardware
     exfatprogs # exFAT filesystem userspace utilities
     feh # Light-weight image viewer
     ffmpeg-full # Complete FFmpeg suite for audio/video encoding, decoding, transcoding, and streaming
@@ -242,6 +242,7 @@ in
     inotify-tools
     iproute2 # Collection of utilities for controlling TCP/IP networking and traffic control in Linux
     iptables-legacy # Program to configure the Linux IP packet filtering ruleset
+    javaPackages.compiler.temurin-bin.jdk-21
     jpegoptim # Optimize JPEG files
     jq
     keychain
@@ -255,6 +256,7 @@ in
     libraw # RAW image format support (for images from digital cameras)
     libreoffice-still
     librewolf # Fork of Firefox, focused on privacy, security and freedom
+    libsecret # Library for storing and retrieving passwords and other secrets
     libtheora # Theora video compression codec (open VP3 implementation)
     libtiff # TIFF format support (used for high-quality images and scanning)
     libv4l # Video4Linux2 (V4L2) library for video capture and output (for webcams)
@@ -263,6 +265,9 @@ in
     libvirt
     libvpx # VP8/VP9 video codec library from Google
     libwebp # WebP format support (modern image format, often used on websites)
+    libx11 # Core X11 protocol client library (aka "Xlib")
+    libxext
+    libxpm # X Pixmap (XPM) image file format library
     linux-firmware
     litecli # Terminal client for SQLite databases with autocompletion and syntax highlighting
     lm_sensors # Read CPU temperatures, fan speeds, voltages, etc.
@@ -308,6 +313,7 @@ in
     pdfstudioviewer
     pngoptimizer # PNG optimizer and converter
     powershell # Powerful cross-platform (Windows, Linux, and macOS) shell and scripting language based on .NET
+    powertop # Analyze power consumption on Intel-based laptops
     pulseaudioFull
     qbittorrent
     remmina
@@ -358,6 +364,9 @@ in
     x264 # H.264/MPEG-4 AVC video encoder
     x265 # H.265/HEVC video encoder
     xclip
+    xdg-desktop-portal-gtk # Desktop integration portals for sandboxed apps
+    xdg-launch # Command line XDG compliant launcher and tools
+    xdg-user-dirs # Tool to help manage well known user directories like the desktop folder and the music folder
     xdg-utils # Desktop environment integration (e.g., `xdg-open`)
     xdotool # Command-line X11 automation tool (simulate keyboard input, mouse activity, window management, etc.)
     xorg.xdpyinfo
@@ -706,8 +715,10 @@ in
 
       programs.alacritty = {
         enable = true;
+        theme = "nord";
         settings = {
           font = {
+            size = 7.0;
             normal = {
               family = "Iosevka Nerd Font";
               style = "Regular";
@@ -1278,10 +1289,10 @@ in
 
   services.tlp = {
     enable = true;
-    extraConfig = ''
-      CPU_SCALING_GOVERNOR_ON_AC=performance
-      CPU_SCALING_GOVERNOR_ON_BAT=powersave
-    '';
+    settings = {
+      CPU_SCALING_GOVERNOR_ON_AC = "performance";
+      CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
+    };
   };
 
   services.udev.extraRules = lib.mkMerge [
@@ -1353,12 +1364,15 @@ in
 
   environment.variables = {
     EDITOR = "vim";
-    TERMINAL = "ghostty";
+    TERMINAL = "alacritty";
     BROWSER = "firefox";
     DEFAULT_BROWSER = "firefox";
     NIXPKGS_ALLOW_UNFREE = 1;
 
     GTK_THEME = "Nordic";
+
+    # Better font rendering in Java applications.
+    _JAVA_OPTIONS = "-Dawt.useSystemAAFontSettings=lcd";
   };
 
   networking.nftables.enable = false;

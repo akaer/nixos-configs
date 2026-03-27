@@ -1295,7 +1295,6 @@ in
   services.blueman.enable = true;
   services.usbmuxd.enable = true;
   services.fstrim.enable = true;
-  services.tlp.enable = true;
   services.fwupd.enable = true;
   services.printing.enable = true;
   services.avahi = {
@@ -1328,6 +1327,21 @@ in
     alsa.enable = true;
     alsa.support32Bit = true;
   };
+
+  services.tlp = {
+    enable = true;
+    extraConfig = ''
+      CPU_SCALING_GOVERNOR_ON_AC=performance
+      CPU_SCALING_GOVERNOR_ON_BAT=powersave
+    '';
+  };
+
+  services.udev.extraRules = lib.mkMerge [
+    # autosuspend USB devices
+    ''ACTION=="add", SUBSYSTEM=="usb", TEST=="power/control", ATTR{power/control}="auto"''
+    # autosuspend PCI devices
+    ''ACTION=="add", SUBSYSTEM=="pci", TEST=="power/control", ATTR{power/control}="auto"''
+  ];
 
   security.rtkit.enable = true;
   security.polkit.enable = true;
