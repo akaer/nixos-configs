@@ -76,7 +76,10 @@ in
   # pti on/off - Enable/disable Page Table Isolation (PTI).
   #              Protects from attacks on the shared user/kernel address space,
   #              but with a cost of a little perfomance overhead
-  boot.kernelParams = [ "quiet" "splash" ];
+  boot.kernelParams = [
+    "quiet"
+    "splash"
+  ];
 
   # All Kernel Messages with a log level smaller
   # than this setting will be printed to the console
