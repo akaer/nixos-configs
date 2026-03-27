@@ -35,7 +35,8 @@ in
   #  checkJournalingFS = false;
   #};
 
-  boot.initrd.luks.devices."luks-41c487f2-f414-43f2-be0b-b0590f069bdf".device = "/dev/disk/by-uuid/41c487f2-f414-43f2-be0b-b0590f069bdf";
+  boot.initrd.luks.devices."luks-41c487f2-f414-43f2-be0b-b0590f069bdf".device =
+    "/dev/disk/by-uuid/41c487f2-f414-43f2-be0b-b0590f069bdf";
 
   boot.loader.grub.enable = true; # Enable GRUB as the bootloader
   boot.loader.grub.device = "nodev"; # Install GRUB on the EFI system partition
@@ -65,7 +66,10 @@ in
   # pti on/off - Enable/disable Page Table Isolation (PTI).
   #              Protects from attacks on the shared user/kernel address space,
   #              but with a cost of a little perfomance overhead
-  boot.kernelParams = [ "quiet" "splash" ];
+  boot.kernelParams = [
+    "quiet"
+    "splash"
+  ];
 
   # All Kernel Messages with a log level smaller
   # than this setting will be printed to the console
@@ -195,6 +199,7 @@ in
     dos2unix
     dunst
     dxvk # Direct3D 9/10/11 to Vulkan translation (Wine/Proton)
+    ethtool # Utility for controlling network drivers and hardware
     elfutils
     exfatprogs # exFAT filesystem userspace utilities
     feh # Light-weight image viewer
@@ -1238,7 +1243,6 @@ in
   services.blueman.enable = true;
   services.usbmuxd.enable = true;
   services.fstrim.enable = true;
-  services.tlp.enable = true;
   services.fwupd.enable = true;
   services.printing.enable = true;
   services.avahi = {
@@ -1271,6 +1275,23 @@ in
     alsa.enable = true;
     alsa.support32Bit = true;
   };
+
+  services.tlp = {
+    enable = true;
+    extraConfig = ''
+      CPU_SCALING_GOVERNOR_ON_AC=performance
+      CPU_SCALING_GOVERNOR_ON_BAT=powersave
+    '';
+  };
+
+  services.udev.extraRules = lib.mkMerge [
+    # autosuspend USB devices
+    ''ACTION=="add", SUBSYSTEM=="usb", TEST=="power/control", ATTR{power/control}="auto"''
+    # autosuspend PCI devices
+    ''ACTION=="add", SUBSYSTEM=="pci", TEST=="power/control", ATTR{power/control}="auto"''
+    # disable Ethernet Wake-on-LAN
+    ''ACTION=="add", SUBSYSTEM=="net", NAME=="enp*", RUN+="${pkgs.ethtool}/sbin/ethtool -s $name wol d"''
+  ];
 
   security.rtkit.enable = true;
   security.polkit.enable = true;
