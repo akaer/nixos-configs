@@ -274,6 +274,7 @@ in
     inotify-tools
     iproute2 # Collection of utilities for controlling TCP/IP networking and traffic control in Linux
     iptables-legacy # Program to configure the Linux IP packet filtering ruleset
+    javaPackages.compiler.temurin-bin.jdk-21
     jpegoptim # Optimize JPEG files
     jq
     keychain
@@ -287,6 +288,7 @@ in
     libraw # RAW image format support (for images from digital cameras)
     libreoffice-still
     librewolf # Fork of Firefox, focused on privacy, security and freedom
+    libsecret # Library for storing and retrieving passwords and other secrets
     libtheora # Theora video compression codec (open VP3 implementation)
     libtiff # TIFF format support (used for high-quality images and scanning)
     libv4l # Video4Linux2 (V4L2) library for video capture and output (for webcams)
@@ -295,6 +297,8 @@ in
     libvirt
     libvpx # VP8/VP9 video codec library from Google
     libwebp # WebP format support (modern image format, often used on websites)
+    libx11 # Core X11 protocol client library (aka "Xlib")
+    libxpm # X Pixmap (XPM) image file format library
     linux-firmware
     litecli # Terminal client for SQLite databases with autocompletion and syntax highlighting
     lm_sensors # Read CPU temperatures, fan speeds, voltages, etc.
@@ -317,7 +321,6 @@ in
     mupdf # Lightweight PDF, XPS, and E-book viewer and toolkit written in portable C
     ncdu # Terminal disk usage analyzer with an ncurses interface, allowing you to easily find and manage large files and directories
     nemo-with-extensions
-    #net-tools # Set of tools for controlling the network subsystem in Linux; deactivated because steam brings the same package / tools via depencencies for debian-hostname
     networkmanagerapplet # System tray applet for NetworkManager, providing a graphical interface to manage network connections and settings
     nixfmt-rfc-style # Nixfmt is the official formatter for Nix language code
     nixfmt-tree
@@ -372,6 +375,7 @@ in
     usbmuxd # Daemon to multiplex connections to iOS devices (for tools like `ideviceinfo` and `idevicesyslog`)
     usbutils # `lsusb` — list USB devices
     util-linux
+    libxext
     v4l-utils # V4L utils and libv4l, provide common image formats regardless of the v4l device (for webcams)
     vde2 # Virtual Distributed Ethernet, an Ethernet compliant virtual network
     vim-full
@@ -391,6 +395,9 @@ in
     x265 # H.265/HEVC video encoder
     xclip
     xdg-utils # Desktop environment integration (e.g., `xdg-open`)
+    xdg-launch # Command line XDG compliant launcher and tools
+    xdg-user-dirs # Tool to help manage well known user directories like the desktop folder and the music folder
+    xdg-desktop-portal-gtk # Desktop integration portals for sandboxed apps
     xdotool # Command-line X11 automation tool (simulate keyboard input, mouse activity, window management, etc.)
     xorg.xdpyinfo
     xorg.xf86inputsynaptics # Synaptics touchpad driver for Xorg
@@ -1398,6 +1405,9 @@ in
     MOZ_DISABLE_RDD_SANDBOX = "1";
 
     GTK_THEME = "Nordic";
+
+    # Better font rendering in Java applications.
+    _JAVA_OPTIONS = "-Dawt.useSystemAAFontSettings=lcd";
   };
 
   networking.nftables.enable = false;

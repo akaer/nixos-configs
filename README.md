@@ -50,8 +50,9 @@ sudo nixos-rebuild switch --upgrade
 ## Cleanup
 
 ```
-sudo nix-store --gc
 sudo nix-collect-garbage --delete-old
+sudo nix-store --gc
+sudo nix-store --optimise
 
 sudo nix profile history --profile /nix/var/nix/profiles/system --extra-experimental-features nix-command
 sudo nix profile wipe-history --older-than 7d --profile /nix/var/nix/profiles/system --extra-experimental-features nix-command
