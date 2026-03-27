@@ -1247,8 +1247,9 @@ in
     mtr.enable = true;
     nix-ld.enable = true;
     ssh.startAgent = true;
-    steam.enable = true;
   };
+
+  powerManagement.powertop.enable = true;
 
   services.acpid.enable = true;
   services.blueman.enable = true;
