@@ -133,6 +133,51 @@ in
     "discard"
   ];
 
+  fileSystems."/mnt/scan" = {
+    device = "//fritte1.fritz.box/scan";
+    fsType = "cifs";
+    options = let
+      # this line prevents hanging on network split
+      automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
+    in ["${automount_opts},credentials=/etc/nixos/smb-secrets-scan"];
+  };
+
+  fileSystems."/mnt/backup" = {
+    device = "//nas.fritz.box/Backup";
+    fsType = "cifs";
+    options = let
+      # this line prevents hanging on network split
+      automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
+    in ["${automount_opts},credentials=/etc/nixos/smb-secrets-nas"];
+  };
+
+  fileSystems."/mnt/dokumente" = {
+    device = "//nas.fritz.box/Dokumente";
+    fsType = "cifs";
+    options = let
+      # this line prevents hanging on network split
+      automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
+    in ["${automount_opts},credentials=/etc/nixos/smb-secrets-nas"];
+  };
+
+  fileSystems."/mnt/photo" = {
+    device = "//nas.fritz.box/photo";
+    fsType = "cifs";
+    options = let
+      # this line prevents hanging on network split
+      automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
+    in ["${automount_opts},credentials=/etc/nixos/smb-secrets-nas"];
+  };
+
+  fileSystems."/mnt/video" = {
+    device = "//nas.fritz.box/video";
+    fsType = "cifs";
+    options = let
+      # this line prevents hanging on network split
+      automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
+    in ["${automount_opts},credentials=/etc/nixos/smb-secrets-nas"];
+  };
+
   networking.hostName = "mars"; # Define your hostname.
 
   networking.networkmanager.enable = true;
@@ -216,6 +261,7 @@ in
     btop
     camset # GUI for Video4Linux adjustments of webcams
     chawan # Lightweight and featureful terminal web browser
+    cifs-utils # Tools for managing Linux CIFS client filesystems
     colordiff
     coreutils
     cpufetch # Terminal CPU info
@@ -236,6 +282,7 @@ in
     dunst
     dxvk # Direct3D 9/10/11 to Vulkan translation (Wine/Proton)
     elfutils
+    ethtool # Utility for controlling network drivers and hardware
     exfatprogs # exFAT filesystem userspace utilities
     feh # Light-weight image viewer
     ffmpeg-full # Complete FFmpeg suite for audio/video encoding, decoding, transcoding, and streaming
@@ -301,6 +348,7 @@ in
     libvpx # VP8/VP9 video codec library from Google
     libwebp # WebP format support (modern image format, often used on websites)
     libx11 # Core X11 protocol client library (aka "Xlib")
+    libxext
     libxpm # X Pixmap (XPM) image file format library
     linux-firmware
     litecli # Terminal client for SQLite databases with autocompletion and syntax highlighting
@@ -346,6 +394,7 @@ in
     pdfstudioviewer
     pngoptimizer # PNG optimizer and converter
     powershell # Powerful cross-platform (Windows, Linux, and macOS) shell and scripting language based on .NET
+    powertop # Analyze power consumption on Intel-based laptops
     pulseaudioFull
     qbittorrent
     remmina
@@ -378,7 +427,6 @@ in
     usbmuxd # Daemon to multiplex connections to iOS devices (for tools like `ideviceinfo` and `idevicesyslog`)
     usbutils # `lsusb` — list USB devices
     util-linux
-    libxext
     v4l-utils # V4L utils and libv4l, provide common image formats regardless of the v4l device (for webcams)
     vde2 # Virtual Distributed Ethernet, an Ethernet compliant virtual network
     vim-full
@@ -397,10 +445,10 @@ in
     x264 # H.264/MPEG-4 AVC video encoder
     x265 # H.265/HEVC video encoder
     xclip
-    xdg-utils # Desktop environment integration (e.g., `xdg-open`)
+    xdg-desktop-portal-gtk # Desktop integration portals for sandboxed apps
     xdg-launch # Command line XDG compliant launcher and tools
     xdg-user-dirs # Tool to help manage well known user directories like the desktop folder and the music folder
-    xdg-desktop-portal-gtk # Desktop integration portals for sandboxed apps
+    xdg-utils # Desktop environment integration (e.g., `xdg-open`)
     xdotool # Command-line X11 automation tool (simulate keyboard input, mouse activity, window management, etc.)
     xorg.xdpyinfo
     xorg.xf86inputsynaptics # Synaptics touchpad driver for Xorg
@@ -748,8 +796,10 @@ in
 
       programs.alacritty = {
         enable = true;
+        theme = "nord";
         settings = {
           font = {
+            size = 7.0;
             normal = {
               family = "Iosevka Nerd Font";
               style = "Regular";
@@ -1291,6 +1341,8 @@ in
     steam.enable = true;
   };
 
+  powerManagement.powertop.enable = true;
+
   services.acpid.enable = true;
   services.blueman.enable = true;
   services.usbmuxd.enable = true;
@@ -1306,6 +1358,7 @@ in
   };
   services.dbus.enable = true;
   services.dbus.packages = [ pkgs.dconf ];
+  services.gvfs.enable = true;
   services.illum.enable = true;
   services.openssh = {
     enable = true;
@@ -1330,10 +1383,10 @@ in
 
   services.tlp = {
     enable = true;
-    extraConfig = ''
-      CPU_SCALING_GOVERNOR_ON_AC=performance
-      CPU_SCALING_GOVERNOR_ON_BAT=powersave
-    '';
+    settings = {
+      CPU_SCALING_GOVERNOR_ON_AC = "performance";
+      CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
+    };
   };
 
   services.udev.extraRules = lib.mkMerge [
@@ -1406,7 +1459,7 @@ in
 
   environment.variables = {
     EDITOR = "vim";
-    TERMINAL = "ghostty";
+    TERMINAL = "alacritty";
     BROWSER = "firefox";
     DEFAULT_BROWSER = "firefox";
     NIXPKGS_ALLOW_UNFREE = 1;
