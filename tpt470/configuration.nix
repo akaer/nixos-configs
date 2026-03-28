@@ -97,6 +97,51 @@ in
     "discard"
   ];
 
+  fileSystems."/mnt/scan" = {
+    device = "//fritte1.fritz.box/scan";
+    fsType = "cifs";
+    options = let
+      # this line prevents hanging on network split
+      automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
+    in ["${automount_opts},credentials=/etc/nixos/smb-secrets-scan"];
+  };
+
+  fileSystems."/mnt/backup" = {
+    device = "//nas.fritz.box/Backup";
+    fsType = "cifs";
+    options = let
+      # this line prevents hanging on network split
+      automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
+    in ["${automount_opts},credentials=/etc/nixos/smb-secrets-nas"];
+  };
+
+  fileSystems."/mnt/dokumente" = {
+    device = "//nas.fritz.box/Dokumente";
+    fsType = "cifs";
+    options = let
+      # this line prevents hanging on network split
+      automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
+    in ["${automount_opts},credentials=/etc/nixos/smb-secrets-nas"];
+  };
+
+  fileSystems."/mnt/photo" = {
+    device = "//nas.fritz.box/photo";
+    fsType = "cifs";
+    options = let
+      # this line prevents hanging on network split
+      automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
+    in ["${automount_opts},credentials=/etc/nixos/smb-secrets-nas"];
+  };
+
+  fileSystems."/mnt/video" = {
+    device = "//nas.fritz.box/video";
+    fsType = "cifs";
+    options = let
+      # this line prevents hanging on network split
+      automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
+    in ["${automount_opts},credentials=/etc/nixos/smb-secrets-nas"];
+  };
+
   networking.hostName = "tpt470"; # Define your hostname.
 
   networking.networkmanager.enable = true;
@@ -180,6 +225,7 @@ in
     btop
     camset # GUI for Video4Linux adjustments of webcams
     chawan # Lightweight and featureful terminal web browser
+    cifs-utils # Tools for managing Linux CIFS client filesystems
     colordiff
     coreutils
     cpufetch # Terminal CPU info
@@ -1266,6 +1312,7 @@ in
   };
   services.dbus.enable = true;
   services.dbus.packages = [ pkgs.dconf ];
+  services.gvfs.enable = true;
   services.illum.enable = true;
   services.openssh = {
     enable = true;
