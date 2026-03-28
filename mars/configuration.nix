@@ -799,7 +799,7 @@ in
         theme = "nord";
         settings = {
           font = {
-            size = 7.0;
+            size = 10.0;
             normal = {
               family = "Iosevka Nerd Font";
               style = "Regular";
@@ -1341,7 +1341,7 @@ in
     steam.enable = true;
   };
 
-  powerManagement.powertop.enable = true;
+  powerManagement.powertop.enable = false;
 
   services.acpid.enable = true;
   services.blueman.enable = true;
@@ -1388,13 +1388,6 @@ in
       CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
     };
   };
-
-  services.udev.extraRules = lib.mkMerge [
-    # autosuspend USB devices
-    ''ACTION=="add", SUBSYSTEM=="usb", TEST=="power/control", ATTR{power/control}="auto"''
-    # autosuspend PCI devices
-    ''ACTION=="add", SUBSYSTEM=="pci", TEST=="power/control", ATTR{power/control}="auto"''
-  ];
 
   security.rtkit.enable = true;
   security.polkit.enable = true;
