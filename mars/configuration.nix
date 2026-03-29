@@ -136,46 +136,56 @@ in
   fileSystems."/mnt/scan" = {
     device = "//fritte1.fritz.box/scan";
     fsType = "cifs";
-    options = let
-      # this line prevents hanging on network split
-      automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
-    in ["${automount_opts},credentials=/etc/nixos/smb-secrets-scan"];
+    options =
+      let
+        # this line prevents hanging on network split
+        automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
+      in
+      [ "${automount_opts},credentials=/etc/nixos/smb-secrets-scan" ];
   };
 
   fileSystems."/mnt/backup" = {
     device = "//nas.fritz.box/Backup";
     fsType = "cifs";
-    options = let
-      # this line prevents hanging on network split
-      automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
-    in ["${automount_opts},credentials=/etc/nixos/smb-secrets-nas"];
+    options =
+      let
+        # this line prevents hanging on network split
+        automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
+      in
+      [ "${automount_opts},credentials=/etc/nixos/smb-secrets-nas" ];
   };
 
   fileSystems."/mnt/dokumente" = {
     device = "//nas.fritz.box/Dokumente";
     fsType = "cifs";
-    options = let
-      # this line prevents hanging on network split
-      automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
-    in ["${automount_opts},credentials=/etc/nixos/smb-secrets-nas"];
+    options =
+      let
+        # this line prevents hanging on network split
+        automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
+      in
+      [ "${automount_opts},credentials=/etc/nixos/smb-secrets-nas" ];
   };
 
   fileSystems."/mnt/photo" = {
     device = "//nas.fritz.box/photo";
     fsType = "cifs";
-    options = let
-      # this line prevents hanging on network split
-      automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
-    in ["${automount_opts},credentials=/etc/nixos/smb-secrets-nas"];
+    options =
+      let
+        # this line prevents hanging on network split
+        automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
+      in
+      [ "${automount_opts},credentials=/etc/nixos/smb-secrets-nas" ];
   };
 
   fileSystems."/mnt/video" = {
     device = "//nas.fritz.box/video";
     fsType = "cifs";
-    options = let
-      # this line prevents hanging on network split
-      automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
-    in ["${automount_opts},credentials=/etc/nixos/smb-secrets-nas"];
+    options =
+      let
+        # this line prevents hanging on network split
+        automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
+      in
+      [ "${automount_opts},credentials=/etc/nixos/smb-secrets-nas" ];
   };
 
   networking.hostName = "mars"; # Define your hostname.
@@ -323,7 +333,7 @@ in
     inetutils # Collection of common network programs
     inotify-tools
     iproute2 # Collection of utilities for controlling TCP/IP networking and traffic control in Linux
-    iptables-legacy # Program to configure the Linux IP packet filtering ruleset
+    iptables # Program to configure the Linux IP packet filtering ruleset
     javaPackages.compiler.temurin-bin.jdk-21
     jpegoptim # Optimize JPEG files
     jq
@@ -1223,6 +1233,12 @@ in
             bindsym Return mode "default"
             bindsym Escape mode "default"
           }
+
+          # Clipboard manager clipcat
+          set $launcher-clipboard-insert clipcat-menu insert
+          set $launcher-clipboard-remove clipcat-menu remove
+          bindsym Mod4+p exec $launcher-clipboard-insert
+          bindsym Mod4+o exec $launcher-clipboard-remove
         '';
         config = {
           modifier = "Mod4";
@@ -1318,6 +1334,39 @@ in
         settings = {
           program_options = {
             file_manager = "${pkgs.nemo-with-extensions}/bin/nemo";
+          };
+        };
+      };
+
+      services.clipcat = {
+        enable = true;
+        daemonSettings = {
+          daemonize = true;
+          max_history = 150;
+        };
+        ctlSettings = {
+          server_endpoint = "/run/user/1000/clipcat/grpc.sock";
+          log = {
+            file_path = "/tmp/clipcatctl.log";
+            emit_journald = true;
+            emit_stdout = false;
+            emit_stderr = false;
+            level = "INFO";
+          };
+        };
+        menuSettings = {
+          server_endpoint = "/run/user/1000/clipcat/grpc.sock";
+          finder = "rofi";
+          rofi = {
+            line_length = 100;
+            menu_length = 30;
+            menu_prompt = "Clipcat";
+            extra_arguments = [
+              "-mesg"
+              "Please select a clip"
+              "-theme"
+              "Arc-Dark"
+            ];
           };
         };
       };
@@ -1473,7 +1522,7 @@ in
     _JAVA_OPTIONS = "-Dawt.useSystemAAFontSettings=lcd";
   };
 
-  networking.nftables.enable = false;
+  networking.nftables.enable = true;
   networking.firewall = {
     enable = false;
     #trustedInterfaces = [ "br+" ];
