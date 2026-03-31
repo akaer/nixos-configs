@@ -318,6 +318,7 @@ in
     gst_all_1.gst-vaapi # Plugin enabling VA-API hardware-accelerated video encoding/decoding
     gtk-engine-murrine # Very flexible theme engine
     guvcview # Simple interface for devices supported by the linux UVC driver
+    gxmessage # Graphical message box utility for X11, similar to `zenity` or `kdialog`, allowing you to display simple dialog boxes from shell scripts or the command line
     hexedit # View and edit files in hexadecimal or in ASCII
     hextazy # TUI hexeditor in Rust with colored bytes
     htop # Interactive system monitor (like a better 'top')
@@ -367,6 +368,7 @@ in
     lsd # A modern replacement for 'ls' with a focus on simplicity and color, written in Rust
     lshw # Hardware lister (detailed info about hardware components)
     lxappearance
+    maim # Terminal screenshot tool with support for selecting a region, window, or entire screen, and saving to file or clipboard
     man-pages # Man pages for command-line tools
     marp-cli # Terminal Markdown presenter
     mc # Midnight Commander, a powerful terminal file manager with a text user interface
@@ -425,6 +427,7 @@ in
     sqlite # Command-line interface for SQLite databases
     tailspin # Log file highlighter
     teams-for-linux
+    tesseract # Terminal OCR (Optical Character Recognition) tool to extract text from images, supporting multiple languages and output formats
     tldr
     tmux
     tree
@@ -474,6 +477,7 @@ in
     yaziPlugins.rich-preview # Add a rich preview plugin to yazi to show file previews (e.g., images, PDFs, markdown) in a side panel
     yaziPlugins.sudo # Allow yazi to ask for sudo password to perform privileged operations (e.g., delete files owned by root)
     yt-dlp # Command-line tool to download videos from YouTube.com and other sites (youtube-dl fork)
+    zbar # Terminal barcode reader (supports various 1D and 2D barcode formats, e.g., QR codes)
     zenmap # Offical nmap Security Scanner GUI
     (texlive.combine {
       inherit (texlive)
@@ -1236,9 +1240,16 @@ in
 
           # Clipboard manager clipcat
           set $launcher-clipboard-insert clipcat-menu insert
-          set $launcher-clipboard-remove clipcat-menu remove
           bindsym Mod4+p exec $launcher-clipboard-insert
-          bindsym Mod4+o exec $launcher-clipboard-remove
+
+          # Screenshot with flameshot
+          bindsym Print exec flameshot gui -d 2000
+
+          # Read bar or qr codes
+          bindsym Mod4+q exec maim -qs | zbarimg -q --raw - | xclip -selection clipboard -f
+
+          # OCR
+          bindsym Mod4+o exec flameshot gui -s -r | tesseract - - | gxmessage -title "Decoded Data" -fn "Consolas 12" -wrap -geometry 640x480 -file -
         '';
         config = {
           modifier = "Mod4";
