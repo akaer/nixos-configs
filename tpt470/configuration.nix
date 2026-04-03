@@ -103,7 +103,7 @@ in
     options =
       let
         # this line prevents hanging on network split
-        automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
+        automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s,uid=1000,gid=100,forceuid,forcegid";
       in
       [ "${automount_opts},credentials=/etc/nixos/smb-secrets-scan" ];
   };
@@ -114,7 +114,7 @@ in
     options =
       let
         # this line prevents hanging on network split
-        automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
+        automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s,uid=1000,gid=100,forceuid,forcegid";
       in
       [ "${automount_opts},credentials=/etc/nixos/smb-secrets-nas" ];
   };
@@ -125,7 +125,7 @@ in
     options =
       let
         # this line prevents hanging on network split
-        automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
+        automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s,uid=1000,gid=100,forceuid,forcegid";
       in
       [ "${automount_opts},credentials=/etc/nixos/smb-secrets-nas" ];
   };
@@ -136,7 +136,7 @@ in
     options =
       let
         # this line prevents hanging on network split
-        automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
+        automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s,uid=1000,gid=100,forceuid,forcegid";
       in
       [ "${automount_opts},credentials=/etc/nixos/smb-secrets-nas" ];
   };
@@ -147,7 +147,7 @@ in
     options =
       let
         # this line prevents hanging on network split
-        automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
+        automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s,uid=1000,gid=100,forceuid,forcegid";
       in
       [ "${automount_opts},credentials=/etc/nixos/smb-secrets-nas" ];
   };
@@ -269,9 +269,9 @@ in
     gimp3-with-plugins # GNU Image Manipulation Program
     girouette # Modern Unix weather
     git-lfs # Git extension for versioning large files (e.g., media assets, datasets) by storing them outside the main repository
+    gittyup # Terminal Git client with a focus on simplicity and speed, written in Rust
     gitui # Blazing fast terminal-ui for Git written in Rust
     git # Version control system for tracking changes in source code during software development
-    gittyup # Terminal Git client with a focus on simplicity and speed, written in Rust
     glow # Terminal Markdown viewer
     gnome-themes-extra
     gparted # Graphical disk partitioning tool
@@ -305,6 +305,7 @@ in
     jpegoptim # Optimize JPEG files
     jq
     keychain
+    keychain # Manage SSH and GPG keys in a convenient and secure manner
     killall # Stop running processes by name
     libaom # AOMedia Video 1 (AV1) codec library
     libexif # EXIF metadata support (extract metadata like camera info and timestamps)
@@ -379,6 +380,7 @@ in
     remmina
     rich-cli # Terminal file previewer with support for images, PDFs, markdown, and more, using the rich library for beautiful formatting
     rofi-rbw-x11 # Rofi frontend for Bitwarden
+    rpi-imager # Raspberry Pi Imaging Utility
     rsync
     rtkit
     sane-backends
@@ -392,6 +394,7 @@ in
     sqlcl # Oracle SQL Developer Command Line
     sqlcmd # Microsoft SQL Server command-line tool
     sqlite # Command-line interface for SQLite databases
+    sshfs # FUSE-based filesystem that allows remote filesystems to be mounted over SSH
     tailspin # Log file highlighter
     teams-for-linux
     tesseract # Terminal OCR (Optical Character Recognition) tool to extract text from images, supporting multiple languages and output formats
@@ -1469,11 +1472,18 @@ in
     BROWSER = "firefox";
     DEFAULT_BROWSER = "firefox";
     NIXPKGS_ALLOW_UNFREE = 1;
-
     GTK_THEME = "Nordic";
-
     # Better font rendering in Java applications.
     _JAVA_OPTIONS = "-Dawt.useSystemAAFontSettings=lcd";
+    # Privacy
+    DOTNET_CLI_TELEMETRY_OPTOUT = 1;
+    DOTNET_EnableDiagnostics = 0;
+    DOTNET_TELEMETRY_OPTOUT = 1;
+    POWERSHELL_CLI_TELEMETRY_OPTOUT = 1;
+    POWERSHELL_TELEMETRY_OPTOUT = 1;
+    POWERSHELL_UPDATECHECK = "Off";
+    POWERSHELL_UPDATECHECK_OPTOUT = 1;
+    DOTNET_NOLOGO = "true";
   };
 
   networking.nftables.enable = true;
