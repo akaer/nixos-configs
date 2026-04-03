@@ -100,46 +100,56 @@ in
   fileSystems."/mnt/scan" = {
     device = "//fritte1.fritz.box/scan";
     fsType = "cifs";
-    options = let
-      # this line prevents hanging on network split
-      automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
-    in ["${automount_opts},credentials=/etc/nixos/smb-secrets-scan"];
+    options =
+      let
+        # this line prevents hanging on network split
+        automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
+      in
+      [ "${automount_opts},credentials=/etc/nixos/smb-secrets-scan" ];
   };
 
   fileSystems."/mnt/backup" = {
     device = "//nas.fritz.box/Backup";
     fsType = "cifs";
-    options = let
-      # this line prevents hanging on network split
-      automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
-    in ["${automount_opts},credentials=/etc/nixos/smb-secrets-nas"];
+    options =
+      let
+        # this line prevents hanging on network split
+        automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
+      in
+      [ "${automount_opts},credentials=/etc/nixos/smb-secrets-nas" ];
   };
 
   fileSystems."/mnt/dokumente" = {
     device = "//nas.fritz.box/Dokumente";
     fsType = "cifs";
-    options = let
-      # this line prevents hanging on network split
-      automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
-    in ["${automount_opts},credentials=/etc/nixos/smb-secrets-nas"];
+    options =
+      let
+        # this line prevents hanging on network split
+        automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
+      in
+      [ "${automount_opts},credentials=/etc/nixos/smb-secrets-nas" ];
   };
 
   fileSystems."/mnt/photo" = {
     device = "//nas.fritz.box/photo";
     fsType = "cifs";
-    options = let
-      # this line prevents hanging on network split
-      automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
-    in ["${automount_opts},credentials=/etc/nixos/smb-secrets-nas"];
+    options =
+      let
+        # this line prevents hanging on network split
+        automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
+      in
+      [ "${automount_opts},credentials=/etc/nixos/smb-secrets-nas" ];
   };
 
   fileSystems."/mnt/video" = {
     device = "//nas.fritz.box/video";
     fsType = "cifs";
-    options = let
-      # this line prevents hanging on network split
-      automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
-    in ["${automount_opts},credentials=/etc/nixos/smb-secrets-nas"];
+    options =
+      let
+        # this line prevents hanging on network split
+        automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
+      in
+      [ "${automount_opts},credentials=/etc/nixos/smb-secrets-nas" ];
   };
 
   networking.hostName = "tpt470"; # Define your hostname.
@@ -261,6 +271,7 @@ in
     git-lfs # Git extension for versioning large files (e.g., media assets, datasets) by storing them outside the main repository
     gitui # Blazing fast terminal-ui for Git written in Rust
     git # Version control system for tracking changes in source code during software development
+    gittyup # Terminal Git client with a focus on simplicity and speed, written in Rust
     glow # Terminal Markdown viewer
     gnome-themes-extra
     gparted # Graphical disk partitioning tool
@@ -272,6 +283,7 @@ in
     gst_all_1.gst-vaapi # Plugin enabling VA-API hardware-accelerated video encoding/decoding
     gtk-engine-murrine # Very flexible theme engine
     guvcview # Simple interface for devices supported by the linux UVC driver
+    gxmessage # Graphical message box utility for X11, similar to `zenity` or `kdialog`, allowing you to display simple dialog boxes from shell scripts or the command line
     hexedit # View and edit files in hexadecimal or in ASCII
     hextazy # TUI hexeditor in Rust with colored bytes
     htop # Interactive system monitor (like a better 'top')
@@ -286,8 +298,9 @@ in
     imagemagick # Powerful image manipulation tool (for converting, resizing, and editing images)
     inetutils # Collection of common network programs
     inotify-tools
+    iotop-c # Terminal I/O monitor with a top-like interface, written in C for better performance and lower resource usage compared to the original Python version
     iproute2 # Collection of utilities for controlling TCP/IP networking and traffic control in Linux
-    iptables-legacy # Program to configure the Linux IP packet filtering ruleset
+    iptables # Program to configure the Linux IP packet filtering ruleset
     javaPackages.compiler.temurin-bin.jdk-21
     jpegoptim # Optimize JPEG files
     jq
@@ -321,6 +334,7 @@ in
     lsd # A modern replacement for 'ls' with a focus on simplicity and color, written in Rust
     lshw # Hardware lister (detailed info about hardware components)
     lxappearance
+    maim # Terminal screenshot tool with support for selecting a region, window, or entire screen, and saving to file or clipboard
     man-pages # Man pages for command-line tools
     marp-cli # Terminal Markdown presenter
     mc # Midnight Commander, a powerful terminal file manager with a text user interface
@@ -380,6 +394,7 @@ in
     sqlite # Command-line interface for SQLite databases
     tailspin # Log file highlighter
     teams-for-linux
+    tesseract # Terminal OCR (Optical Character Recognition) tool to extract text from images, supporting multiple languages and output formats
     tldr
     tmux
     tree
@@ -429,6 +444,7 @@ in
     yaziPlugins.rich-preview # Add a rich preview plugin to yazi to show file previews (e.g., images, PDFs, markdown) in a side panel
     yaziPlugins.sudo # Allow yazi to ask for sudo password to perform privileged operations (e.g., delete files owned by root)
     yt-dlp # Command-line tool to download videos from YouTube.com and other sites (youtube-dl fork)
+    zbar # Terminal barcode reader (supports various 1D and 2D barcode formats, e.g., QR codes)
     zenmap # Offical nmap Security Scanner GUI
     (texlive.combine {
       inherit (texlive)
@@ -1178,6 +1194,19 @@ in
             bindsym Return mode "default"
             bindsym Escape mode "default"
           }
+
+          # Clipboard manager clipcat
+          set $launcher-clipboard-insert clipcat-menu insert
+          bindsym Mod4+p exec $launcher-clipboard-insert
+
+          # Screenshot with flameshot
+          bindsym Print exec flameshot gui -d 2000
+
+          # Read bar or qr codes
+          bindsym Mod4+q exec maim -qs | zbarimg -q --raw - | xclip -selection clipboard -f
+
+          # OCR
+          bindsym Mod4+o exec flameshot gui -s -r | tesseract - - | gxmessage -title "Decoded Data" -fn "Consolas 12" -wrap -geometry 640x480 -file -
         '';
         config = {
           modifier = "Mod4";
@@ -1277,6 +1306,39 @@ in
         };
       };
 
+      services.clipcat = {
+        enable = true;
+        daemonSettings = {
+          daemonize = true;
+          max_history = 150;
+        };
+        ctlSettings = {
+          server_endpoint = "/run/user/1000/clipcat/grpc.sock";
+          log = {
+            file_path = "/tmp/clipcatctl.log";
+            emit_journald = true;
+            emit_stdout = false;
+            emit_stderr = false;
+            level = "INFO";
+          };
+        };
+        menuSettings = {
+          server_endpoint = "/run/user/1000/clipcat/grpc.sock";
+          finder = "rofi";
+          rofi = {
+            line_length = 100;
+            menu_length = 30;
+            menu_prompt = "Clipcat";
+            extra_arguments = [
+              "-mesg"
+              "Please select a clip"
+              "-theme"
+              "Arc-Dark"
+            ];
+          };
+        };
+      };
+
       services.flameshot.enable = true;
       services.remmina.enable = true;
       services.remmina.addRdpMimeTypeAssoc = true;
@@ -1295,7 +1357,7 @@ in
     ssh.startAgent = true;
   };
 
-  powerManagement.powertop.enable = true;
+  powerManagement.powertop.enable = false;
 
   services.acpid.enable = true;
   services.blueman.enable = true;
@@ -1342,15 +1404,6 @@ in
       CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
     };
   };
-
-  services.udev.extraRules = lib.mkMerge [
-    # autosuspend USB devices
-    ''ACTION=="add", SUBSYSTEM=="usb", TEST=="power/control", ATTR{power/control}="auto"''
-    # autosuspend PCI devices
-    ''ACTION=="add", SUBSYSTEM=="pci", TEST=="power/control", ATTR{power/control}="auto"''
-    # disable Ethernet Wake-on-LAN
-    ''ACTION=="add", SUBSYSTEM=="net", NAME=="enp*", RUN+="${pkgs.ethtool}/sbin/ethtool -s $name wol d"''
-  ];
 
   security.rtkit.enable = true;
   security.polkit.enable = true;
@@ -1423,7 +1476,7 @@ in
     _JAVA_OPTIONS = "-Dawt.useSystemAAFontSettings=lcd";
   };
 
-  networking.nftables.enable = false;
+  networking.nftables.enable = true;
   networking.firewall = {
     enable = false;
     #trustedInterfaces = [ "br+" ];
