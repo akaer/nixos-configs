@@ -307,6 +307,7 @@ in
     git-lfs # Git extension for versioning large files (e.g., media assets, datasets) by storing them outside the main repository
     gitui # Blazing fast terminal-ui for Git written in Rust
     git # Version control system for tracking changes in source code during software development
+    gittyup # Terminal Git client with a focus on simplicity and speed, written in Rust
     glow # Terminal Markdown viewer
     gnome-themes-extra
     gparted # Graphical disk partitioning tool
@@ -333,6 +334,7 @@ in
     imagemagick # Powerful image manipulation tool (for converting, resizing, and editing images)
     inetutils # Collection of common network programs
     inotify-tools
+    iotop-c # Terminal I/O monitor with a top-like interface, written in C for better performance and lower resource usage compared to the original Python version
     iproute2 # Collection of utilities for controlling TCP/IP networking and traffic control in Linux
     iptables # Program to configure the Linux IP packet filtering ruleset
     javaPackages.compiler.temurin-bin.jdk-21
