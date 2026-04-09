@@ -338,6 +338,8 @@ in
     iproute2 # Collection of utilities for controlling TCP/IP networking and traffic control in Linux
     iptables # Program to configure the Linux IP packet filtering ruleset
     javaPackages.compiler.temurin-bin.jdk-21
+    joplin-cli # Command-line interface for Joplin, allowing you to manage your notes and notebooks from the terminal, with support for synchronization and encryption
+    joplin-desktop # Open-source note-taking and to-do application with markdown support, synchronization, and end-to-end encryption
     jpegoptim # Optimize JPEG files
     jq
     keychain
