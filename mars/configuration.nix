@@ -936,6 +936,7 @@ in
           mv = "mv -iv";
           myextip = "curl ipinfo.io/ip";
           rm = "rm -iv";
+          docker-ips = "docker inspect \$(docker ps -q) | jq -r '.[] | \"\(.Name | ltrimstr(\"/\")) - \(.NetworkSettings.Networks | to_entries[] | .value.IPAddress)\"'";
         };
         shellOptions = [
           "histappend"
