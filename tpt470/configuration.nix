@@ -268,10 +268,10 @@ in
     ghostty # Terminal emulator with a focus on performance and simplicity, written in Rust
     gimp3-with-plugins # GNU Image Manipulation Program
     girouette # Modern Unix weather
+    gitFull # Version control system for tracking changes in source code during software development
     git-lfs # Git extension for versioning large files (e.g., media assets, datasets) by storing them outside the main repository
     gittyup # Terminal Git client with a focus on simplicity and speed, written in Rust
     gitui # Blazing fast terminal-ui for Git written in Rust
-    git # Version control system for tracking changes in source code during software development
     glow # Terminal Markdown viewer
     gnome-themes-extra
     gparted # Graphical disk partitioning tool
@@ -296,15 +296,17 @@ in
     ifwifi # Terminal Wi-Fi manager for NetworkManager, allowing you to connect to and manage Wi-Fi networks from the command line
     illum # Daemon that wires button presses to screen backlight level
     imagemagick # Powerful image manipulation tool (for converting, resizing, and editing images)
+    imhex # Hex Editor for Reverse Engineers, Programmers and people who value their retinas when working at 3 AM
     inetutils # Collection of common network programs
     inotify-tools
     iotop-c # Terminal I/O monitor with a top-like interface, written in C for better performance and lower resource usage compared to the original Python version
     iproute2 # Collection of utilities for controlling TCP/IP networking and traffic control in Linux
     iptables # Program to configure the Linux IP packet filtering ruleset
     javaPackages.compiler.temurin-bin.jdk-21
+    joplin-cli # Command-line interface for Joplin, allowing you to manage your notes and notebooks from the terminal, with support for synchronization and encryption
+    joplin-desktop # Open-source note-taking and to-do application with markdown support, synchronization, and end-to-end encryption
     jpegoptim # Optimize JPEG files
     jq
-    keychain
     keychain # Manage SSH and GPG keys in a convenient and secure manner
     killall # Stop running processes by name
     libaom # AOMedia Video 1 (AV1) codec library
@@ -900,6 +902,7 @@ in
           mv = "mv -iv";
           myextip = "curl ipinfo.io/ip";
           rm = "rm -iv";
+          docker-ips = "docker inspect \$(docker ps -q) | jq -r '.[] | \"\(.Name | ltrimstr(\"/\")) - \(.NetworkSettings.Networks | to_entries[] | .value.IPAddress)\"'";
         };
         shellOptions = [
           "histappend"
@@ -914,17 +917,18 @@ in
         enable = true;
         lfs.enable = true;
         settings = {
-          user.name = "André Raabe";
-          user.email = "andre.raabe@gmail.com";
-          branch.autosetuprebase = "always";
-          color.ui = true;
-          core.askPass = ""; # needs to be empty to use terminal for ask pass
-          github.user = "akaer";
           alias = {
             lg = "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative";
             graph = "log --decorate --oneline --graph";
           };
+          branch.autosetuprebase = "always";
+          color.ui = true;
+          core.askPass = ""; # needs to be empty to use terminal for ask pass
+          fetch.showForcedUpdates = true;
+          github.user = "akaer";
           merge.tool = "meld";
+          user.email = "andre.raabe@gmail.com";
+          user.name = "André Raabe";
         };
       };
 

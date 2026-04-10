@@ -435,6 +435,7 @@ in
     tailspin # Log file highlighter
     teams-for-linux
     tesseract # Terminal OCR (Optical Character Recognition) tool to extract text from images, supporting multiple languages and output formats
+    testdisk # Data recovery utilities
     tldr
     tmux
     tree
