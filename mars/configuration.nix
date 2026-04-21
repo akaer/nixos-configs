@@ -486,6 +486,7 @@ in
     yaziPlugins.sudo # Allow yazi to ask for sudo password to perform privileged operations (e.g., delete files owned by root)
     yt-dlp # Command-line tool to download videos from YouTube.com and other sites (youtube-dl fork)
     zbar # Terminal barcode reader (supports various 1D and 2D barcode formats, e.g., QR codes)
+    zellij # Terminal workspace with batteries included, written in Rust, with support for tabs, splits, plugins, and more
     zenmap # Offical nmap Security Scanner GUI
     (texlive.combine {
       inherit (texlive)
@@ -1108,12 +1109,14 @@ in
           yank
         ];
         extraConfig = ''
-          set -g set-titles on
           set -g update-environment "SSH_ASKPASS SSH_AUTH_SOCK SSH_AGENT_PID SSH_CONNECTION DISPLAY"
-          bind s split-window -v
-          bind v split-window -h
-          set -g automatic-rename on
-          set -g allow-passthrough on
+          # split panes using | and -
+          bind | split-window -h
+          bind - split-window -v
+          unbind '"'
+          unbind %
+          # don't rename windows automatically
+          set-option -g allow-rename off
         '';
       };
 
