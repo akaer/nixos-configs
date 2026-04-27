@@ -81,6 +81,13 @@ in
     "splash"
   ];
 
+  boot.kernel.sysctl = {
+    "kernel.dmesg_restrict" = 1; # Restrict access to kernel logs for non-root users (for security)
+    "fs.file-max" = 20000000; # Maximum number of open file descriptors (for applications that require many files, e.g., databases, web servers)
+    "fs.aio-max-nr" = 4194304; # Maximum number of allowed concurrent asynchronous I/O operations (for applications that use async I/O, e.g., databases, web servers)
+    "vm.max_map_count" = 2147483647; # Maximum number of memory map areas a process may have (for applications that use many memory mappings, e.g., databases, web servers)
+  };
+
   # All Kernel Messages with a log level smaller
   # than this setting will be printed to the console
   boot.consoleLogLevel = 3;
@@ -355,6 +362,7 @@ in
     libreoffice-still
     librewolf # Fork of Firefox, focused on privacy, security and freedom
     libsecret # Library for storing and retrieving passwords and other secrets
+    libsecret # Library for storing and retrieving passwords and other secrets, used by vkbasalt to securely store API keys for shader repositories
     libtheora # Theora video compression codec (open VP3 implementation)
     libtiff # TIFF format support (used for high-quality images and scanning)
     libv4l # Video4Linux2 (V4L2) library for video capture and output (for webcams)
@@ -421,6 +429,7 @@ in
     rsync
     rtkit
     sane-backends
+    scite # Lightweight and powerful source code editor with support for many programming languages, syntax highlighting, and extensibility through Lua scripting
     scrcpy # Display and control Android devices connected via USB (or over TCP/IP)
     screenfetch
     serie # Rich git commit graph in your terminal, like magic
@@ -432,6 +441,7 @@ in
     sqlcmd # Microsoft SQL Server command-line tool
     sqlite # Command-line interface for SQLite databases
     sshfs # FUSE-based filesystem that allows remote filesystems to be mounted over SSH
+    steam-run # Wrapper to run Steam games on Linux with better compatibility (e.g., using Proton for Windows games)
     tailspin # Log file highlighter
     teams-for-linux
     tesseract # Terminal OCR (Optical Character Recognition) tool to extract text from images, supporting multiple languages and output formats
