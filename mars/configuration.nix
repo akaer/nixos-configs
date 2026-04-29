@@ -317,6 +317,7 @@ in
     gitui # Blazing fast terminal-ui for Git written in Rust
     glow # Terminal Markdown viewer
     gnome-themes-extra
+    gnumake # Tool to control the generation of non-source files from sources
     gparted # Graphical disk partitioning tool
     gst_all_1.gst-libav # GStreamer plugin wrapping FFmpeg/libav for broad codec support
     gst_all_1.gst-plugins-bad # Experimental or less maintained plugins, still open-source (e.g. newer formats)
@@ -408,7 +409,9 @@ in
     obsidian-export # Rust library and CLI to export an Obsidian vault to regular Markdown
     obsidian # Powerful knowledge base that works on top of a local folder of plain text Markdown files
     obs-studio # Powerful open-source software for video recording and live streaming
+    ocrmypdf # Adds an OCR text layer to scanned PDF files, allowing them to be searched
     omnissa-horizon-client
+    opencode # Terminal code editor with a focus on simplicity and performance, written in Rust
     openjpeg # JPEG 2000 format support (used in some PDFs, publishing, and archival)
     openssl
     optipng # Terminal PNG optimizer
@@ -418,6 +421,7 @@ in
     pciutils # `lspci` — list PCI devices (e.g., GPUs, Wi-Fi cards)
     pdfstudioviewer
     pngoptimizer # PNG optimizer and converter
+    poppler-utils # PDF rendering library
     powershell # Powerful cross-platform (Windows, Linux, and macOS) shell and scripting language based on .NET
     powertop # Analyze power consumption on Intel-based laptops
     pulseaudioFull
@@ -452,7 +456,6 @@ in
     udiskie
     udisks
     unrar
-    unstable.github-copilot-cli # GitHub Copilot CLI brings the power of Copilot coding agent directly to your terminal
     unstable.vscode-fhs # Wrapped variant of vscode which launches in a FHS compatible environment, should allow for easy usage of extensions without nix-specific modifications
     unzip
     usbmuxd # Daemon to multiplex connections to iOS devices (for tools like `ideviceinfo` and `idevicesyslog`)
@@ -1017,7 +1020,6 @@ in
         plugins = with pkgs.vimPlugins; [
           airline
           command-t
-          copilot-vim
           fugitive
           nerdtree
           nord-vim
