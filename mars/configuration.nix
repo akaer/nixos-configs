@@ -419,7 +419,9 @@ in
     patchelf
     pavucontrol
     pciutils # `lspci` — list PCI devices (e.g., GPUs, Wi-Fi cards)
+    pdfchain
     pdfstudioviewer
+    pdftk
     pngoptimizer # PNG optimizer and converter
     poppler-utils # PDF rendering library
     powershell # Powerful cross-platform (Windows, Linux, and macOS) shell and scripting language based on .NET
