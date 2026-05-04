@@ -481,6 +481,7 @@ in
     x264 # H.264/MPEG-4 AVC video encoder
     x265 # H.265/HEVC video encoder
     xclip
+    xcolor # Lightweight color picker for X11
     xdg-desktop-portal-gtk # Desktop integration portals for sandboxed apps
     xdg-launch # Command line XDG compliant launcher and tools
     xdg-user-dirs # Tool to help manage well known user directories like the desktop folder and the music folder
