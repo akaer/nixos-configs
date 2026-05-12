@@ -71,6 +71,13 @@ in
     "splash"
   ];
 
+  boot.kernel.sysctl = {
+    "kernel.dmesg_restrict" = 1; # Restrict access to kernel logs for non-root users (for security)
+    "fs.file-max" = 20000000; # Maximum number of open file descriptors (for applications that require many files, e.g., databases, web servers)
+    "fs.aio-max-nr" = 4194304; # Maximum number of allowed concurrent asynchronous I/O operations (for applications that use async I/O, e.g., databases, web servers)
+    "vm.max_map_count" = 2147483647; # Maximum number of memory map areas a process may have (for applications that use many memory mappings, e.g., databases, web servers)
+  };
+
   # All Kernel Messages with a log level smaller
   # than this setting will be printed to the console
   boot.consoleLogLevel = 3;
@@ -248,6 +255,7 @@ in
     ddcutil # Query and change Linux monitor settings using DDC/CI and USB
     dell-command-configure # Dell Command | Configure CLI tool for managing Dell BIOS settings from Linux
     direnv
+    discord # All-in-one cross-platform voice and text chat for gamers
     dnsutils
     docker_29
     docker-buildx
@@ -274,6 +282,7 @@ in
     gitui # Blazing fast terminal-ui for Git written in Rust
     glow # Terminal Markdown viewer
     gnome-themes-extra
+    gnumake # Tool to control the generation of non-source files from sources
     gparted # Graphical disk partitioning tool
     gst_all_1.gst-libav # GStreamer plugin wrapping FFmpeg/libav for broad codec support
     gst_all_1.gst-plugins-bad # Experimental or less maintained plugins, still open-source (e.g. newer formats)
@@ -319,6 +328,7 @@ in
     libreoffice-still
     librewolf # Fork of Firefox, focused on privacy, security and freedom
     libsecret # Library for storing and retrieving passwords and other secrets
+    libsecret # Library for storing and retrieving passwords and other secrets, used by vkbasalt to securely store API keys for shader repositories
     libtheora # Theora video compression codec (open VP3 implementation)
     libtiff # TIFF format support (used for high-quality images and scanning)
     libv4l # Video4Linux2 (V4L2) library for video capture and output (for webcams)
@@ -365,7 +375,9 @@ in
     obsidian-export # Rust library and CLI to export an Obsidian vault to regular Markdown
     obsidian # Powerful knowledge base that works on top of a local folder of plain text Markdown files
     obs-studio # Powerful open-source software for video recording and live streaming
+    ocrmypdf # Adds an OCR text layer to scanned PDF files, allowing them to be searched
     omnissa-horizon-client
+    opencode # Terminal code editor with a focus on simplicity and performance, written in Rust
     openjpeg # JPEG 2000 format support (used in some PDFs, publishing, and archival)
     openssl
     optipng # Terminal PNG optimizer
@@ -373,8 +385,11 @@ in
     patchelf
     pavucontrol
     pciutils # `lspci` — list PCI devices (e.g., GPUs, Wi-Fi cards)
+    pdfchain
     pdfstudioviewer
+    pdftk
     pngoptimizer # PNG optimizer and converter
+    poppler-utils # PDF rendering library
     powershell # Powerful cross-platform (Windows, Linux, and macOS) shell and scripting language based on .NET
     powertop # Analyze power consumption on Intel-based laptops
     pulseaudioFull
@@ -386,6 +401,7 @@ in
     rsync
     rtkit
     sane-backends
+    scite # Lightweight and powerful source code editor with support for many programming languages, syntax highlighting, and extensibility through Lua scripting
     scrcpy # Display and control Android devices connected via USB (or over TCP/IP)
     screenfetch
     serie # Rich git commit graph in your terminal, like magic
@@ -397,6 +413,7 @@ in
     sqlcmd # Microsoft SQL Server command-line tool
     sqlite # Command-line interface for SQLite databases
     sshfs # FUSE-based filesystem that allows remote filesystems to be mounted over SSH
+    steam-run # Wrapper to run Steam games on Linux with better compatibility (e.g., using Proton for Windows games)
     tailspin # Log file highlighter
     teams-for-linux
     tesseract # Terminal OCR (Optical Character Recognition) tool to extract text from images, supporting multiple languages and output formats
@@ -407,7 +424,6 @@ in
     udiskie
     udisks
     unrar
-    unstable.github-copilot-cli # GitHub Copilot CLI brings the power of Copilot coding agent directly to your terminal
     unstable.vscode-fhs # Wrapped variant of vscode which launches in a FHS compatible environment, should allow for easy usage of extensions without nix-specific modifications
     unzip
     usbmuxd # Daemon to multiplex connections to iOS devices (for tools like `ideviceinfo` and `idevicesyslog`)
@@ -431,6 +447,7 @@ in
     x264 # H.264/MPEG-4 AVC video encoder
     x265 # H.265/HEVC video encoder
     xclip
+    xcolor # Lightweight color picker for X11
     xdg-desktop-portal-gtk # Desktop integration portals for sandboxed apps
     xdg-launch # Command line XDG compliant launcher and tools
     xdg-user-dirs # Tool to help manage well known user directories like the desktop folder and the music folder
@@ -451,6 +468,7 @@ in
     yaziPlugins.sudo # Allow yazi to ask for sudo password to perform privileged operations (e.g., delete files owned by root)
     yt-dlp # Command-line tool to download videos from YouTube.com and other sites (youtube-dl fork)
     zbar # Terminal barcode reader (supports various 1D and 2D barcode formats, e.g., QR codes)
+    zellij # Terminal workspace with batteries included, written in Rust, with support for tabs, splits, plugins, and more
     zenmap # Offical nmap Security Scanner GUI
     (texlive.combine {
       inherit (texlive)
@@ -971,7 +989,6 @@ in
         plugins = with pkgs.vimPlugins; [
           airline
           command-t
-          copilot-vim
           fugitive
           nerdtree
           nord-vim
@@ -1073,12 +1090,14 @@ in
           yank
         ];
         extraConfig = ''
-          set -g set-titles on
           set -g update-environment "SSH_ASKPASS SSH_AUTH_SOCK SSH_AGENT_PID SSH_CONNECTION DISPLAY"
-          bind s split-window -v
-          bind v split-window -h
-          set -g automatic-rename on
-          set -g allow-passthrough on
+          # split panes using | and -
+          bind | split-window -h
+          bind - split-window -v
+          unbind '"'
+          unbind %
+          # don't rename windows automatically
+          set-option -g allow-rename off
         '';
       };
 
