@@ -291,6 +291,7 @@ in
     ddcutil # Query and change Linux monitor settings using DDC/CI and USB
     dell-command-configure # Dell Command | Configure CLI tool for managing Dell BIOS settings from Linux
     direnv
+    discord # All-in-one cross-platform voice and text chat for gamers
     dnsutils
     docker_29
     docker-buildx
