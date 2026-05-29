@@ -418,6 +418,7 @@ in
     teams-for-linux
     tesseract # Terminal OCR (Optical Character Recognition) tool to extract text from images, supporting multiple languages and output formats
     testdisk # Data recovery utilities
+    thunderbird # Full-featured e-mail client
     tldr
     tmux
     tree
@@ -832,6 +833,7 @@ in
         settings = {
           font-size = 10;
           bold-is-bright = true;
+          shell-integration = "none";
         };
       };
 
