@@ -243,6 +243,7 @@ in
     camset # GUI for Video4Linux adjustments of webcams
     chawan # Lightweight and featureful terminal web browser
     cifs-utils # Tools for managing Linux CIFS client filesystems
+    claude-code # Agentic coding tool that lives in your terminal, understands your codebase, and helps you code faster
     colordiff
     coreutils
     cpufetch # Terminal CPU info
@@ -265,6 +266,7 @@ in
     dxvk # Direct3D 9/10/11 to Vulkan translation (Wine/Proton)
     elfutils
     ethtool # Utility for controlling network drivers and hardware
+    fastfetch # Actively maintained, feature-rich and performance oriented, neofetch like system information tool
     exfatprogs # exFAT filesystem userspace utilities
     feh # Light-weight image viewer
     ffmpeg-full # Complete FFmpeg suite for audio/video encoding, decoding, transcoding, and streaming
@@ -404,6 +406,7 @@ in
     scite # Lightweight and powerful source code editor with support for many programming languages, syntax highlighting, and extensibility through Lua scripting
     scrcpy # Display and control Android devices connected via USB (or over TCP/IP)
     screenfetch
+    #sequoia-sq # Command line application exposing a useful set of OpenPGP functionality for common tasks
     serie # Rich git commit graph in your terminal, like magic
     shellcheck # Shell script analysis tool
     signal-desktop # Private, simple, and secure messenger
@@ -412,6 +415,7 @@ in
     sqlcl # Oracle SQL Developer Command Line
     sqlcmd # Microsoft SQL Server command-line tool
     sqlite # Command-line interface for SQLite databases
+    sq # Swiss army knife for data
     sshfs # FUSE-based filesystem that allows remote filesystems to be mounted over SSH
     steam-run # Wrapper to run Steam games on Linux with better compatibility (e.g., using Proton for Windows games)
     tailspin # Log file highlighter
@@ -904,6 +908,9 @@ in
                   alias powerline-go="/run/current-system/sw/bin/powerline-go"
               fi
           fi
+
+          # include .bashrc_local if it exists
+          [[ -f ~/.bashrc_local ]] && . ~/.bashrc_local
         '';
         initExtra = ''
           if command -v keychain > /dev/null 2>&1; then eval $(keychain --eval --nogui id_rsa --quiet); fi
