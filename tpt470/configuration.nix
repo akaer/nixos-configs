@@ -228,7 +228,6 @@ in
   environment.systemPackages = with pkgs; [
     _7zz
     acpi
-    acpid
     alacritty
     alsa-tools # ALSA utilities for audio configuration and troubleshooting (e.g., `alsamixer`, `amixer`, `speaker-test`)
     arandr
@@ -333,8 +332,7 @@ in
     libraw # RAW image format support (for images from digital cameras)
     libreoffice-still
     librewolf # Fork of Firefox, focused on privacy, security and freedom
-    libsecret # Library for storing and retrieving passwords and other secrets
-    libsecret # Library for storing and retrieving passwords and other secrets, used by vkbasalt to securely store API keys for shader repositories
+    libsecret # Library for storing and retrieving passwords and other secrets (also used by vkbasalt to store shader-repo API keys)
     libtheora # Theora video compression codec (open VP3 implementation)
     libtiff # TIFF format support (used for high-quality images and scanning)
     libv4l # Video4Linux2 (V4L2) library for video capture and output (for webcams)
@@ -369,7 +367,7 @@ in
     mupdf # Lightweight PDF, XPS, and E-book viewer and toolkit written in portable C
     ncdu # Terminal disk usage analyzer with an ncurses interface, allowing you to easily find and manage large files and directories
     nemo-with-extensions
-    net-tools # Set of tools for controlling the network subsystem in Linux; deactivated because steam brings the same package / tools via depencencies for debian-hostname
+    net-tools # Set of tools for controlling the network subsystem in Linux (ifconfig, netstat, route, etc.)
     networkmanagerapplet # System tray applet for NetworkManager, providing a graphical interface to manage network connections and settings
     nixfmt # Nixfmt is the official formatter for Nix language code
     nixfmt-tree
@@ -398,7 +396,6 @@ in
     poppler-utils # PDF rendering library
     powershell # Powerful cross-platform (Windows, Linux, and macOS) shell and scripting language based on .NET
     powertop # Analyze power consumption on Intel-based laptops
-    pulseaudioFull
     qbittorrent
     remmina
     rich-cli # Terminal file previewer with support for images, PDFs, markdown, and more, using the rich library for beautiful formatting
@@ -617,7 +614,6 @@ in
 
       home.sessionVariables = {
         PROMPT_COMMAND = "history -a";
-        GREP_OPTIONS = "--color=auto";
         MANPAGEA = "sh -c 'col --no-backspaces --spaces | bat --language man --theme Nord'";
         MANROFFOPT = "-c";
         PAGER = "bat --theme Nord";
@@ -927,6 +923,7 @@ in
         shellAliases = {
           cp = "cp -iv";
           diff = "colordiff";
+          grep = "grep --color=auto";
           dmesg = "sudo dmesg --human --color=always";
           ll = "ls --color=auto -lha";
           ln = "ln -iv";
