@@ -56,7 +56,8 @@ in
     }
   '';
 
-  boot.kernelPackages = pkgs.linuxKernel.packages.linux_6_18;
+  # The Linux kernel to use
+  boot.kernelPackages = pkgs.linuxPackages_latest;
 
   # Delete all files in /tmp during boot
   boot.tmp.cleanOnBoot = true;
@@ -73,9 +74,12 @@ in
 
   boot.kernel.sysctl = {
     "kernel.dmesg_restrict" = 1; # Restrict access to kernel logs for non-root users (for security)
+    # Needed for running SAP in Docker
     "fs.file-max" = 20000000; # Maximum number of open file descriptors (for applications that require many files, e.g., databases, web servers)
     "fs.aio-max-nr" = 4194304; # Maximum number of allowed concurrent asynchronous I/O operations (for applications that use async I/O, e.g., databases, web servers)
     "vm.max_map_count" = 2147483647; # Maximum number of memory map areas a process may have (for applications that use many memory mappings, e.g., databases, web servers)
+    "net.ipv4.tcp_syncookies" = 1;
+    "vm.swappiness" = 10;
   };
 
   # All Kernel Messages with a log level smaller
@@ -367,7 +371,7 @@ in
     nemo-with-extensions
     net-tools # Set of tools for controlling the network subsystem in Linux; deactivated because steam brings the same package / tools via depencencies for debian-hostname
     networkmanagerapplet # System tray applet for NetworkManager, providing a graphical interface to manage network connections and settings
-    nixfmt-rfc-style # Nixfmt is the official formatter for Nix language code
+    nixfmt # Nixfmt is the official formatter for Nix language code
     nixfmt-tree
     nmap # Free and open source utility for network discovery and security auditing
     nodejs_24 # Event-driven I/O framework for the V8 JavaScript engine
@@ -458,9 +462,9 @@ in
     xdg-user-dirs # Tool to help manage well known user directories like the desktop folder and the music folder
     xdg-utils # Desktop environment integration (e.g., `xdg-open`)
     xdotool # Command-line X11 automation tool (simulate keyboard input, mouse activity, window management, etc.)
-    xorg.xdpyinfo
-    xorg.xf86inputsynaptics # Synaptics touchpad driver for Xorg
-    xorg.xrandr
+    xdpyinfo
+    xf86inputsynaptics # Synaptics touchpad driver for Xorg
+    xrandr
     xsel
     xss-lock
     yazi # Blazing fast terminal file manager written in Rust, based on async I/O
@@ -520,7 +524,7 @@ in
 
   # Find options: https://nix-community.github.io/home-manager/options.xhtml
   home-manager.users.andrer =
-    { pkgs, ... }:
+    { config, pkgs, ... }:
     {
       xdg.desktopEntries.nemo = {
         name = "Nemo";
@@ -602,6 +606,7 @@ in
         gtk4.extraConfig = {
           "gtk-font-name" = "FiraCode Nerd,10";
         };
+        gtk4.theme = null;
       };
 
       qt = {
@@ -625,6 +630,7 @@ in
 
       programs.firefox = {
         enable = true;
+        configPath = "${config.xdg.configHome}/mozilla/firefox";
         languagePacks = [
           "en-US"
           "de"
@@ -996,15 +1002,15 @@ in
         };
         # Search plugins: nix-env -f '<nixpkgs>' -qaP -A vimPlugins
         plugins = with pkgs.vimPlugins; [
-          airline
           command-t
-          fugitive
           nerdtree
           nord-vim
-          sensible
           supertab
           syntastic
+          vim-airline
           vim-airline-themes
+          vim-fugitive
+          vim-sensible
         ];
         extraConfig = ''
           set laststatus=2
@@ -1382,7 +1388,7 @@ in
       services.autorandr.enable = true;
       services.autorandr.ignoreLid = true;
 
-      home.stateVersion = "25.11";
+      home.stateVersion = "26.05";
     };
 
   programs = {
