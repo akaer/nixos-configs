@@ -230,7 +230,9 @@ in
     acpi
     alacritty
     alsa-tools # ALSA utilities for audio configuration and troubleshooting (e.g., `alsamixer`, `amixer`, `speaker-test`)
+    anki
     arandr
+    ausweisapp
     autorandr
     azure-cli
     bat
@@ -265,12 +267,13 @@ in
     docker-buildx
     docker-compose
     dos2unix
+    dotnet-sdk_10
     dunst
     dxvk # Direct3D 9/10/11 to Vulkan translation (Wine/Proton)
     elfutils
     ethtool # Utility for controlling network drivers and hardware
-    fastfetch # Actively maintained, feature-rich and performance oriented, neofetch like system information tool
     exfatprogs # exFAT filesystem userspace utilities
+    fastfetch # Actively maintained, feature-rich and performance oriented, neofetch like system information tool
     feh # Light-weight image viewer
     ffmpeg-full # Complete FFmpeg suite for audio/video encoding, decoding, transcoding, and streaming
     file # Terminal file info
