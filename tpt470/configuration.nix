@@ -346,6 +346,7 @@ in
     libwebp # WebP format support (modern image format, often used on websites)
     libx11 # Core X11 protocol client library (aka "Xlib")
     libxext
+    open-fprintd # Fprintd replacement which allows you to have your own backend as a standalone service
     libxpm # X Pixmap (XPM) image file format library
     linux-firmware
     litecli # Terminal client for SQLite databases with autocompletion and syntax highlighting
