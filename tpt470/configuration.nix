@@ -346,7 +346,6 @@ in
     libwebp # WebP format support (modern image format, often used on websites)
     libx11 # Core X11 protocol client library (aka "Xlib")
     libxext
-    open-fprintd # Fprintd replacement which allows you to have your own backend as a standalone service
     libxpm # X Pixmap (XPM) image file format library
     linux-firmware
     litecli # Terminal client for SQLite databases with autocompletion and syntax highlighting
@@ -386,6 +385,7 @@ in
     ocrmypdf # Adds an OCR text layer to scanned PDF files, allowing them to be searched
     omnissa-horizon-client
     opencode # Terminal code editor with a focus on simplicity and performance, written in Rust
+    open-fprintd # Fprintd replacement which allows you to have your own backend as a standalone service
     openjpeg # JPEG 2000 format support (used in some PDFs, publishing, and archival)
     openssl
     optipng # Terminal PNG optimizer
@@ -425,6 +425,7 @@ in
     steam-run # Wrapper to run Steam games on Linux with better compatibility (e.g., using Proton for Windows games)
     tailspin # Log file highlighter
     teams-for-linux
+    teamviewer
     tesseract # Terminal OCR (Optical Character Recognition) tool to extract text from images, supporting multiple languages and output formats
     testdisk # Data recovery utilities
     thunderbird # Full-featured e-mail client
@@ -1428,6 +1429,8 @@ in
       UseDns = false;
     };
   };
+
+  services.teamviewer.enable = false;
 
   # Enable touchpad support (enabled default in most desktopManager).
   services.libinput.enable = true;
