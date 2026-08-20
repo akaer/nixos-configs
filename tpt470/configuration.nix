@@ -110,6 +110,7 @@ in
     cpu.intel.updateMicrocode = true;
     enableAllFirmware = true;
     enableRedistributableFirmware = true;
+    logitech.wireless.enable = true;
     firmware = with pkgs; [
       wireless-regdb
     ];
