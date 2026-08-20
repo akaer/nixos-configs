@@ -24,19 +24,16 @@ in
     <home-manager/nixos>
   ];
 
-  #boot.initrd = {
-  #  luks.devices = {
-  #    luksCrypted = {
-  #      device = "/dev/disk/by-uuid/41c487f2-f414-43f2-be0b-b0590f069bdf"; # Replace with your UUID
-  #      preLVM = true; # Unlock before activating LVM
-  #      allowDiscards = true; # Allow TRIM commands for SSDs
-  #    };
-  #  };
-  #  checkJournalingFS = false;
-  #};
-
-  boot.initrd.luks.devices."luks-41c487f2-f414-43f2-be0b-b0590f069bdf".device =
-    "/dev/disk/by-uuid/41c487f2-f414-43f2-be0b-b0590f069bdf";
+  boot.initrd = {
+    luks.devices = {
+      luksCrypted = {
+        device = "/dev/disk/by-uuid/41c487f2-f414-43f2-be0b-b0590f069bdf"; # Replace with your UUID
+        preLVM = true; # Unlock before activating LVM
+        allowDiscards = true; # Allow TRIM commands for SSDs
+      };
+    };
+    checkJournalingFS = false;
+  };
 
   boot.loader.grub.enable = true; # Enable GRUB as the bootloader
   boot.loader.grub.device = "nodev"; # Install GRUB on the EFI system partition
@@ -55,6 +52,26 @@ in
         halt
     }
   '';
+
+  boot.initrd.systemd = {
+    storePaths = [
+      "${pkgs.kbd}/bin/setleds"
+    ];
+    services.numlockon = {
+      description = "Enable NumLock at startup";
+      wantedBy = [ "initrd.target" ];
+      before = [ "initrd-root-device.target" ];
+      unitConfig = {
+        DefaultDependencies = false;
+      };
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = "${pkgs.kbd}/bin/setleds -D +num";
+        StandardInput = "tty";
+        TTYPath = "/dev/tty0";
+      };
+    };
+  };
 
   # The Linux kernel to use
   boot.kernelPackages = pkgs.linuxPackages_latest;
@@ -380,6 +397,7 @@ in
     nodejs_24 # Event-driven I/O framework for the V8 JavaScript engine
     nordic # Nordic GTK theme
     ntfs3g # Read/write NTFS (Windows) drives
+    numlockx # Allows to start X with NumLock turned on
     nvtopPackages.full # Real-time GPU monitor (NVIDIA/AMD/Intel)
     obsidian-export # Rust library and CLI to export an Obsidian vault to regular Markdown
     obsidian # Powerful knowledge base that works on top of a local folder of plain text Markdown files
