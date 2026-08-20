@@ -312,6 +312,7 @@ in
     ifuse # optional, to mount using 'ifuse'
     ifwifi # Terminal Wi-Fi manager for NetworkManager, allowing you to connect to and manage Wi-Fi networks from the command line
     illum # Daemon that wires button presses to screen backlight level
+    ilspycmd # Tool for decompiling .NET assemblies and generating portable PDBs
     imagemagick # Powerful image manipulation tool (for converting, resizing, and editing images)
     imhex # Hex Editor for Reverse Engineers, Programmers and people who value their retinas when working at 3 AM
     inetutils # Collection of common network programs
@@ -350,6 +351,7 @@ in
     linux-firmware
     litecli # Terminal client for SQLite databases with autocompletion and syntax highlighting
     lm_sensors # Read CPU temperatures, fan speeds, voltages, etc.
+    logitech-udev-rules # Linux devices manager for the Logitech Unifying Receiver
     logrotate # Required for rotating logs and automatic updates
     lsd # A modern replacement for 'ls' with a focus on simplicity and color, written in Rust
     lshw # Hardware lister (detailed info about hardware components)
@@ -416,6 +418,7 @@ in
     shellcheck # Shell script analysis tool
     signal-desktop # Private, simple, and secure messenger
     smplayer # A more feature-rich media player with the mpv backend, offering advanced controls and customization.
+    solaar # Linux devices manager for the Logitech Unifying Receiver
     speedtest-go # Terminal speedtest.net
     sqlcl # Oracle SQL Developer Command Line
     sqlcmd # Microsoft SQL Server command-line tool
