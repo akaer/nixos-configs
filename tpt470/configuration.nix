@@ -132,7 +132,7 @@ in
     options =
       let
         # this line prevents hanging on network split
-        automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s,uid=1000,gid=100,forceuid,forcegid";
+        automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s,uid=1000,gid=100,forceuid,forcegid,noserverino,vers=3.11";
       in
       [ "${automount_opts},credentials=/etc/nixos/smb-secrets-scan" ];
   };
@@ -270,6 +270,7 @@ in
     colordiff
     coreutils
     cpufetch # Terminal CPU info
+    cpupower-gui # Change the frequency limits of your cpu and its governor
     croc # Terminal file transfer
     curl
     curlie # Terminal HTTP client
@@ -327,6 +328,7 @@ in
     hunspell
     hunspellDicts.de_DE
     hyphenDicts.de_DE
+    i7z # Better i7 (and now i3, i5) reporting tool for Linux
     ifuse # optional, to mount using 'ifuse'
     ifwifi # Terminal Wi-Fi manager for NetworkManager, allowing you to connect to and manage Wi-Fi networks from the command line
     illum # Daemon that wires button presses to screen backlight level
@@ -367,6 +369,7 @@ in
     libxext
     libxpm # X Pixmap (XPM) image file format library
     linux-firmware
+    linuxPackages_latest.cpupower # Tool to examine and tune power saving features
     litecli # Terminal client for SQLite databases with autocompletion and syntax highlighting
     lm_sensors # Read CPU temperatures, fan speeds, voltages, etc.
     logitech-udev-rules # Linux devices manager for the Logitech Unifying Receiver
@@ -382,6 +385,7 @@ in
     mesa-demos
     mfcl3770cdwcupswrapper
     mfcl3770cdwlpr # Brother MFCL3770CDW driver
+    microcode-intel # Microcode for Intel processors
     mjpg-streamer # Takes JPGs from Linux-UVC compatible webcams, filesystem or other input plugins and streams them as M-JPEG via HTTP to webbrowsers, VLC and other software
     most # Terminal pager with advanced features (e.g., multiple windows, horizontal scrolling, mouse support)
     mpv # Backend for SMPlayer.
@@ -405,7 +409,6 @@ in
     obs-studio # Powerful open-source software for video recording and live streaming
     ocrmypdf # Adds an OCR text layer to scanned PDF files, allowing them to be searched
     omnissa-horizon-client
-    opencode # Terminal code editor with a focus on simplicity and performance, written in Rust
     open-fprintd # Fprintd replacement which allows you to have your own backend as a standalone service
     openjpeg # JPEG 2000 format support (used in some PDFs, publishing, and archival)
     openssl
@@ -457,6 +460,8 @@ in
     udiskie
     udisks
     unrar
+    unstable.opencode-desktop # AI coding agent desktop client
+    unstable.opencode # Terminal code editor with a focus on simplicity and performance, written in Rust
     unstable.vscode-fhs # Wrapped variant of vscode which launches in a FHS compatible environment, should allow for easy usage of extensions without nix-specific modifications
     unzip
     usbmuxd # Daemon to multiplex connections to iOS devices (for tools like `ideviceinfo` and `idevicesyslog`)
@@ -1442,6 +1447,7 @@ in
   services.dbus.packages = [ pkgs.dconf ];
   services.gvfs.enable = true;
   services.illum.enable = true;
+  services.cpupower-gui.enable = true;
   services.openssh = {
     enable = true;
     allowSFTP = true;
@@ -1470,6 +1476,14 @@ in
     settings = {
       CPU_SCALING_GOVERNOR_ON_AC = "performance";
       CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
+
+      # Modern AMD/Intel CPU energy profiles
+      CPU_ENERGY_PERF_POLICY_ON_AC = "performance";
+      CPU_ENERGY_PERF_POLICY_ON_BAT = "power";
+
+      # Help your CPU drop into deeper sleep states on battery
+      PLATFORM_PROFILE_ON_AC = "performance";
+      PLATFORM_PROFILE_ON_BAT = "low-power";
     };
   };
 
