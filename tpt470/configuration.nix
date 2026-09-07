@@ -456,6 +456,7 @@ in
     thunderbird # Full-featured e-mail client
     tldr
     tmux
+    tor-browser # Privacy-focused browser routing traffic through the Tor network
     tree
     udiskie
     udisks
