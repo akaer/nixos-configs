@@ -250,6 +250,7 @@ in
     alsa-tools # ALSA utilities for audio configuration and troubleshooting (e.g., `alsamixer`, `amixer`, `speaker-test`)
     anki
     arandr
+    arduino-ide # Open-source electronics prototyping platform
     ausweisapp
     autorandr
     azure-cli
@@ -420,6 +421,7 @@ in
     pdfchain
     pdfstudioviewer
     pdftk
+    platformio # Open source ecosystem for IoT development
     pngoptimizer # PNG optimizer and converter
     poppler-utils # PDF rendering library
     powershell # Powerful cross-platform (Windows, Linux, and macOS) shell and scripting language based on .NET
