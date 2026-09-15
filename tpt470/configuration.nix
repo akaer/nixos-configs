@@ -265,6 +265,7 @@ in
     bridge-utils # Userspace tool to configure linux bridges (deprecated in favour or iproute2)
     btop
     camset # GUI for Video4Linux adjustments of webcams
+    chameleon-cli # Command line interface for Chameleon Ultra
     chawan # Lightweight and featureful terminal web browser
     cifs-utils # Tools for managing Linux CIFS client filesystems
     claude-code # Agentic coding tool that lives in your terminal, understands your codebase, and helps you code faster
