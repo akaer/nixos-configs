@@ -57,6 +57,7 @@ in
     storePaths = [
       "${pkgs.kbd}/bin/setleds"
     ];
+    network.wait-online.enable = false;
     services.numlockon = {
       description = "Enable NumLock at startup";
       wantedBy = [ "initrd.target" ];
@@ -184,7 +185,7 @@ in
   networking.hostName = "tpt470"; # Define your hostname.
 
   networking.networkmanager.enable = true;
-
+  networking.networkmanager.dns = "systemd-resolved";
   networking.networkmanager.wifi.powersave = true;
 
   # Workaround for strange Docker issues with dhcp active on bridge network. See: https://github.com/NixOS/nixpkgs/issues/109389
@@ -349,6 +350,10 @@ in
     jq
     keychain # Manage SSH and GPG keys in a convenient and secure manner
     killall # Stop running processes by name
+    lazydocker # Simple terminal UI for both docker and docker-compose
+    lazygit # Simple terminal UI for git commands
+    lazyjournal # TUI for journalctl, file system logs, as well as Docker and Podman containers
+    lazysql # Cross-platform TUI database management tool written in Go
     libaom # AOMedia Video 1 (AV1) codec library
     libexif # EXIF metadata support (extract metadata like camera info and timestamps)
     libimobiledevice # Library to communicate with iOS devices (for tools like `ideviceinfo` and `idevicesyslog`)
@@ -428,6 +433,7 @@ in
     powershell # Powerful cross-platform (Windows, Linux, and macOS) shell and scripting language based on .NET
     powertop # Analyze power consumption on Intel-based laptops
     qbittorrent
+    qbittorrent # Featureful free software BitTorrent client
     remmina
     rich-cli # Terminal file previewer with support for images, PDFs, markdown, and more, using the rich library for beautiful formatting
     rofi-rbw-x11 # Rofi frontend for Bitwarden
@@ -451,7 +457,9 @@ in
     sq # Swiss army knife for data
     sshfs # FUSE-based filesystem that allows remote filesystems to be mounted over SSH
     steam-run # Wrapper to run Steam games on Linux with better compatibility (e.g., using Proton for Windows games)
+    tailscale # Node agent for Tailscale, a mesh VPN built on WireGuard
     tailspin # Log file highlighter
+    tail-tray # Tray icon to manage Tailscale
     teams-for-linux
     teamviewer
     tesseract # Terminal OCR (Optical Character Recognition) tool to extract text from images, supporting multiple languages and output formats
@@ -482,7 +490,9 @@ in
     webcamoid # Webcam Capture Software
     webex # All-in-one app to call, meet, message, and get work done
     wget # Download files from the web (handy for scripts or terminal use)
+    wg-netmanager
     which
+    wireguard-tools
     wireshark # Powerful network protocol analyzer
     wormhole-william # Terminal file transfer
     wxhexeditor # Hex Editor / Disk Editor for Huge Files or Devices
@@ -964,7 +974,7 @@ in
           ll = "ls --color=auto -lha";
           ln = "ln -iv";
           # Latest version can be build with: docker build -t lazyteam/lazydocker https://github.com/jesseduffield/lazydocker.git
-          lzd = "docker run --rm -it --name lazydocker -v /var/run/docker.sock:/var/run/docker.sock -v $HOME/.config/lazydocker:/.config/jesseduffield/lazydocker lazyteam/lazydocker";
+          #lzd = "docker run --rm -it --name lazydocker -v /var/run/docker.sock:/var/run/docker.sock -v $HOME/.config/lazydocker:/.config/jesseduffield/lazydocker lazyteam/lazydocker";
           mv = "mv -iv";
           myextip = "curl ipinfo.io/ip";
           rm = "rm -iv";
@@ -1263,7 +1273,7 @@ in
             bindsym e exec --no-startup-id i3-msg exit, mode "default"
             bindsym s exec --no-startup-id loginctl lock-session && systemctl suspend, mode "default"
             bindsym r exec --no-startup-id systemctl reboot, mode "default"
-            bindsym Shift+s exec --no-startup-id systemctl poweroff -i, mode "default"
+            bindsym Shift+s exec --no-startup-id clipcatctl clear && systemctl poweroff -i, mode "default"
 
             # back to normal: Enter or Escape
             bindsym Return mode "default"
@@ -1305,6 +1315,14 @@ in
             }
             {
               command = "blueman-applet";
+              notification = false;
+            }
+            {
+              command = "solaar --window hide";
+              notification = false;
+            }
+            {
+              command = "tail-tray";
               notification = false;
             }
           ];
@@ -1491,6 +1509,12 @@ in
     };
   };
 
+  # Enable systemd-resolved for MagicDNS support
+  services.resolved.enable = true;
+
+  # Enable Tailscale service
+  services.tailscale.enable = true;
+
   security.rtkit.enable = true;
   security.polkit.enable = true;
 
@@ -1528,6 +1552,8 @@ in
   services.displayManager.autoLogin.enable = true;
   services.displayManager.autoLogin.user = "andrer";
   services.displayManager.logToFile = true;
+
+  systemd.network.wait-online.enable = false;
 
   virtualisation.docker = {
     enable = true;
