@@ -1452,6 +1452,8 @@ in
     enable = true;
     allowSFTP = true;
     settings = {
+      PasswordAuthentication = false;
+      KbdInteractiveAuthentication = false;
       GatewayPorts = "yes";
       X11Forwarding = true;
       UseDns = false;
