@@ -24,15 +24,10 @@ in
     <home-manager/nixos>
   ];
 
-  boot.initrd = {
-    luks.devices = {
-      luksCrypted = {
-        device = "/dev/disk/by-uuid/41c487f2-f414-43f2-be0b-b0590f069bdf"; # Replace with your UUID
-        preLVM = true; # Unlock before activating LVM
-        allowDiscards = true; # Allow TRIM commands for SSDs
-      };
-    };
-    checkJournalingFS = false;
+  boot.initrd.luks.devices."luks-41c487f2-f414-43f2-be0b-b0590f069bdf" = {
+    device = "/dev/disk/by-uuid/41c487f2-f414-43f2-be0b-b0590f069bdf";
+    preLVM = true; # Unlock before activating LVM
+    allowDiscards = true; # Allow TRIM commands for SSDs
   };
 
   boot.loader.grub.enable = true; # Enable GRUB as the bootloader
@@ -52,27 +47,6 @@ in
         halt
     }
   '';
-
-  boot.initrd.systemd = {
-    storePaths = [
-      "${pkgs.kbd}/bin/setleds"
-    ];
-    network.wait-online.enable = false;
-    services.numlockon = {
-      description = "Enable NumLock at startup";
-      wantedBy = [ "initrd.target" ];
-      before = [ "initrd-root-device.target" ];
-      unitConfig = {
-        DefaultDependencies = false;
-      };
-      serviceConfig = {
-        Type = "oneshot";
-        ExecStart = "${pkgs.kbd}/bin/setleds -D +num";
-        StandardInput = "tty";
-        TTYPath = "/dev/tty0";
-      };
-    };
-  };
 
   # The Linux kernel to use
   boot.kernelPackages = pkgs.linuxPackages_latest;
@@ -1111,6 +1085,10 @@ in
           endif
           "set t_Co=256
 
+          if has('gui_running')
+            set guifont=Iosevka\ Nerd\ Font\ Medium\ 10
+          end
+
           let g:airline_powerline_fonts=1
           let g:airline_theme='nord'
           let g:airline#extensions#tabline#enabled=1
@@ -1118,10 +1096,10 @@ in
           let g:airline#extensions#tabline#formatter='unique_tail'
 
           colorscheme nord
-          let g:nord_italic = 1
-          let g:nord_italic_comments = 1
-          let g:nord_underline = 1
-          let g:nord_cursor_line_number_background = 1
+          let g:nord_italic=1
+          let g:nord_italic_comments=1
+          let g:nord_underline=1
+          let g:nord_cursor_line_number_background=1
         '';
       };
 
