@@ -1280,6 +1280,15 @@ in
           };
           startup = [
             {
+              # Home-manager generates the number-row workspace bindings in
+              # alphabetical key order ("Mod4+0" before "Mod4+1"), so i3 parses
+              # "workspace number 10" before "workspace number 1" and treats it
+              # as the initial workspace on the first output. Force workspace 1
+              # right after parsing to work around this.
+              command = "i3-msg 'workspace number 1'";
+              notification = false;
+            }
+            {
               command = "flameshot";
               notification = false;
             }
