@@ -599,6 +599,55 @@ in
         nerd-fonts.jetbrains-mono
       ];
 
+      xresources.properties = {
+        "xterm*backarrowKey" = false;
+        "xterm*bellIsUrgent" = false;
+        "xterm*bellSupressTime" = "100";
+        "xterm*boldColors" = false;
+        "xterm*cursorBlink" = "true";
+        "xterm*cursorColor" = "reverse";
+        "xterm*cursorOffTime" = "300";
+        "xterm*cursorOnTime" = "800";
+        "xterm*cursorUnderLine" = false;
+        "xterm*dynamicColors" = true;
+        "xterm*faceName" = "Iosevka Nerd Font Mono";
+        "xterm*faceSize" = "10";
+        "xterm*faceSize1" = "10";
+        "xterm*faceSize2" = "12";
+        "xterm*faceSize3" = "15";
+        "xterm*faceSize4" = "18.25";
+        "xterm*faceSize5" = "20.5";
+        "xterm*faceSize6" = "25.5";
+        "xterm*forceBoxChars" = false;
+        "xterm*geometry" = "80x24";
+        "xterm*highlightColor" = "XtDefaultForeground";
+        "xterm*highlightReverse" = true;
+        "xterm*highlightSelection" = true;
+        "xterm*highlightTextColor" = "XtDefaultBackground";
+        "xterm*internalBorder" = "0";
+        "xterm*jumpScroll" = true;
+        "xterm*limitFontsets" = "5";
+        "xterm*locale" = true;
+        "xterm*marginBell" = false;
+        "xterm*metaSendsEscape" = true;
+        "xterm*multiScroll" = true;
+        "xterm*pointerShape" = "XTerm";
+        "xterm*renderFont" = true;
+        "xterm*saveLines" = "9999";
+        "xterm*scaleHeight" = "1.0";
+        "xterm*scrollBar" = false;
+        "xterm*scrollKey" = true;
+        "xterm*scrollTtyKeypress" = true;
+        "xterm*scrollTtyOutput" = false;
+        "xterm*selectToClipboard" = true;
+        "xterm*termName" = "xterm-256color";
+        "xterm*toolBar" = false;
+        "xterm*ttyModes" = "erase ^?";
+        "xterm*utf8" = "1";
+        "xterm*utf8Fonts" = "always";
+        "xterm*visualBell" = true;
+      };
+
       xresources.extraConfig = builtins.readFile (
         pkgs.fetchFromGitHub {
           owner = "nordtheme";
