@@ -16,12 +16,18 @@ let
       allowUnfree = true;
     };
   };
+  agenix = builtins.fetchTarball {
+    # Stand main, 2026-02-04
+    url = "https://github.com/ryantm/agenix/archive/b027ee29d959fda4b60b57566d64c98a202e0feb.tar.gz";
+    sha256 = "1wlpvpj45qfixdzhmk2cgiwlkyaf8a5mjy2jp5lsx2wsxblclngm";   # siehe unten
+  };
 in
 
 {
   imports = [
     ./hardware-configuration.nix
     <home-manager/nixos>
+    "${agenix}/modules/age.nix"
   ];
 
   boot.initrd.luks.devices."luks-41c487f2-f414-43f2-be0b-b0590f069bdf" = {
@@ -221,6 +227,8 @@ in
   environment.systemPackages = with pkgs; [
     _7zz
     acpi
+    (callPackage "${agenix}/pkgs/agenix.nix" { })   # ryantm agenix CLI
+    age
     alacritty
     alsa-tools # ALSA utilities for audio configuration and troubleshooting (e.g., `alsamixer`, `amixer`, `speaker-test`)
     anki
@@ -243,7 +251,15 @@ in
     chameleon-cli # Command line interface for Chameleon Ultra
     chawan # Lightweight and featureful terminal web browser
     cifs-utils # Tools for managing Linux CIFS client filesystems
-    claude-code # Agentic coding tool that lives in your terminal, understands your codebase, and helps you code faster
+    (symlinkJoin {
+      name = "claude-code-openrouter";
+      paths = [ claude-code ];
+      nativeBuildInputs = [ makeWrapper ];
+      postBuild = ''
+        wrapProgram $out/bin/claude \
+          --run '[ -r /run/agenix/claude-env ] && { set -a; . /run/agenix/claude-env; set +a; }'
+      '';
+    })
     colordiff
     coreutils
     cpufetch # Terminal CPU info
@@ -536,6 +552,13 @@ in
       "wheel"
       "wireshark"
     ];
+  };
+
+  age.secrets.claude-env = {
+    file  = ./secrets/claude-env.age;   # relativ zur configuration.nix
+    owner = "andrer";
+    group = "users";
+    mode  = "0400";
   };
 
   home-manager.useGlobalPkgs = true;
