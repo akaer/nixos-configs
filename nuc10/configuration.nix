@@ -484,6 +484,7 @@ in
     xdpyinfo
     xf86inputsynaptics # Synaptics touchpad driver for Xorg
     xrandr
+    xrdp # Open source RDP server
     xsel
     xss-lock
     yazi # Blazing fast terminal file manager written in Rust, based on async I/O
@@ -1550,6 +1551,9 @@ in
   services.displayManager.autoLogin.enable = true;
   services.displayManager.autoLogin.user = "andrer";
   services.displayManager.logToFile = true;
+
+  services.xrdp.enable = true;
+  services.xrdp.defaultWindowManager = "i3";
 
   systemd.network.wait-online.enable = false;
 
