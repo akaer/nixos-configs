@@ -210,6 +210,21 @@ in
     };
   };
 
+  nixpkgs.overlays = [
+    # solaar 1.1.19 fails its test suite inside the Nix build sandbox: libnotify
+    # cannot spawn a D-Bus message bus because no /etc/machine-id exists there
+    # ("Cannot spawn a message bus without a machine-id"). Only `test_show` in
+    # the two desktop notification test modules is affected, so deselect it.
+    # Needed because hardware.logitech.wireless.enable pulls in
+    # logitech-udev-rules, which is an alias for solaar.udev, and a failing
+    # solaar build therefore breaks udev-rules and the whole system-path.
+    (final: prev: {
+      solaar = prev.solaar.overridePythonAttrs (old: {
+        disabledTests = (old.disabledTests or [ ]) ++ [ "test_show" ];
+      });
+    })
+  ];
+
   environment.systemPackages = with pkgs; [
     _7zz
     acpi
@@ -448,8 +463,10 @@ in
     udiskie
     udisks
     unrar
+    unstable.officecli # Command-line tool for creating, reading and editing Office documents
     unstable.opencode-desktop # AI coding agent desktop client
     unstable.opencode # Terminal code editor with a focus on simplicity and performance, written in Rust
+    unstable.pi-coding-agent # Coding agent CLI with read, bash, edit, write tools and session management
     unstable.vscode-fhs # Wrapped variant of vscode which launches in a FHS compatible environment, should allow for easy usage of extensions without nix-specific modifications
     unzip
     usbmuxd # Daemon to multiplex connections to iOS devices (for tools like `ideviceinfo` and `idevicesyslog`)
