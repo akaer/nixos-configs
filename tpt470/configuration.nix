@@ -463,8 +463,10 @@ in
     udiskie
     udisks
     unrar
+    unstable.officecli # Command-line tool for creating, reading and editing Office documents
     unstable.opencode-desktop # AI coding agent desktop client
     unstable.opencode # Terminal code editor with a focus on simplicity and performance, written in Rust
+    unstable.pi-coding-agent # Coding agent CLI with read, bash, edit, write tools and session management
     unstable.vscode-fhs # Wrapped variant of vscode which launches in a FHS compatible environment, should allow for easy usage of extensions without nix-specific modifications
     unzip
     usbmuxd # Daemon to multiplex connections to iOS devices (for tools like `ideviceinfo` and `idevicesyslog`)
