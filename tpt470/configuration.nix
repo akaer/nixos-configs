@@ -19,7 +19,7 @@ let
   agenix = builtins.fetchTarball {
     # Stand main, 2026-02-04
     url = "https://github.com/ryantm/agenix/archive/b027ee29d959fda4b60b57566d64c98a202e0feb.tar.gz";
-    sha256 = "1wlpvpj45qfixdzhmk2cgiwlkyaf8a5mjy2jp5lsx2wsxblclngm";   # siehe unten
+    sha256 = "1wlpvpj45qfixdzhmk2cgiwlkyaf8a5mjy2jp5lsx2wsxblclngm"; # siehe unten
   };
 in
 
@@ -224,10 +224,34 @@ in
     };
   };
 
+  nixpkgs.overlays = [
+    # solaar 1.1.19 fails its test suite inside the Nix build sandbox: libnotify
+    # cannot spawn a D-Bus message bus because no /etc/machine-id exists there
+    # ("Cannot spawn a message bus without a machine-id"). Only `test_show` in
+    # the two desktop notification test modules is affected, so deselect it.
+    # Needed because hardware.logitech.wireless.enable pulls in
+    # logitech-udev-rules, which is an alias for solaar.udev, and a failing
+    # solaar build therefore breaks udev-rules and the whole system-path.
+    (final: prev: {
+      solaar = prev.solaar.overridePythonAttrs (old: {
+        disabledTests = (old.disabledTests or [ ]) ++ [ "test_show" ];
+      });
+    })
+    # unblob 26.3.30: test_extractall_ignores_gnu_timestamp_prefix fails in the
+    # Nix build sandbox (extracted Vagrantfile missing), breaking system-path.
+    (final: prev: {
+      unblob = prev.unblob.overridePythonAttrs (old: {
+        disabledTests = (old.disabledTests or [ ]) ++ [
+          "test_extractall_ignores_gnu_timestamp_prefix"
+        ];
+      });
+    })
+  ];
+
   environment.systemPackages = with pkgs; [
     _7zz
     acpi
-    (callPackage "${agenix}/pkgs/agenix.nix" { })   # ryantm agenix CLI
+    (callPackage "${agenix}/pkgs/agenix.nix" { }) # ryantm agenix CLI
     age
     alacritty
     alsa-tools # ALSA utilities for audio configuration and troubleshooting (e.g., `alsamixer`, `amixer`, `speaker-test`)
@@ -236,6 +260,7 @@ in
     arduino-ide # Open-source electronics prototyping platform
     ausweisapp
     autorandr
+    apktool # Tool for reverse engineering Android apk files
     azure-cli
     bat
     bc
@@ -267,6 +292,7 @@ in
     croc # Terminal file transfer
     curl
     curlie # Terminal HTTP client
+    cutterPlugins.rz-ghidra # Deep ghidra decompiler and sleigh disassembler integration for rizin
     dbeaver-bin
     dconf
     ddcui # Graphical user interface for ddcutil - control monitor settings
@@ -293,6 +319,15 @@ in
     flameshot
     frogmouth # Terminal markdown viewer
     fzf # Command-line fuzzy finder for files, command history, processes, and more, with interactive preview and multi-select capabilities
+    ghidra-extensions.findcrypt # Ghidra analysis plugin to locate cryptographic constants
+    ghidra-extensions.ghidra-delinker-extension # Ghidra extension for delinking executables back to object files
+    ghidra-extensions.ghidra-firmware-utils # Ghidra utilities for analyzing PC firmware
+    ghidra-extensions.ghidra-golanganalyzerextension # Facilitates the analysis of Golang binaries using Ghidra
+    ghidra-extensions.ghidraninja-ghidra-scripts # Scripts for the Ghidra software reverse engineering suite
+    ghidra-extensions.gnudisassembler # Leverage the binutils disassembler capabilities for various processors
+    ghidra-extensions.lightkeeper # Port of the Lighthouse plugin to GHIDRA
+    ghidra-extensions.machinelearning # Finds functions using ML
+    ghidra # Software reverse engineering (SRE) suite of tools
     ghostty # Terminal emulator with a focus on performance and simplicity, written in Rust
     gimp3-with-plugins # GNU Image Manipulation Program
     girouette # Modern Unix weather
@@ -315,6 +350,7 @@ in
     gxmessage # Graphical message box utility for X11, similar to `zenity` or `kdialog`, allowing you to display simple dialog boxes from shell scripts or the command line
     hexedit # View and edit files in hexadecimal or in ASCII
     hextazy # TUI hexeditor in Rust with colored bytes
+    hopper # MacOS and Linux Disassembler
     htop # Interactive system monitor (like a better 'top')
     httpie # Terminal HTTP client
     hueadm # Terminal Philips Hue client
@@ -333,7 +369,9 @@ in
     iotop-c # Terminal I/O monitor with a top-like interface, written in C for better performance and lower resource usage compared to the original Python version
     iproute2 # Collection of utilities for controlling TCP/IP networking and traffic control in Linux
     iptables # Program to configure the Linux IP packet filtering ruleset
+    jadx # Dex to Java decompiler
     javaPackages.compiler.temurin-bin.jdk-21
+    jdk # Open-source Java Development Kit
     joplin-cli # Command-line interface for Joplin, allowing you to manage your notes and notebooks from the terminal, with support for synchronization and encryption
     joplin-desktop # Open-source note-taking and to-do application with markdown support, synchronization, and end-to-end encryption
     jpegoptim # Optimize JPEG files
@@ -427,6 +465,9 @@ in
     qbittorrent # Featureful free software BitTorrent client
     remmina
     rich-cli # Terminal file previewer with support for images, PDFs, markdown, and more, using the rich library for beautiful formatting
+    rizinPlugins.rz-ghidra # Deep ghidra decompiler and sleigh disassembler integration for rizin
+    rizinPlugins.sigdb # Rizin FLIRT Signature Database
+    rizin # UNIX-like reverse engineering framework and command-line toolset
     rofi-rbw-x11 # Rofi frontend for Bitwarden
     rpi-imager # Raspberry Pi Imaging Utility
     rsync
@@ -460,8 +501,10 @@ in
     tmux
     tor-browser # Privacy-focused browser routing traffic through the Tor network
     tree
+    tshark # Powerful network protocol analyzer
     udiskie
     udisks
+    unblob # Extract files from any kind of container formats
     unrar
     unstable.officecli # Command-line tool for creating, reading and editing Office documents
     unstable.opencode-desktop # AI coding agent desktop client
@@ -479,6 +522,7 @@ in
     vkbasalt # Vulkan post-processing (e.g., contrast, sharpening)
     vkd3d # Direct3D 12 to Vulkan translation (Wine/Proton)
     vlc
+    wabt # WebAssembly Binary Toolkit
     watch
     webcamoid # Webcam Capture Software
     webex # All-in-one app to call, meet, message, and get work done
@@ -557,10 +601,10 @@ in
   };
 
   age.secrets.claude-env = {
-    file  = ./secrets/claude-env.age;   # relativ zur configuration.nix
+    file = ./secrets/claude-env.age; # relativ zur configuration.nix
     owner = "andrer";
     group = "users";
-    mode  = "0400";
+    mode = "0400";
   };
 
   home-manager.useGlobalPkgs = true;
