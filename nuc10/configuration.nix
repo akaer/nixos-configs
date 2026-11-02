@@ -19,7 +19,7 @@ let
   agenix = builtins.fetchTarball {
     # Stand main, 2026-02-04
     url = "https://github.com/ryantm/agenix/archive/b027ee29d959fda4b60b57566d64c98a202e0feb.tar.gz";
-    sha256 = "1wlpvpj45qfixdzhmk2cgiwlkyaf8a5mjy2jp5lsx2wsxblclngm";   # siehe unten
+    sha256 = "1wlpvpj45qfixdzhmk2cgiwlkyaf8a5mjy2jp5lsx2wsxblclngm"; # siehe unten
   };
 in
 
@@ -228,7 +228,7 @@ in
   environment.systemPackages = with pkgs; [
     _7zz
     acpi
-    (callPackage "${agenix}/pkgs/agenix.nix" { })   # ryantm agenix CLI
+    (callPackage "${agenix}/pkgs/agenix.nix" { }) # ryantm agenix CLI
     age
     alacritty
     alsa-tools # ALSA utilities for audio configuration and troubleshooting (e.g., `alsamixer`, `amixer`, `speaker-test`)
@@ -558,10 +558,10 @@ in
   };
 
   age.secrets.claude-env = {
-    file  = ./secrets/claude-env.age;   # relativ zur configuration.nix
+    file = ./secrets/claude-env.age; # relativ zur configuration.nix
     owner = "andrer";
     group = "users";
-    mode  = "0400";
+    mode = "0400";
   };
 
   home-manager.useGlobalPkgs = true;
