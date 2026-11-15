@@ -456,7 +456,8 @@ in
     pdfchain
     pdfstudioviewer
     pdftk
-    pgadmin4-desktopmode # Administration and development platform for PostgreSQL. Desktop Mode
+    # doCheck disabled: upstream regression tests fail (nixpkgs#569095)
+    (unstable.pgadmin4-desktopmode.overridePythonAttrs { doCheck = false; }) # Administration and development platform for PostgreSQL. Desktop Mode
     platformio # Open source ecosystem for IoT development
     pngoptimizer # PNG optimizer and converter
     poppler-utils # PDF rendering library
