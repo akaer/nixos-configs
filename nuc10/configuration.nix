@@ -393,6 +393,7 @@ in
     nemo-with-extensions
     net-tools # Set of tools for controlling the network subsystem in Linux (ifconfig, netstat, route, etc.)
     networkmanagerapplet # System tray applet for NetworkManager, providing a graphical interface to manage network connections and settings
+    ngrok # Allows you to expose a web server running on your local machine to the internet
     nixfmt # Nixfmt is the official formatter for Nix language code
     nixfmt-tree
     nmap # Free and open source utility for network discovery and security auditing
